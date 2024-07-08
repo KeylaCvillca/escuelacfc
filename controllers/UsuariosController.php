@@ -7,11 +7,13 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\AddUserForm;
+use Yii;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
  */
-class UsuariosController extends Controller
+class UsuariosController extends Controller implements \yii\web\IdentityInterface
 {
     /**
      * @inheritDoc
@@ -77,21 +79,17 @@ class UsuariosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Usuarios();
+        $model = new AddUserForm();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if ($model->load(Yii::$app->request->post()) && $model->addUser()) {
+            Yii::$app->session->setFlash('success', 'Usuario creado exitosamente.');
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
-
     /**
      * Updates an existing Usuarios model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -141,4 +139,25 @@ class UsuariosController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function getAuthKey() {
+        
+    }
+
+    public function getId() {
+        
+    }
+
+    public function validateAuthKey($authKey) {
+        
+    }
+
+    public static function findIdentity($id) {
+        
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null) {
+        
+    }
+
 }

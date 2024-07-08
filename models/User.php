@@ -99,6 +99,12 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return Yii::$app->getSecurity()->validatePassword($password, $this->hash);
+    }
+
+    /**En esta función generamos un hash a partir de una string de texto plano*/
+    public static function generateHash($password){
+        return Yii::$app->getSecurity()->generatePasswordHash($password);
     }
 }
+

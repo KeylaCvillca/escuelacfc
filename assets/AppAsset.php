@@ -21,6 +21,15 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+
+        /* FUENTES PARA PARRAFOS  - Inter lingh */
+       'https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap',
+
+       /* FUENTE PARA TITULOS - Expletus Sans */
+       'https://fonts.googleapis.com/css2?family=Expletus+Sans:ital@0;1&family=Inter+Tight:ital@0;1&display=swap',
+
+       // CDN A FONTAWESOME ICONS
+       'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css',
     ];
     public $js = [
     ];
