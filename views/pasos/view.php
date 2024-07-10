@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\controllers\BibliaController;
 
 /** @var yii\web\View $this */
 /** @var app\models\Pasos $model */
@@ -37,5 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'color',
         ],
     ]) ?>
+    
+    <p><?=BibliaController::getVersiculo($model->cita_biblica)?></p>
 
 </div>

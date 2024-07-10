@@ -8,11 +8,25 @@ use yii\helpers\Json;
  */
 
  class Biblia  {
+     
+     public static $VOCALS = array(
+        'á' => 'a',
+        'é' => 'e',
+        'í' => 'i',
+        'ó' => 'o',
+        'ú' => 'u',
+        'Á' => 'A',
+        'É' => 'E',
+        'Í' => 'I',
+        'Ó' => 'O',
+        'Ú' => 'U'
+    );
      public static function getVersiculo($vers)
      {
          $i = Biblia::findSeparator($vers);
-         $libro= Biblia::parseBookName(substr($vers, 0, $i));
+         $libro= strtr(Biblia::parseBookName(substr($vers, 0, $i)), Biblia::$VOCALS);
          $partes = explode(":", substr($vers,$i+1)); //partes{0}capitulo y partes{1}versiculo
+         
          $data = Biblia::read($libro);
          return Biblia::findVersiculo($partes, $data);
      }
@@ -33,15 +47,21 @@ use yii\helpers\Json;
         return Json::decode(file_get_contents($path));
     }
      private static function findVersiculo($partes, $data) {
+        
+         
          if ($partes[0] < 1 || $partes[0] > count($data)) {
-             return "Este capítulo no existe.";
-         } else if ( $partes[1] < 1 || $partes[1] - 1 > count($data[$partes[0]])) {
-             return "Este versículo no existe.";
-         } else {
-
- //echo count($data[0]);            
- return $data[$partes[0] - 1][$partes[1] - 1];
-         } 
+            return "Este capítulo no existe.";
+        } else if ( $partes[1] < 1 || $partes[1] - 1 > count($data[$partes[0] - 1])) {
+            return "Este versículo no existe.";
+        } else {
+        
+        //echo count($data[0]);            
+        return $data[$partes[0] - 1][$partes[1] - 1];
+        } 
+     }
+     
+     private static function findVersiculos($partes, $versiculos, $data) {
+         
      }
    
      private static function parseBookName($name) {
