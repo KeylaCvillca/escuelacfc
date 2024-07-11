@@ -19,6 +19,10 @@ $config = [
         ],
     ],
     'components' => [
+         'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['guest', 'user'],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'zsUJxtx964DxoPZ-MgoLt7Sjfa7_mqcA',
@@ -57,7 +61,16 @@ $config = [
             'rules' => [
             ],
         ],
-        
+        'i18n' => [
+            'translations' => [
+                'yii2mod.rbac' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                ],
+            ]
+        ]
+ 
     ],
     'params' => $params,
 ];
