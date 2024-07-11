@@ -123,4 +123,5 @@ class Usuarios extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Telefonos::class, ['usuario' => 'id']);
     }
+    
 }

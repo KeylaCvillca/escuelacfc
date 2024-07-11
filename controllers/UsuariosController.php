@@ -13,7 +13,7 @@ use Yii;
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
  */
-class UsuariosController extends Controller implements \yii\web\IdentityInterface
+class UsuariosController extends Controller 
 {
     /**
      * @inheritDoc
@@ -138,26 +138,6 @@ class UsuariosController extends Controller implements \yii\web\IdentityInterfac
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function getAuthKey() {
-        
-    }
-
-    public function getId() {
-        
-    }
-
-    public function validateAuthKey($authKey) {
-        
-    }
-
-    public static function findIdentity($id) {
-        
-    }
-
-    public static function findIdentityByAccessToken($token, $type = null) {
-        
     }
 
 }
