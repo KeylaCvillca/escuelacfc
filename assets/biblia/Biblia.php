@@ -28,7 +28,7 @@ use yii\helpers\Json;
          $partes = explode(":", substr($vers,$i+1)); //partes{0}capitulo y partes{1}versiculo
          
          $data = Biblia::read($libro);
-         return Biblia::findVersiculo($partes, $data);
+         return (strpos($partes[1],"-") !== false)?Biblia::findVersiculos($partes,$data):Biblia::findVersiculo($partes, $data);
      }
     
     /** Devuelve un array asociativo leyendo el archivo _index.json
@@ -60,8 +60,13 @@ use yii\helpers\Json;
         } 
      }
      
-     private static function findVersiculos($partes, $versiculos, $data) {
-         
+     private static function findVersiculos($partes, $data) {
+         $versiculos = explode("-",$partes[1]);
+         $temp = "";
+         foreach($versiculos as $versiculo) {
+             $temp .= Biblia::findVersiculo([$partes[0],$versiculo],$data);
+         }
+         return $temp;
      }
    
      private static function parseBookName($name) {
