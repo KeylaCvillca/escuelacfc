@@ -9,7 +9,7 @@ use yii\helpers\Json;
 
  class Biblia  {
      
-     public static $VOCALS = array(
+     private static $VOCALS = array(
         'á' => 'a',
         'é' => 'e',
         'í' => 'i',
@@ -34,7 +34,7 @@ use yii\helpers\Json;
     /** Devuelve un array asociativo leyendo el archivo _index.json
      */
     public static function getIndex() {
-        
+        return Biblia::read("index.json");
    }
     
       

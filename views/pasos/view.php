@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
     
-    <p><?=BibliaController::getVersiculo($model->cita_biblica)?></p>
+    <p><?=BibliaController::getText($model->cita_biblica)?></p>
 
 </div>
 
