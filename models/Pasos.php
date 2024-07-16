@@ -49,7 +49,7 @@ class Pasos extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'cita_biblica' => 'Cita Biblica',
+            'cita_biblica' => 'Cita Bíblica',
             'nombre' => 'Nombre',
             'descripcion' => 'Descripcion',
             'imagen' => 'Imagen',

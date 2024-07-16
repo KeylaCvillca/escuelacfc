@@ -12,7 +12,7 @@ use yii\grid\GridView;
 $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="Usuarios-index">
+<div class="usuarios-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -33,9 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'celula',
             //'fecha_ingreso',
             //'fecha_graduacion',
-            //'email:email',
-            //'hash',
-            //'salt',
             //'foto',
             //'color',
             [

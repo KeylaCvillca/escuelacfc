@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="Usuarios-form">
+<div class="usuarios-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -23,12 +23,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'fecha_ingreso')->textInput() ?>
 
     <?= $form->field($model, 'fecha_graduacion')->textInput() ?>
-
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'hash')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'salt')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'foto')->textInput(['maxlength' => true]) ?>
 

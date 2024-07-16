@@ -14,9 +14,6 @@ use Yii;
  * @property string|null $celula
  * @property string|null $fecha_ingreso
  * @property string|null $fecha_graduacion
- * @property string|null $email
- * @property string|null $hash
- * @property string|null $salt
  * @property string|null $foto
  * @property string|null $color
  *
@@ -25,6 +22,7 @@ use Yii;
  * @property Ensenan[] $ensenans
  * @property Noticias $noticias
  * @property Telefonos[] $telefonos
+ * @property User $user
  */
 class Usuarios extends \yii\db\ActiveRecord
 {
@@ -43,11 +41,10 @@ class Usuarios extends \yii\db\ActiveRecord
     {
         return [
             [['fecha_nacimiento', 'fecha_ingreso', 'fecha_graduacion'], 'safe'],
-            [['nombre_apellidos', 'email'], 'string', 'max' => 50],
+            [['nombre_apellidos'], 'string', 'max' => 50],
             [['rol'], 'string', 'max' => 40],
             [['celula'], 'string', 'max' => 20],
-            [['hash', 'foto'], 'string', 'max' => 255],
-            [['salt'], 'string', 'max' => 16],
+            [['foto'], 'string', 'max' => 255],
             [['color'], 'string', 'max' => 15],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
         ];
@@ -66,9 +63,6 @@ class Usuarios extends \yii\db\ActiveRecord
             'celula' => 'Celula',
             'fecha_ingreso' => 'Fecha Ingreso',
             'fecha_graduacion' => 'Fecha Graduacion',
-            'email' => 'Email',
-            'hash' => 'Hash',
-            'salt' => 'Salt',
             'foto' => 'Foto',
             'color' => 'Color',
         ];
@@ -123,5 +117,16 @@ class Usuarios extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Telefonos::class, ['usuario' => 'id']);
     }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['usuario' => 'id']);
+    }
     
+   
 }

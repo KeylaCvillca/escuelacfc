@@ -7,13 +7,14 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\AddUserForm;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
 use Yii;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
  */
-class UsuariosController extends Controller 
+class UsuariosController extends Controller
 {
     /**
      * @inheritDoc
@@ -79,17 +80,21 @@ class UsuariosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new AddUserForm();
+        $model = new Usuarios();
 
-        if ($model->load(Yii::$app->request->post()) && $model->addUser()) {
-            Yii::$app->session->setFlash('success', 'Usuario creado exitosamente.');
-            return $this->redirect(['index']);
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
     /**
      * Updates an existing Usuarios model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -139,5 +144,30 @@ class UsuariosController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    
+    public function getNav(){
+        echo Yii::$app->user->isGuest? Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Soy un invitado', 'url' => ['/site/index']],
 
+            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            Yii::$app->user->isGuest ? (
+                ['label' => 'Login', 'url' => ['/site/login']]
+            ) : (
+                '<li>'
+                . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+                . Html::submitButton(
+                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'btn btn-link logout']
+                )
+                . Html::endForm()
+                . '</li>'
+            )
+        ],
+        ]):"admin";
+        
+    }
 }
