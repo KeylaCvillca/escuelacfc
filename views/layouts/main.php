@@ -10,6 +10,7 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use app\controllers\UsuariosController;
+use app\assets\MenuHelper;
 
 AppAsset::register($this);
 ?>
@@ -35,7 +36,7 @@ AppAsset::register($this);
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
         ],
     ]);
-    UsuariosController::getNav();
+    echo MenuHelper::navMenu();
     NavBar::end();
     ?>
 </header>
