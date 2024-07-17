@@ -141,4 +141,69 @@ class PasosController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    
+    public function actionDownloadPdf($id) {
+        // Find your model by ID
+        $model = Pasos::findOne($id);
+
+        // Check if the model exists
+        if ($model === null) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        // Generate the PDF content
+        $content = $this->renderPartial('_pdf_template', ['model' => $model]); // Use a partial view to render your model data in PDF
+
+        // Setup the PDF
+        $pdf = new mPDF();
+        $pdf->WriteHTML($content);
+
+        // Output the PDF as a downloadable file
+        $pdf->Output('filename.pdf', 'D'); // 'D' sends the file inline to the browser (default), 'F' saves to a file
+
+        // Exit to prevent Yii from rendering any view
+        Yii::$app->end();
+    }
+    
+    public function actionQuiz() {
+        // Obtenemos todos los pasos usando ActiveDataProvider
+        $dataProvider = new ActiveDataProvider([
+            'query' => Pasos::find(),
+            'pagination' => false, // Deshabilitamos la paginación para obtener todos los registros
+        ]);
+        
+        // Convertimos el ActiveDataProvider a un array de modelos
+        $models = $dataProvider->getModels();
+        $questions = [];
+        $answers = [];
+    
+        for ($i = 0; $i < 4; $i++) {
+            // Selecciona un elemento aleatorio y obtén su modelo
+            $itemIndex = array_rand($models);
+            $questions[$i][0] = $models[$itemIndex];
+            
+            // Elimina el elemento seleccionado y reindexa el array
+            array_splice($models, $itemIndex, 1);
+    
+            for ($j = 1; $j < 4; $j++) {
+                // Selecciona un elemento aleatorio de los restantes y obtén su modelo
+                $itemIndex = array_rand($models);
+                $questions[$i][$j] = $models[$itemIndex];
+                
+                // Elimina el elemento seleccionado y reindexa el array
+                array_splice($models, $itemIndex, 1);
+            }
+    
+            // Guarda la respuesta correcta
+            $answers[$i] = $questions[$i][0];
+            
+            // Baraja las respuestas
+            shuffle($questions[$i]);
+        }
+    
+        return $this->render('quiz', [
+            'questions' => $questions,
+            'answers' => $answers
+        ]);
+    }
 }

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "pasos".
@@ -85,5 +86,12 @@ class Pasos extends \yii\db\ActiveRecord
     public function getUtilizans()
     {
         return $this->hasMany(Utilizan::class, ['paso' => 'id']);
+    }
+    
+    public function getImgUrl() {
+        $imgPath = Yii::getAlias('@webroot/imagenes/' . $this->imagen);
+        $defaultImgUrl = Url::to("@web/imagenes/default.jpg");
+
+        return Url::to((file_exists($imgPath)? '@web/imagenes/' . $this->imagen:$defaultImgUrl));
     }
 }
