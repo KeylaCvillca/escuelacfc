@@ -19,10 +19,9 @@ use yii\helpers\Html;
 
     </div>
     <div class="text-align-center">
-        <h3>Patrón <?= $model->codigo ?></h3>
+        <h3>Patrón <?= $model->id ?></h3>
         <h2><?= $model->nombre ?></h2>
-        <h4>Instrumento: <?= $model->getInstrumento() ?></h4>
-        <p>"<?= BibliaController::getVersiculo($model->cita_biblica) ?>"</p>
+        <p><?= BibliaController::getText($model->cita_biblica) ?></p>
         <h4><?= $model->cita_biblica ?></h4>
     </div>
     <div class="row" style="background-color: #a469a8">

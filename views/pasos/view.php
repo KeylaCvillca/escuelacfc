@@ -40,6 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
     
     <p><?=BibliaController::getText($model->cita_biblica)?></p>
+    <div class="btn-right  btn-pasos">
+            <?= Html::a(
+                '<i class="fa-regular fa-file-pdf"></i>' .
+                    "Descargar",
+                ['download-pdf', 'id' => $model->id],
+                ["class" => "btn btn-primary"]
+            ) ?>
+    </div>
+    
+    
 
 </div>
 
