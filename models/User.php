@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "user".
@@ -107,13 +108,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        $data = new ActiveDataProvider([
+            "query" => User::find()->select("*")->where("username='" . $username . "'")
+        ]);
+        return $data->getModels()[0];
     }
 
     /**
@@ -148,11 +146,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return Yii::$app->getSecurity()->validatePassword($password, $this->hash);
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
     }
 
     /**En esta función generamos un hash a partir de una string de texto plano*/
     public static function generateHash($password){
         return Yii::$app->getSecurity()->generatePasswordHash($password);
+    }
+    
+    public static function getRole() {
+        
     }
 }
