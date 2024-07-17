@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 
 <div class="biblia-search">
     <?php $form = ActiveForm::begin([
-        'action' => ['search'],
+        'action' => ['biblia/search'],
         'method' => 'get',
     ]); ?>
 

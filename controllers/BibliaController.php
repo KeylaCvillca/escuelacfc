@@ -48,6 +48,5 @@ class BibliaController extends Controller {
             'indice' => Biblia::getIndex()
         ]);
     }
-    
-    
+ 
 }

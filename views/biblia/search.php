@@ -5,8 +5,6 @@ use yii\helpers\Html;
 /* @var $model app\models\SearchForm */
 /* @var $text string */
 
-$this->title = 'Resultado de Búsqueda';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="biblia-search-result">
