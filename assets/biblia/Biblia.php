@@ -2,6 +2,7 @@
 namespace app\assets\biblia;
 
 use yii\helpers\Json;
+use Yii;
 /* 
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
@@ -23,18 +24,18 @@ use yii\helpers\Json;
     );
      public static function getVersiculo($vers)
      {
-         $i = Biblia::findSeparator($vers);
-         $libro= strtr(Biblia::parseBookName(substr($vers, 0, $i)), Biblia::$VOCALS);
+         $i = self::findSeparator($vers);
+         $libro= self::parseBookName(substr($vers, 0, $i));
          $partes = explode(":", substr($vers,$i+1)); //partes{0}capitulo y partes{1}versiculo
          
-         $data = Biblia::read($libro);
+         $data = self::read($libro);
          return (strpos($partes[1],"-") !== false)?Biblia::findVersiculos($partes,$data):Biblia::findVersiculo($partes, $data);
      }
     
     /** Devuelve un array asociativo leyendo el archivo _index.json
      */
     public static function getIndex() {
-        return Biblia::read("index.json");
+        return self::read("index.json");
    }
     
       
@@ -51,7 +52,7 @@ use yii\helpers\Json;
          
          if ($partes[0] < 1 || $partes[0] > count($data)) {
             return "Este capítulo no existe.";
-        } else if ( $partes[1] < 1 || $partes[1] - 1 > count($data[$partes[0] - 1])) {
+        } else if ( $partes[1] < 1 || $partes[1] - 1 >= count($data[$partes[0] - 1])) {
             return "Este versículo no existe.";
         } else {
         
@@ -63,15 +64,16 @@ use yii\helpers\Json;
      private static function findVersiculos($partes, $data) {
          $versiculos = explode("-",$partes[1]);
          $temp = "";
-         foreach($versiculos as $versiculo) {
-             $temp .= Biblia::findVersiculo([$partes[0],$versiculo],$data);
+         for($i = $versiculos[0]; $i <= $versiculos[1]; $i++) {
+            $temp .= Biblia::findVersiculo([$partes[0],$i],$data);
          }
          return $temp;
      }
    
      private static function parseBookName($name) {
-         return strtolower(str_replace(" ","_",$name)) . ".json";
-     }
+        return strtr(strtolower(str_replace(" ", "_", $name)), self::$VOCALS) . ".json";
+    }
+
     
      private static function findSeparator($string) {
          $i = strlen($string)-1; 
