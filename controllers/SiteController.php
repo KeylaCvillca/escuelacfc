@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\data\ActiveDataProvider;
+use app\models\Instrumentos;
 
 class SiteController extends Controller
 {
@@ -61,7 +63,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $instrumentos= new ActiveDataProvider([
+            'query' => Instrumentos::find()->select("*")
+            
+        ]);
+        
+        return $this->render('index',[
+            'instrumentos' => $instrumentos->models,
+        ]);
     }
 
     /**
