@@ -17,38 +17,54 @@ class MenuHelper {
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'Soy un invitado', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
-                    ['label' => 'Login', 'url' => ['/site/login']]    
+                    ['label' => 'Conócenos', 'url' => ['/site/about']],
+                    ['label' => 'Contacto', 'url' => ['/site/contact']],
+                    ['label' => 'Conectarse', 'url' => ['/site/login']]    
                     ];
             case "alumna":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Soy una alumna', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
+                    ['label' => 'Conócenos', 'url' => ['/site/about']],
+                    ['label' => 'Alumna (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/datos']],
+                    ['label' => 'Materiales', 'url' => ['/pasos/index']],
+                    ['label' => 'Conócenos', 'url' => ['/site/about']],
+                    ['label' => 'Quiz', 'url' => ['/site/quiz']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/index']],
+                    ['label' => 'Contacto', 'url' => ['/site/contact']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                        . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')',
+                        . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
                     ];
             case "maestra":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Soy una maestra', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
+                    ['label' => 'Conócenos', 'url' => ['/site/about']],
+                    ['label' => 'Maestra (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/datos']],
+                    ['label' => 'Materiales', 'url' => ['/pasos/index']],
+                    ['label' => 'Mis alumnas', 'url' => ['/usuarios/alumnas']],
+                    ['label' => 'Quiz', 'url' => ['/site/quiz']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/index']],
+                    ['label' => 'Contacto', 'url' => ['/site/contact']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                        . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')',
+                        . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
                     ];
             case "admin":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Soy un administrador', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
+                    ['label' => 'Administración', 
+                        'items' => [
+                        ['label' => 'Páginas','url'=>['/site/rbac']],
+                        ['label'=> 'Usuarios','url'=>['/usuarios/index']],
+                        ['label'=> 'Archivos','url'=>['/archivos/index']],
+                    ]],
+                    ['label' => 'Conócenos', 'url' => ['/site/about']],
+                    ['label' => 'Quiz', 'url' => ['/site/quiz']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/index']],
+                    ['label' => 'Contacto', 'url' => ['/site/contact']],
+                    ['label' => 'Administrador (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/datos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                        . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')',
+                        . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
                     ];
             

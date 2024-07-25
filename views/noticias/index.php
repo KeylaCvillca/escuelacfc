@@ -12,7 +12,7 @@ use yii\grid\GridView;
 $this->title = 'Noticias';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="Noticias-index">
+<div class="noticias-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'fecha_publicacion',
             'contenido',
             'autor',
+            'publico',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Noticias $model, $key, $index, $column) {

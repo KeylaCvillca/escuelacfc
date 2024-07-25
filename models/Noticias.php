@@ -11,6 +11,7 @@ use Yii;
  * @property string|null $fecha_publicacion
  * @property string|null $contenido
  * @property int|null $autor
+ * @property int $publico
  *
  * @property Usuarios $id0
  */
@@ -31,7 +32,7 @@ class Noticias extends \yii\db\ActiveRecord
     {
         return [
             [['fecha_publicacion'], 'safe'],
-            [['autor'], 'integer'],
+            [['autor', 'publico'], 'integer'],
             [['contenido'], 'string', 'max' => 3000],
             [['id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::class, 'targetAttribute' => ['id' => 'id']],
         ];
@@ -47,6 +48,7 @@ class Noticias extends \yii\db\ActiveRecord
             'fecha_publicacion' => 'Fecha Publicacion',
             'contenido' => 'Contenido',
             'autor' => 'Autor',
+            'publico' => 'Publico',
         ];
     }
 

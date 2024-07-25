@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="Noticias-form">
+<div class="noticias-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -19,6 +19,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'contenido')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'autor')->textInput() ?>
+
+    <?= $form->field($model, 'publico')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

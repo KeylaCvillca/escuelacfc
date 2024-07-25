@@ -28,7 +28,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function tableName()
     {
-        return 'user';
+        return 'usuarios';
     }
 
     /**
@@ -44,8 +44,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            [['usuario'], 'unique'],
-            [['usuario'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::class, 'targetAttribute' => ['usuario' => 'id']],
         ];
     }
 
@@ -64,18 +62,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'usuario' => 'Usuario',
         ];
-    }
-
-    /**
-     * Gets query for [[Usuario0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsuario0()
-    {
-        return $this->hasOne(Usuarios::class, ['id' => 'usuario']);
     }
     
     /**

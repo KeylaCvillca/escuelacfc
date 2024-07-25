@@ -36,6 +36,7 @@ $this->title = 'My Yii Application';
 
     </div>
 </div>
+<p><?=Yii::$app->getSecurity()->generatePasswordHash("admin123")?></p>
 <?php
 // Añadimos los estilos de hover al final del archivo para hacer que las tarjetas se agranden al pasar el ratón
 $this->registerCss("
