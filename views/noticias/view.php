@@ -30,10 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
+            'titulo',
             'fecha_publicacion',
             'contenido',
-            'autor',
-            'publico',
+            [
+                'label' => 'Autor',
+                'value' => $autorNombreApellidos, // Usamos la relación para obtener el nombre completo del autor
+            ],
+            'publico:boolean',
         ],
     ]) ?>
 

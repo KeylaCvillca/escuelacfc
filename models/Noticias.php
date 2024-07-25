@@ -8,12 +8,13 @@ use Yii;
  * This is the model class for table "noticias".
  *
  * @property int $id
+ * @property string $titulo
  * @property string|null $fecha_publicacion
  * @property string|null $contenido
  * @property int|null $autor
  * @property int $publico
  *
- * @property Usuarios $id0
+ * @property Usuarios $autor0
  */
 class Noticias extends \yii\db\ActiveRecord
 {
@@ -31,10 +32,12 @@ class Noticias extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['titulo'], 'required'],
             [['fecha_publicacion'], 'safe'],
             [['autor', 'publico'], 'integer'],
+            [['titulo'], 'string', 'max' => 255],
             [['contenido'], 'string', 'max' => 3000],
-            [['id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::class, 'targetAttribute' => ['id' => 'id']],
+            [['autor'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::class, 'targetAttribute' => ['autor' => 'id']],
         ];
     }
 
@@ -45,6 +48,7 @@ class Noticias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'titulo' => 'Titulo',
             'fecha_publicacion' => 'Fecha Publicacion',
             'contenido' => 'Contenido',
             'autor' => 'Autor',
@@ -53,12 +57,23 @@ class Noticias extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Id0]].
+     * Gets query for [[Autor0]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getId0()
+    public function getAutor()
     {
-        return $this->hasOne(Usuarios::class, ['id' => 'id']);
+        return $this->hasOne(Usuarios::class, ['id' => 'autor']);
     }
-}
+
+    /**
+     * Devuelve el nombre y apellidos del autor.
+     * 
+     * @return string
+     */
+    public function getAutorNombreApellidos()
+    {
+        // Usa la relación definida para obtener el autor
+        return $this->getAutor()->one() ? $this->getAutor()->one()->nombre_apellidos : 'Desconocido';
+    }
+}         

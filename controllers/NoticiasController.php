@@ -7,6 +7,9 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
+use app\models\Usuarios;
+use yii\data\Pagination;
 
 /**
  * NoticiasController implements the CRUD actions for Noticias model.
@@ -65,8 +68,15 @@ class NoticiasController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        // Obtener la información del autor
+        $autor = Usuarios::findOne($model->autor);
+        $autorNombreApellidos = $autor ? $autor->nombre_apellidos : 'Desconocido';
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'autorNombreApellidos' => $autorNombreApellidos,
         ]);
     }
 
@@ -79,7 +89,10 @@ class NoticiasController extends Controller
     {
         $model = new Noticias();
 
+
         if ($this->request->isPost) {
+            $model->autor= Yii::$app->user->identity->id;
+            $model->fecha_publicacion=date('Y-m-d H:i:s');
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -141,4 +154,31 @@ class NoticiasController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    
+    
+    public function actionRead()
+    {
+        // Configurar la paginación
+        $query = Noticias::find(); // Usa el modelo Noticias
+        $pagination = new Pagination([
+            'defaultPageSize' => 10, // Número de noticias por página
+            'totalCount' => $query->count(),
+        ]);
+
+        $noticias = $query->offset($pagination->offset)
+                          ->limit($pagination->limit)
+                          ->all();
+
+        // No es necesario aquí, el método en el modelo se encarga de obtener el nombre del autor
+        // foreach ($noticias as $noticia) {
+        //     $autor = Usuarios::findOne($noticia->autor);
+        //     $noticia->autorNombreApellidos = $autor ? $autor->nombre_apellidos : 'Desconocido';
+        // }
+
+        return $this->render('read', [
+            'noticias' => $noticias,
+            'pagination' => $pagination,
+        ]);
+    }
+    
 }

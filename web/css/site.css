@@ -82,3 +82,23 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+
+
+
+
+.news-item {
+    border: 1px solid #ddd; /* Color gris claro para el borde */
+    border-radius: 5px; /* Bordes redondeados para un borde más suave */
+    padding: 15px; /* Espaciado interno */
+    margin-bottom: 15px; /* Espaciado entre noticias */
+    background-color: #fff; /* Fondo blanco */
+}
+
+.news-item h3 {
+    margin-top: 0; /* Eliminar margen superior en el título */
+}
+
+.news-item p {
+    margin-bottom: 0; /* Eliminar margen inferior en los párrafos */
+}
