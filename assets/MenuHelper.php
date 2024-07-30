@@ -56,7 +56,7 @@ class MenuHelper {
                         'items' => [
                         ['label' => 'Páginas','url'=>['/site/rbac']],
                         ['label'=> 'Usuarios','url'=>['/usuarios/index']],
-                        ['label'=> 'Archivos','url'=>['/archivos/index']],
+                        ['label'=> 'Archivos','url'=>['/site/files']],
                     ]],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
                     ['label' => 'Quiz', 'url' => ['/site/quiz']],
