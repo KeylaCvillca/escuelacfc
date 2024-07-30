@@ -11,6 +11,8 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\data\ActiveDataProvider;
 use app\models\Instrumentos;
+use yii\helpers\FileHelper;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
@@ -133,6 +135,81 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+    
+    public function actionUpload()
+    {
+       
+        
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            if ($model->validate()) {
+                $filePath = ($model->file->extension==='mp4'?'videos/':'imagenes/') .
+                                 $model->file->baseName . '.' . $model->file->extension; //);
+                if ($model->file->saveAs($filePath)) {
+                    Yii::$app->session->setFlash('success', 'El archivo ha sido subido exitosamente.');
+                } else {
+                    Yii::$app->session->setFlash('error', 'Hubo un error al subir el archivo.');
+                }
+                return $this->refresh();
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
+    }
+
+    public function actionFiles()
+    {
+       
+        
+        $files = array_merge(FileHelper::findFiles('imagenes'), FileHelper::findFiles('videos'));
+        return $this->render('files', ['files' => $files]);
+    }
+
+    public function actionViewFile($filename)
+    {
+        $imagePath = Yii::getAlias('@web/imagenes/' . $filename);
+        $videoPath = Yii::getAlias('@web/videos/' . $filename);
+
+        if (!file_exists($imagePath) && !file_exists($videoPath)) {
+            throw new NotFoundHttpException('The requested file does not exist.');
+        }
+
+        $filePath = file_exists($imagePath) ? $imagePath : $videoPath;
+        return $this->renderAjax('view-file', ['filePath' => $filePath, 'filename' => $filename]);
+    }
+
+    
+    public function actionDownloadFile($filename)
+    {
+        
+        
+        $filePath = Yii::getAlias('@web/imagenes/' . $filename);
+        if (!file_exists($filePath)) {
+            $filePath = Yii::getAlias('@web/videos/' . $filename);
+            if (!file_exists($filePath)) {
+                throw new NotFoundHttpException('The requested file does not exist.');
+            }
+        }
+        return Yii::$app->response->sendFile($filePath);
+    }
+
+    public function actionDeleteFile($filename)
+    { 
+        $filePath = Yii::getAlias('@webroot/imagenes/' . $filename);
+        if (!file_exists($filePath)) {
+            $filePath = Yii::getAlias('@webroot/videos/' . $filename);
+        }
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            Yii::$app->session->setFlash('success', 'The file has been deleted successfully.');
+        } else {
+            Yii::$app->session->setFlash('error', 'There was an error deleting the file.');
+        }
+        return $this->redirect(['site/files']);
     }
     
     
