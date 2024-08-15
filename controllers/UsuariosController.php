@@ -124,6 +124,22 @@ class UsuariosController extends Controller
 
         return $this->redirect(['index']);
     }
+    
+    public function actionMisdatos()
+    {
+        $userId = Yii::$app->user->id;
+
+        if (!$userId) {
+            return $this->redirect(['site/login']);
+        }
+
+        $user = $this->findModel($userId);
+        $model = new MisDatosForm($user);
+
+        return $this->render('misdatos', [
+            'model' => $model
+        ]);
+    }
 
     /**
      * Finds the Usuarios model based on its primary key value.

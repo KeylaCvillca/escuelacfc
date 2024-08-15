@@ -20,6 +20,9 @@ class AddUserForm extends Model
     public $password;
     public $email;
     public $pais;
+    public $created_at;
+    public $updated_at;
+    public $status;
 
     public function rules()
     {
@@ -55,7 +58,8 @@ class AddUserForm extends Model
             $user->password_hash = User::generateHash($this->password);
             $user->auth_key = Yii::$app->security->generateRandomString(); 
             $user->status = 10; 
-            
+            $user->created_at = time();
+            $user->updated_at = time();
 
             if ($user->save()) {
                 foreach ($this->telefonos as $numero) {
@@ -64,8 +68,7 @@ class AddUserForm extends Model
                     $telefono->telefono = $this->$numero;
                     $telefono->save();
                 }
-                $user->created_at = time();
-                $user->updated_at = time();
+                
                 return true;
             }
         }
