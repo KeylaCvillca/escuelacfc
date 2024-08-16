@@ -4,7 +4,8 @@ namespace app\models;
 use yii\base\Model;
 use yii\helpers\Security;
 use Yii;
-use app\models\User;
+use app\models\Usuarios;
+use app\models\Telefonos;
 
 class AddUserForm extends Model
 {
@@ -23,6 +24,8 @@ class AddUserForm extends Model
     public $created_at;
     public $updated_at;
     public $status;
+    public $telefonos = [];
+    public $id;
 
     public function rules()
     {
@@ -43,8 +46,13 @@ class AddUserForm extends Model
 
     public function addUser()
     {
+        $user = new Usuarios();
+        $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
+        $celulaPart = substr($this->celula, 0, 3);           // First 3 letters of celula
+        $datePart = date('dm');                              // Current day and month in 'ddmm' format
+        $this->username = strtolower($nombrePart . $celulaPart . $datePart);
+        
         if ($this->validate()) {
-            $user = new Usuarios();
             $user->nombre_apellidos = $this->nombre_apellidos;
             $user->rol = $this->rol;
             $user->fecha_nacimiento = $this->fecha_nacimiento;
@@ -61,18 +69,19 @@ class AddUserForm extends Model
             $user->created_at = time();
             $user->updated_at = time();
 
-            if ($user->save()) {
-                foreach ($this->telefonos as $numero) {
-                    $telefono = new Telefonos();
-                    $telefono->usuario = $user->id;
-                    $telefono->telefono = $this->$numero;
-                    $telefono->save();
-                }
-                
-                return true;
+            
+            foreach ($this->telefonos as $numero) {
+                $telefono = new Telefonos();
+                $telefono->usuario = $user->id;
+                $telefono->telefono = $numero;
+                $telefono->save();
             }
+            
+                
+            return $user->save();
+            
         }
-
-        return null;
+        Yii::info(var_dump($user));
+        return false;
     }
 }

@@ -81,9 +81,16 @@ class UsuariosController extends Controller
     {
         $model = new AddUserForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->addUser()) {
-            Yii::$app->session->setFlash('success', 'Usuario creado exitosamente.');
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->created_at = time();
+            $model->updated_at = time();
+
+            if ($model->AddUser()) {
+                Yii::$app->session->setFlash('success', 'Usuario guardado exitosamente.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Error al guardar el usuario.');
+            }
         }
 
         return $this->render('create', [
