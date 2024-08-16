@@ -13,6 +13,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Instrumentos;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
+use yii2mod\rbac\models\RouteModel;
 
 class SiteController extends Controller
 {
@@ -135,6 +136,18 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+    
+    /**
+     * Displays about page.
+     *
+     * @return string
+     */
+    public function actionRbac()
+    {
+        $model = Yii::createObject(RouteModel::class);
+
+        return $this->render('rbac', ['routes' => $model->getAvailableAndAssignedRoutes()]);
     }
     
     public function actionUpload()
