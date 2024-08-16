@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\AddUserForm;
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -81,10 +82,11 @@ class UsuariosController extends Controller
     {
         $model = new AddUserForm();
         $model->scenario = AddUserForm::SCENARIO_CREATE;
+        $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
 
         if ($model->load(Yii::$app->request->post()) && $model->addUser()) {
             Yii::$app->session->setFlash('success', 'User created successfully.');
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         }
 
         return $this->render('create', [
@@ -94,7 +96,7 @@ class UsuariosController extends Controller
 
     public function actionMisdatos()
     {
-        $userId = Yii::$app->user->id; // Get the ID of the currently logged-in user
+        $userId = Yii::$app->user->id;
         $user = Usuarios::findOne($userId);
 
         if (!$user) {
@@ -103,16 +105,14 @@ class UsuariosController extends Controller
 
         $model = new AddUserForm();
         $model->scenario = AddUserForm::SCENARIO_UPDATE;
-        $model->attributes = $user->attributes; // Load the user's current attributes into the model
+        $model->attributes = $user->attributes;
 
-        // Convert the user's Telefonos records into a simple array
-        $model->telefonos = array_map(function ($telefono) {
-            return $telefono->telefono;
-        }, $user->telefonos);
-
-        if ($model->load(Yii::$app->request->post()) && $model->updateUser($userId)) {
-            Yii::$app->session->setFlash('success', 'Your data has been updated.');
-            return $this->redirect(['misdatos']);
+        if (Yii::$app->request->isPost) {
+            $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
+            if ($model->load(Yii::$app->request->post()) && $model->updateUser($userId)) {
+                Yii::$app->session->setFlash('success', 'Your data has been updated.');
+                return $this->redirect(['misdatos']);
+            }
         }
 
         return $this->render('misdatos', [
