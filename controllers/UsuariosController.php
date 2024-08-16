@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\AddUserForm;
 use Yii;
 use yii\web\UploadedFile;
+use app\models\UsuariosSearch;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -41,22 +42,21 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Usuarios::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $searchModel = new UsuariosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // Filters for "maestra" and "alumna" roles
+        $maestraProvider = clone $dataProvider;
+        $maestraProvider->query->andFilterWhere(['rol' => 'maestra']);
+
+        $alumnaProvider = clone $dataProvider;
+        $alumnaProvider->query->andFilterWhere(['rol' => 'alumna']);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'maestraProvider' => $maestraProvider,
+            'alumnaProvider' => $alumnaProvider,
         ]);
     }
 
