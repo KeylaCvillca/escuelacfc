@@ -1,8 +1,8 @@
 <?php
+
 namespace app\models;
 
 use yii\base\Model;
-use yii\helpers\Security;
 use Yii;
 use app\models\Usuarios;
 use app\models\Telefonos;
@@ -27,11 +27,14 @@ class AddUserForm extends Model
     public $telefonos = [];
     public $id;
 
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
+
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'created_at', 'updated_at'], 'required'],
-            [['fecha_nacimiento', 'fecha_ingreso', 'fecha_graduacion'], 'safe'],
+            [['nombre_apellidos', 'email', 'fecha_nacimiento', 'celula', 'fecha_ingreso', 'fecha_graduacion', 'foto', 'color', 'telefonos'], 'safe'],
+            [['username', 'email', 'password', 'created_at', 'updated_at'], 'required', 'on' => self::SCENARIO_CREATE],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['nombre_apellidos'], 'string', 'max' => 50],
             [['rol'], 'string', 'max' => 40],
@@ -39,49 +42,75 @@ class AddUserForm extends Model
             [['foto', 'username', 'password', 'email'], 'string', 'max' => 255],
             [['color'], 'string', 'max' => 15],
             [['email'], 'email'],
-            [['email', 'username'], 'unique', 'targetClass' => Usuarios::class],
+            [['email', 'username'], 'unique', 'targetClass' => Usuarios::class, 'on' => self::SCENARIO_CREATE],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_CREATE] = ['nombre_apellidos', 'rol', 'fecha_nacimiento', 'celula', 'fecha_ingreso', 'fecha_graduacion', 'foto', 'color', 'username', 'password', 'email', 'telefonos', 'created_at', 'updated_at', 'status'];
+        $scenarios[self::SCENARIO_UPDATE] = ['nombre_apellidos', 'email', 'fecha_nacimiento', 'celula', 'fecha_ingreso', 'fecha_graduacion', 'foto', 'color', 'telefonos'];
+        return $scenarios;
     }
 
     public function addUser()
     {
         $user = new Usuarios();
-        $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
-        $celulaPart = substr($this->celula, 0, 3);           // First 3 letters of celula
-        $datePart = date('dm');                              // Current day and month in 'ddmm' format
-        $this->username = strtolower($nombrePart . $celulaPart . $datePart);
-        
+
         if ($this->validate()) {
-            $user->nombre_apellidos = $this->nombre_apellidos;
-            $user->rol = $this->rol;
-            $user->fecha_nacimiento = $this->fecha_nacimiento;
-            $user->celula = $this->celula;
-            $user->fecha_ingreso = $this->fecha_ingreso;
-            $user->fecha_graduacion = $this->fecha_graduacion;
-            $user->foto = $this->foto;
-            $user->color = $this->color;
-            $user->username = $this->username;
-            $user->email = $this->email;
+            $this->populateUser($user);
+            return $user->save();
+        }
+        return false;
+    }
+
+    public function updateUser($id)
+    {
+        $user = Usuarios::findOne($id);
+
+        if (!$user) {
+            return false; // Return false if the user is not found
+        }
+
+        if ($this->validate()) {
+            $this->populateUser($user);
+            return $user->save();
+        }
+        return false;
+    }
+
+    private function populateUser($user)
+    {
+        $user->nombre_apellidos = $this->nombre_apellidos;
+        $user->rol = $this->rol;
+        $user->fecha_nacimiento = $this->fecha_nacimiento;
+        $user->celula = $this->celula;
+        $user->fecha_ingreso = $this->fecha_ingreso;
+        $user->fecha_graduacion = $this->fecha_graduacion;
+        $user->foto = $this->foto;
+        $user->color = $this->color;
+        $user->username = $this->username;
+        $user->email = $this->email;
+
+        if ($this->scenario === self::SCENARIO_CREATE) {
             $user->password_hash = User::generateHash($this->password);
-            $user->auth_key = Yii::$app->security->generateRandomString(); 
-            $user->status = 10; 
+            $user->auth_key = Yii::$app->security->generateRandomString();
+            $user->status = 10;
             $user->created_at = time();
             $user->updated_at = time();
-
-            
-            foreach ($this->telefonos as $numero) {
-                $telefono = new Telefonos();
-                $telefono->usuario = $user->id;
-                $telefono->telefono = $numero;
-                $telefono->save();
-            }
-            
-                
-            return $user->save();
-            
+        } else {
+            $user->updated_at = time();
         }
-        Yii::info(var_dump($user));
-        return false;
+
+        // Handle telefonos (assuming Telefonos is a separate model)
+        Telefonos::deleteAll(['usuario' => $user->id]);
+        foreach ($this->telefonos as $numero) {
+            $telefono = new Telefonos();
+            $telefono->usuario = $user->id;
+            $telefono->telefono = $numero;
+            $telefono->save();
+        }
     }
 }

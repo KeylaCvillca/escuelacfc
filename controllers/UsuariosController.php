@@ -80,23 +80,46 @@ class UsuariosController extends Controller
     public function actionCreate()
     {
         $model = new AddUserForm();
+        $model->scenario = AddUserForm::SCENARIO_CREATE;
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->created_at = time();
-            $model->updated_at = time();
-
-            if ($model->AddUser()) {
-                Yii::$app->session->setFlash('success', 'Usuario guardado exitosamente.');
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                Yii::$app->session->setFlash('error', 'Error al guardar el usuario.');
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->addUser()) {
+            Yii::$app->session->setFlash('success', 'User created successfully.');
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
+    public function actionMisdatos()
+    {
+        $userId = Yii::$app->user->id; // Get the ID of the currently logged-in user
+        $user = Usuarios::findOne($userId);
+
+        if (!$user) {
+            throw new NotFoundHttpException('User not found.');
+        }
+
+        $model = new AddUserForm();
+        $model->scenario = AddUserForm::SCENARIO_UPDATE;
+        $model->attributes = $user->attributes; // Load the user's current attributes into the model
+
+        // Convert the user's Telefonos records into a simple array
+        $model->telefonos = array_map(function ($telefono) {
+            return $telefono->telefono;
+        }, $user->telefonos);
+
+        if ($model->load(Yii::$app->request->post()) && $model->updateUser($userId)) {
+            Yii::$app->session->setFlash('success', 'Your data has been updated.');
+            return $this->redirect(['misdatos']);
+        }
+
+        return $this->render('misdatos', [
+            'model' => $model,
+        ]);
+    }
+
 
     /**
      * Updates an existing Usuarios model.
@@ -130,22 +153,6 @@ class UsuariosController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
-    
-    public function actionMisdatos()
-    {
-        $userId = Yii::$app->user->id;
-
-        if (!$userId) {
-            return $this->redirect(['site/login']);
-        }
-
-        $user = $this->findModel($userId);
-        $model = new MisDatosForm($user);
-
-        return $this->render('misdatos', [
-            'model' => $model
-        ]);
     }
 
     /**
