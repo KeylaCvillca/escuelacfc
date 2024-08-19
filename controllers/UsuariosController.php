@@ -11,6 +11,8 @@ use app\models\AddUserForm;
 use Yii;
 use yii\web\UploadedFile;
 use app\models\UsuariosSearch;
+use app\models\EnsenanSearch;
+
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -169,5 +171,17 @@ class UsuariosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+     // Acción para gestionar la relación entre maestras, niveles y funciones
+    public function actionMaestras()
+    {
+        $searchModel = new EnsenanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('maestras', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

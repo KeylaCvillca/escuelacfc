@@ -23,6 +23,7 @@ use yii\data\ActiveDataProvider;
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+    
     /**
      * {@inheritdoc}
      */
@@ -54,14 +55,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             'id' => 'ID',
-            'username' => 'Username',
+            'username' => 'Nombre de Usuario',
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'status' => 'Estado',
+            'created_at' => 'Fecha de creación',
+            'updated_at' => 'Fecha de modificación',
         ];
     }
     
