@@ -1,45 +1,35 @@
 <?php
-
-use app\models\Pasos;
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use app\models\Niveles;
+use yii\grid\ActionColumn;
+use yii\helpers\Url;
 
-/** @var yii\web\View $this */
-/** @var yii\data\ActiveDataProvider $dataProvider */
+/* @var $this yii\web\View */
+/* @var $pasos array */
+/* @var $niveles array */
 
-$this->title = 'Pasos';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="Pasos-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<h1>Pasos by Nivel Color</h1>
 
-    <p>
-        <?= Html::a('Create Pasos', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
+<?php foreach ($niveles as $nivel): ?>
+    <h2><?= Html::encode($nivel->color) ?></h2>
+    
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $pasos[$nivel->color],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'cita_biblica',
+            // Customize the columns as needed
             'nombre',
+            'cita_biblica', // Example column
             'descripcion',
-            'imagen',
-            //'color',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Pasos $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
+                'header' => Yii::t('yii2mod.rbac', 'Action'),
+                'class' => ActionColumn::class,
+                'urlCreator' => function ($action, $model, $key, $index) {
+                // Here, we explicitly reference the AuthItem model class
+                return Url::to([$action, 'id' => $model->id]);
+            }]
         ],
     ]); ?>
-
-
-</div>
+<?php endforeach; ?>

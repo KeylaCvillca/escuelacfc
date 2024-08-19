@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Mpdf\Mpdf;
+use app\models\Niveles;
 
 /**
  * PasosController implements the CRUD actions for Pasos model.
@@ -38,25 +39,21 @@ class PasosController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Pasos::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
+{
+    $niveles = Niveles::find()->all(); // Fetch all Niveles models
+    $pasos = [];
+    
+    foreach ($niveles as $nivel) {
+        $pasos[$nivel->color] = new ActiveDataProvider([
+            'query' => Pasos::find()->where(['color' => $nivel->color]),
         ]);
     }
+
+    return $this->render('index', [
+        'pasos' => $pasos,
+        'niveles' => $niveles,
+    ]);
+}
 
     /**
      * Displays a single Pasos model.

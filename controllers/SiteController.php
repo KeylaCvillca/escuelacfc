@@ -14,6 +14,8 @@ use app\models\Instrumentos;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
 use yii2mod\rbac\models\RouteModel;
+use yii\rbac\Item;
+use yii2mod\rbac\models\search\AuthItemSearch;
 
 class SiteController extends Controller
 {
@@ -145,9 +147,27 @@ class SiteController extends Controller
      */
     public function actionRbac()
     {
+        $labels = [
+        'Item' => 'Permission',
+        'Items' => 'Permissions',
+        ];
+        // Initialize the RouteModel for managing routes
         $model = Yii::createObject(RouteModel::class);
 
-        return $this->render('rbac', ['routes' => $model->getAvailableAndAssignedRoutes()]);
+        // Create the search model for managing items (roles/permissions)
+        $searchModel = new AuthItemSearch();
+        $searchModel->type = Item::TYPE_ROLE; // Assuming you're working with roles here
+
+        // Get the data provider for displaying roles/permissions in GridView
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // Render the 'rbac' view with the necessary data
+        return $this->render('rbac', [
+            'routes' => $model->getAvailableAndAssignedRoutes(),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'labels' => $labels
+        ]);
     }
     
     public function actionUpload()
