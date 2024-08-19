@@ -8,8 +8,7 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\captcha\Captcha;
 
-$this->title = 'Contact';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Contacto';
 ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -17,25 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
 
         <div class="alert alert-success">
-            Thank you for contacting us. We will respond to you as soon as possible.
+            Gracias por contactar con nosotros. Responderemos a la mayor brevedad posible.
         </div>
 
         <p>
-            Note that if you turn on the Yii debugger, you should be able
-            to view the mail message on the mail panel of the debugger.
+            
             <?php if (Yii::$app->mailer->useFileTransport): ?>
-                Because the application is in development mode, the email is not sent but saved as
-                a file under <code><?= Yii::getAlias(Yii::$app->mailer->fileTransportPath) ?></code>.
-                Please configure the <code>useFileTransport</code> property of the <code>mail</code>
-                application component to be false to enable email sending.
+                Puedes ver el email resultante en:  <code><?= Yii::getAlias(Yii::$app->mailer->fileTransportPath) ?></code>.
             <?php endif; ?>
         </p>
 
     <?php else: ?>
 
         <p>
-            If you have business inquiries or other questions, please fill out the following form to contact us.
-            Thank you.
+            Si tienes preguntas acerca de la inscripción, contacta con nosotros por medio de este formulario, o bien escríbenos un whatsapp.
         </p>
 
         <div class="row">
@@ -65,4 +59,19 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
     <?php endif; ?>
+    <div class="col-md-5">
+        <!-- Incluir la vista parcial del mapa -->
+        <?= $this->render('map') ?>
+    </div>
+    <div class="Whatsapp row">
+        <h1 class="center">Contacta con nosotros</h1>
+        <p>
+            Puedes contactarnos directamente a través de WhatsApp haciendo clic en el siguiente enlace:
+        </p>
+
+        <p>
+            <?= Html::a('Contáctanos por WhatsApp', 'https://api.whatsapp.com/send?phone=+34605594430&text=Hola%20me%20gustaria%20obtener%20informacion', ['class' => 'btn btn-success']) ?>
+        </p>
+
+    </div>
 </div>
