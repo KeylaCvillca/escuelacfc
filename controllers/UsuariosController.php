@@ -12,6 +12,7 @@ use Yii;
 use yii\web\UploadedFile;
 use app\models\UsuariosSearch;
 use app\models\EnsenanSearch;
+use app\models\Niveles;
 
 
 /**
@@ -82,17 +83,18 @@ class UsuariosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new AddUserForm();
-        $model->scenario = AddUserForm::SCENARIO_CREATE;
-        $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
+         $model = new AddUserForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->addUser()) {
-            Yii::$app->session->setFlash('success', 'User created successfully.');
-            return $this->redirect(['create']);
+            return $this->redirect(['index']);
         }
+
+        // Fetch all distinct levels for maestras
+        $niveles = Niveles::find()->select(['color'])->distinct()->all();
 
         return $this->render('create', [
             'model' => $model,
+            'niveles' => $niveles,
         ]);
     }
 
@@ -132,10 +134,16 @@ class UsuariosController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $user = Usuarios::findOne($id);
+        $model = new AddUserForm();
+        $model->attributes = $user->attributes;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $user->attributes = $model->attributes;
+            if ($user->save()) {
+                $model->assignRole($id);
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [

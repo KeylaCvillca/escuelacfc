@@ -1,11 +1,13 @@
  <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\Niveles;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\AddUserForm */
 /* @var $form yii\widgets\ActiveForm */
-
+$nivelesList = ArrayHelper::map($niveles, 'id', 'color');
 $paises = [
     'US' => 'Estados Unidos',
     'CA' => 'Canadá',
@@ -31,11 +33,16 @@ $prefijos = [
     <?= $form->field($model, 'nombre_apellidos')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'rol')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'fecha_nacimiento')->input('date') ?>
     <?= $form->field($model, 'celula')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'fecha_ingreso')->input('date') ?>
     <?= $form->field($model, 'fecha_graduacion')->input('date') ?>
+    <?= $form->field($model, 'rol')->dropDownList(['admin' => 'Admin', 'maestra' => 'Maestra', 'alumna' => 'Alumna'], ['prompt' => 'Select Role']) ?>
+
+    <div id="maestra-fields" style="display: none;">
+        <?= $form->field($model, 'niveles')->checkboxList($nivelesList) ?>
+        <?= $form->field($model, 'funcion')->dropDownList(['titular' => 'Titular', 'auxiliar' => 'Auxiliar']) ?>
+    </div>
     <?= $form->field($model, 'foto')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'pais')->dropDownList($paises, ['prompt' => 'Seleccione su país', 'value' => $model->pais]) ?>
 
@@ -86,6 +93,14 @@ function updatePrefijos() {
 }
 
 updatePrefijos();
+        
+        $('#adduserform-rol').change(function() {
+    if ($(this).val() === 'maestra') {
+        $('#maestra-fields').show();
+    } else {
+        $('#maestra-fields').hide();
+    }
+}).trigger('change');
 JS;
 $this->registerJs($script);
 ?>
