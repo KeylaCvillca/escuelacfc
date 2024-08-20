@@ -34,24 +34,28 @@ class AddUserForm extends Model
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'rol', 'created_at', 'updated_at'], 'required'],
+            [['username', 'email', 'password', 'created_at', 'updated_at'], 'required'],
             [['fecha_nacimiento', 'fecha_ingreso', 'fecha_graduacion'], 'safe'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['nombre_apellidos'], 'string', 'max' => 50],
-            [['rol'], 'in', 'range' => ['maestra', 'alumna', 'admin']],
+            [['rol'], 'string', 'max' => 40],
             [['celula'], 'string', 'max' => 20],
             [['foto', 'username', 'password', 'email'], 'string', 'max' => 255],
             [['color'], 'string', 'max' => 15],
             [['email'], 'email'],
             [['email', 'username'], 'unique', 'targetClass' => Usuarios::class],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
-            [['niveles', 'funcion'], 'safe'], // New rules for niveles and funcion
+
         ];
     }
 
     public function addUser()
     {
         $user = new Usuarios();
+        $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
+        $celulaPart = substr($this->celula, 0, 3);           // First 3 letters of celula
+        $datePart = date('dm');                              // Current day and month in 'ddmm' format
+        $this->username = strtolower($nombrePart . $celulaPart . $datePart);
 
         if ($this->validate()) {
             $user->attributes = $this->attributes;

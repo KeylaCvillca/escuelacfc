@@ -85,9 +85,18 @@ class UsuariosController extends Controller
     {
          $model = new AddUserForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->addUser()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->created_at = time();
+            $model->updated_at = time();
+
+            if ($model->AddUser()) {
+                Yii::$app->session->setFlash('success', 'Usuario guardado exitosamente.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Error al guardar el usuario.');
+            }
         }
+
 
         // Fetch all distinct levels for maestras
         $niveles = Niveles::find()->select(['color'])->distinct()->all();

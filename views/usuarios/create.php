@@ -37,7 +37,7 @@ $prefijos = [
     <?= $form->field($model, 'celula')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'fecha_ingreso')->input('date') ?>
     <?= $form->field($model, 'fecha_graduacion')->input('date') ?>
-    <?= $form->field($model, 'rol')->dropDownList(['admin' => 'Admin', 'maestra' => 'Maestra', 'alumna' => 'Alumna'], ['prompt' => 'Select Role']) ?>
+    <?= $form->field($model, 'rol')->dropDownList(['admin' => 'Admin', 'maestra' => 'Maestra', 'alumna' => 'Alumna'], ['prompt' => 'Elige un rol']) ?>
 
     <div id="maestra-fields" style="display: none;">
         <?= $form->field($model, 'niveles')->checkboxList($nivelesList) ?>
