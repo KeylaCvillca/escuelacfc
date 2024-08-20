@@ -23,7 +23,7 @@ use yii\data\ActiveDataProvider;
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-    
+    public $rol;
     /**
      * {@inheritdoc}
      */
@@ -142,7 +142,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return Yii::$app->getSecurity()->generatePasswordHash($password);
     }
     
-    public static function getRole() {
-        
+    public function getRole() {
+        $usuario = Usuarios::findOne($this->id);
+        return $usuario->getAttribute('rol');
     }
+    
 }

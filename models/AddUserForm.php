@@ -30,6 +30,15 @@ class AddUserForm extends Model
     public $id;
     public $niveles; // Array to hold selected levels
     public $funcion; // Array to hold corresponding functions (titular or auxiliar)
+    public $auth_key;
+    public $password_hash;
+    public $password_reset_token;
+    public $scenario;
+    public $fotoFile;
+    
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
+        
 
     public function rules()
     {
@@ -52,11 +61,15 @@ class AddUserForm extends Model
     public function addUser()
     {
         $user = new Usuarios();
+        
+        // IMPORTANTE: Esta parte es necesaria para que $this->validate() sea true y pueda pasar a la siguiente fase.
         $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
         $celulaPart = substr($this->celula, 0, 3);           // First 3 letters of celula
         $datePart = date('dm');                              // Current day and month in 'ddmm' format
         $this->username = strtolower($nombrePart . $celulaPart . $datePart);
-
+        // Hasta aquí.
+        
+        
         if ($this->validate()) {
             $user->attributes = $this->attributes;
             $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
@@ -92,6 +105,13 @@ class AddUserForm extends Model
         return false;
     }
     
+    /**
+     * Método que asigna un rol dentro del RBAC al usuario que estamos creando o actualizando.
+     * 
+     * Importante para que el RBAC funcione de manera intuitiva.
+     * 
+     * @param type $userId
+     */
     public function assignRole($userId)
     {
         // Remove the previous role assignment, if any

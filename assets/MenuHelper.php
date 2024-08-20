@@ -77,7 +77,7 @@ class MenuHelper {
         'options' => ['class' => 'navbar-nav'],
         'items' => Yii::$app->user->identity == null? // == Null temporal. Ideal: isGuest()
                 MenuHelper::links("guest")
-                :MenuHelper::links("admin")
+                :MenuHelper::links(Yii::$app->user->identity->getRole())
         ]);
     }
     
