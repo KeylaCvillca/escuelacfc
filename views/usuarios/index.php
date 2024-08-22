@@ -31,6 +31,10 @@ $this->title = 'Manage Users';
 
         <?php ActiveForm::end(); ?>
     </div>
+    <div class="add_usuarios">
+        <p><?= Html::a('Crear Usuario', ['usuarios/create'],['class' => 'btn btn-success'])?></p>
+        <p><?= Html::a('Añadir usuarios desde excel', ['usuarios/upload'],['class' => 'btn btn-success'])?></p>
+    </div>
 
     <h2>All Users</h2>
     <?= GridView::widget([

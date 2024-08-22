@@ -14,6 +14,7 @@ use app\models\UsuariosSearch;
 use app\models\EnsenanSearch;
 use app\models\Niveles;
 use app\models\Ensenan;
+use app\models\UploadExcelForm;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
@@ -244,8 +245,45 @@ class UsuariosController extends Controller
                 return $this->redirect(['index']);
             }
         }
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => [
+                [
+                    'A: nombre_apellidos' => 'Juana Pérez',
+                    'B: rol' => 'maestra',
+                    'C: fecha_nacimiento' => '1980-05-15',
+                    'D: celula' => 'Su Presencia',
+                    'E: fecha_ingreso' => '2023-01-10',
+                    'F: fecha_graduacion' => '2024-12-20',
+                    'G: email' => 'juana.perez@example.com',
+                    'H: color' => 'rosa',
+                    'I: password' => '1234pass',
+                    'J: telefonos' => '34-623576879,34-712345678',
+                    'K: niveles' => '1,2',
+                    'L: funciones' => 'auxiliar,titular',
+                ],
+                [
+                    'A: nombre_apellidos' => 'Juan Pérez',
+                    'B: rol' => 'maestra',
+                    'C: fecha_nacimiento' => '1980-05-15',
+                    'D: celula' => 'Efraín',
+                    'E: fecha_ingreso' => '2023-01-10',
+                    'F: fecha_graduacion' => '2024-12-20',
+                    'G: email' => 'juan.perez@example.com',
+                    'H: color' => 'rosa',
+                    'I: password' => '1234pass',
+                    'J: telefonos' => '34-699124356,34-692385471',
+                    'K: niveles' => '1,2,3',
+                    'L: funciones' => 'titular,auxiliar,auxiliar',
+                ]
+            ],
+        ]);
 
-        return $this->render('upload', ['model' => $model]);
+        return $this->render('upload', [
+            'dataProvider' => $dataProvider,
+            'model' => new UploadExcelForm(),
+        ]);
+
+       
     }
 
     protected function importUsersFromExcel($filePath)
