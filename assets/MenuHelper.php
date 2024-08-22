@@ -24,13 +24,13 @@ class MenuHelper {
             case "alumna":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Conócenos', 'url' => ['/site/about']],
-                    ['label' => 'Alumna (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
+                    ['label' => 'Conócenos', 'url' => ['/site/about']],       
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
                     ['label' => 'Quiz', 'url' => ['/site/quiz']],
                     ['label' => 'Noticias', 'url' => ['/noticias/index']],
                     ['label' => 'Contacto', 'url' => ['/site/contact']],
+                    ['label' => 'Alumna (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
@@ -39,12 +39,12 @@ class MenuHelper {
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
-                    ['label' => 'Maestra (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Mis alumnas', 'url' => ['/usuarios/alumnas']],
                     ['label' => 'Quiz', 'url' => ['/site/quiz']],
                     ['label' => 'Noticias', 'url' => ['/noticias/index']],
                     ['label' => 'Contacto', 'url' => ['/site/contact']],
+                    ['label' => 'Maestra (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    

@@ -13,6 +13,9 @@ use yii\web\UploadedFile;
 use app\models\UsuariosSearch;
 use app\models\EnsenanSearch;
 use app\models\Niveles;
+use app\models\Ensenan;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 
 /**
@@ -200,5 +203,126 @@ class UsuariosController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+    
+    public function actionAlumnas() {
+         // Obtener todos los niveles en los que enseña el usuario actual
+        $niveles = Ensenan::find()
+            ->select('color')
+            ->distinct()
+            ->where(['maestra' => Yii::$app->user->identity->id])
+            ->column();
+
+        // Obtener todas las alumnas que están en los niveles seleccionados
+        $alumnas = Usuarios::find()
+            ->where(['rol' => 'alumna', 'color' => $niveles])
+            ->all();
+
+        // Agrupar las alumnas por nivel
+        $alumnasPorNivel = [];
+        foreach ($alumnas as $alumna) {
+            $alumnasPorNivel[$alumna->color][$alumna->id] = $alumna;
+        }
+
+        // Renderizar la vista y pasar el array $alumnasPorNivel
+        return $this->render('alumnas', [
+            'alumnasPorNivel' => $alumnasPorNivel,
+        ]);
+    }
+    
+    public function actionUpload()
+    {
+        $model = new UploadExcelForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            $filePath = $model->upload();
+            
+            if ($filePath) {
+                $this->importUsersFromExcel($filePath);
+                Yii::$app->session->setFlash('success', 'Usuarios cargados exitosamente.');
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
+    }
+
+    protected function importUsersFromExcel($filePath)
+    {
+        $reader = new Xlsx();
+        $spreadsheet = $reader->load($filePath);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+        foreach ($sheetData as $key => $row) {
+            // Saltar la primera fila si es un encabezado
+            if ($key == 1) {
+                continue;
+            }
+
+            $usuario = new Usuarios();
+            $usuario->nombre_apellidos = $row['A'];
+            $usuario->rol = $row['B'];
+            $usuario->fecha_nacimiento = $row['C'];
+            $usuario->celula = $row['D'];
+            $usuario->fecha_ingreso = $row['E'];
+            $usuario->fecha_graduacion = $row['F'];
+            $usuario->email = $row['G'];
+            $usuario->color = $row['H'];
+            $usuario->username = $this->generateUsername($usuario->nombre_apellidos, $usuario->celula);
+            $usuario->password_hash = Yii::$app->security->generatePasswordHash($row['I']);
+            $usuario->auth_key = Yii::$app->security->generateRandomString();
+            $usuario->status = 10;
+            $usuario->created_at = time();
+            $usuario->updated_at = time();
+
+            if ($usuario->save()) {
+                // Guardar teléfonos si hay
+                if (!empty($row['J'])) {
+                    $telefonos = explode(',', $row['J']);
+                    foreach ($telefonos as $numero) {
+                        $telefono = new Telefonos();
+                        $telefono->usuario_id = $usuario->id;
+                        $telefono->telefono = $numero;
+                        $telefono->save();
+                    }
+                }
+
+                // Guardar niveles y funciones si es una maestra
+                if ($usuario->rol === 'maestra' && !empty($row['K']) && !empty($row['L'])) {
+                    $niveles = explode(',', $row['K']);
+                    $funciones = explode(',', $row['L']);
+
+                    foreach ($niveles as $index => $nivel) {
+                        $ensenan = new Ensenan();
+                        $ensenan->usuario_id = $usuario->id;
+                        $ensenan->nivel_id = $nivel;
+                        $ensenan->funcion = $funciones[$index];
+                        $ensenan->save();
+                    }
+                }
+
+                // Asignar rol en RBAC
+                $this->assignRole($usuario->id, $usuario->rol);
+            }
+        }
+    }
+
+    protected function generateUsername($nombreApellidos, $celula)
+    {
+        $nombrePart = substr(str_replace(' ', '', $nombreApellidos), 0, 4);
+        $celulaPart = substr($celula, 0, 3);
+        $datePart = date('dm');
+        return strtolower($nombrePart . $celulaPart . $datePart);
+    }
+
+    protected function assignRole($userId, $rol)
+    {
+        Yii::$app->db->createCommand()->delete('auth_assignment', ['user_id' => $userId])->execute();
+        Yii::$app->db->createCommand()->insert('auth_assignment', [
+            'item_name' => $rol,
+            'user_id' => $userId,
+            'created_at' => time(),
+        ])->execute();
     }
 }

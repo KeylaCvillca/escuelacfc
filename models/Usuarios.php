@@ -77,7 +77,7 @@ class Usuarios extends \yii\db\ActiveRecord
             'fecha_ingreso' => 'Fecha Ingreso',
             'fecha_graduacion' => 'Fecha Graduacion',
             'foto' => 'Foto',
-            'color' => 'Color',
+            'color' => 'Nivel',
             'username' => 'Username',
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password Hash',
