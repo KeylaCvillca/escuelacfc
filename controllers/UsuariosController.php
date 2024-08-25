@@ -17,6 +17,7 @@ use app\models\Ensenan;
 use app\models\UploadExcelForm;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use app\models\Telefonos;
 
 
 /**
@@ -237,11 +238,11 @@ class UsuariosController extends Controller
         Yii::debug("Hola");
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
-            $filePath = $model->upload();
+            $uploaded = $model->upload();
             Yii::debug("Hola2");
-            if ($filePath) {
+            if ($uploaded) {
                 Yii::debug("Hola3");
-                $this->importUsersFromExcel($filePath);
+                $this->importUsersFromExcel($model->getPath());
                 Yii::$app->session->setFlash('success', 'Usuarios cargados exitosamente.');
                 return $this->redirect(['index']);
             }
@@ -321,7 +322,7 @@ class UsuariosController extends Controller
                     $telefonos = explode(',', $row['J']);
                     foreach ($telefonos as $numero) {
                         $telefono = new Telefonos();
-                        $telefono->usuario_id = $usuario->id;
+                        $telefono->usuario = $usuario->id;
                         $telefono->telefono = $numero;
                         $telefono->save();
                     }
@@ -334,8 +335,8 @@ class UsuariosController extends Controller
 
                     foreach ($niveles as $index => $nivel) {
                         $ensenan = new Ensenan();
-                        $ensenan->usuario_id = $usuario->id;
-                        $ensenan->nivel_id = $nivel;
+                        $ensenan->maestra = $usuario->id;
+                        $ensenan->color = $nivel;
                         $ensenan->funcion = $funciones[$index];
                         $ensenan->save();
                     }
