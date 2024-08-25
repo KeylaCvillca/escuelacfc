@@ -234,12 +234,13 @@ class UsuariosController extends Controller
     public function actionUpload()
     {
         $model = new UploadExcelForm();
-
+        Yii::debug("Hola");
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
             $filePath = $model->upload();
-            
+            Yii::debug("Hola2");
             if ($filePath) {
+                Yii::debug("Hola3");
                 $this->importUsersFromExcel($filePath);
                 Yii::$app->session->setFlash('success', 'Usuarios cargados exitosamente.');
                 return $this->redirect(['index']);

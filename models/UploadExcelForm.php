@@ -21,9 +21,8 @@ class UploadExcelForm extends Model
     public function upload()
     {
         if ($this->validate()) {
-            $filePath = 'uploads/' . $this->file->baseName . '.' . $this->file->extension;
-            $this->file->saveAs($filePath);
-            return $filePath;
+            $path = Yii::getAlias('@webroot') . '/excel/' . $this->file->baseName . '.' . $this->file->extension;
+            return $this->file->saveAs($path);
         } else {
             return false;
         }

@@ -28,7 +28,7 @@ class MenuHelper {
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
                     ['label' => 'Quiz', 'url' => ['/site/quiz']],
-                    ['label' => 'Noticias', 'url' => ['/noticias/index']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/read']],
                     ['label' => 'Contacto', 'url' => ['/site/contact']],
                     ['label' => 'Alumna (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
@@ -42,7 +42,7 @@ class MenuHelper {
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Mis alumnas', 'url' => ['/usuarios/alumnas']],
                     ['label' => 'Quiz', 'url' => ['/site/quiz']],
-                    ['label' => 'Noticias', 'url' => ['/noticias/index']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/read']],
                     ['label' => 'Contacto', 'url' => ['/site/contact']],
                     ['label' => 'Maestra (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
@@ -57,6 +57,7 @@ class MenuHelper {
                         ['label' => 'Páginas','url'=>['/site/rbac']],
                         ['label'=> 'Usuarios','url'=>['/usuarios/index']],
                         ['label'=> 'Archivos','url'=>['/site/files']],
+                        ['label'=> 'Archivos','url'=>['/noticias/index']],
                     ]],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
@@ -75,7 +76,7 @@ class MenuHelper {
     public static function navMenu() {
         return Nav::widget([
         'options' => ['class' => 'navbar-nav'],
-        'items' => Yii::$app->user->identity == null? // == Null temporal. Ideal: isGuest()
+        'items' => Yii::$app->user->identity == null?
                 MenuHelper::links("guest")
                 :MenuHelper::links(Yii::$app->user->identity->getRole())
         ]);
