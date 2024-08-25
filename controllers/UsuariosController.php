@@ -149,18 +149,24 @@ class UsuariosController extends Controller
     public function actionUpdate($id)
     {
         $user = Usuarios::findOne($id);
+
+        if (!$user) {
+            throw new NotFoundHttpException('User not found.');
+        }
+
         $model = new AddUserForm();
+        $model->scenario = AddUserForm::SCENARIO_UPDATE;
         $model->attributes = $user->attributes;
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $user->attributes = $model->attributes;
-            if ($user->save()) {
-                $model->assignRole($id);
-                return $this->redirect(['index']);
+        if (Yii::$app->request->isPost) {
+            $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
+            if ($model->load(Yii::$app->request->post()) && $model->updateUser($userId)) {
+                Yii::$app->session->setFlash('success', 'Your data has been updated.');
+                return $this->redirect(['misdatos']);
             }
         }
 
-        return $this->render('update', [
+        return $this->render('misdatos', [
             'model' => $model,
         ]);
     }
@@ -235,14 +241,19 @@ class UsuariosController extends Controller
     public function actionUpload()
     {
         $model = new UploadExcelForm();
-        Yii::debug("Hola");
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
             $uploaded = $model->upload();
-            Yii::debug("Hola2");
             if ($uploaded) {
-                Yii::debug("Hola3");
-                $this->importUsersFromExcel($model->getPath());
+                 set_time_limit(500);
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $this->importUsersFromExcel($model->getPath());
+                    $transaction->commit();
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    throw $e; // Or handle the error appropriately
+                }
                 Yii::$app->session->setFlash('success', 'Usuarios cargados exitosamente.');
                 return $this->redirect(['index']);
             }
@@ -349,11 +360,33 @@ class UsuariosController extends Controller
     }
 
     protected function generateUsername($nombreApellidos, $celula)
+{
+    // Normalize accented characters
+    $nombreApellidos = $this->normalizeString($nombreApellidos);
+    $celula = $this->normalizeString($celula);
+
+    // Remove all whitespaces
+    $nombreApellidos = str_replace(' ', '', $nombreApellidos);
+    $celula = str_replace(' ', '', $celula);
+
+    // Generate username parts
+    $nombrePart = substr($nombreApellidos, 0, 4);
+    $celulaPart = substr($celula, 0, 3);
+    $datePart = date('dm');
+
+    return strtolower($nombrePart . $celulaPart . $datePart);
+}
+
+    protected function normalizeString($string)
     {
-        $nombrePart = substr(str_replace(' ', '', $nombreApellidos), 0, 4);
-        $celulaPart = substr($celula, 0, 3);
-        $datePart = date('dm');
-        return strtolower($nombrePart . $celulaPart . $datePart);
+        // Convert accented characters to their non-accented equivalents
+        $normalized = strtr(
+            utf8_decode($string),
+            utf8_decode('áàäâãåçéèëêíìïîñóòöôõúùüûýÿÁÀÄÂÃÅÇÉÈËÊÍÌÏÎÑÓÒÖÔÕÚÙÜÛÝŸ'),
+            'aaaaaaceeeeiiiinooooouuuuyyAAAAAACEEEEIIIINOOOOOUUUUYY'
+        );
+
+        return utf8_encode($normalized);
     }
 
     protected function assignRole($userId, $rol)

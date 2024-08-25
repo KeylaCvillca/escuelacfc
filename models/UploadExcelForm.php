@@ -21,13 +21,12 @@ class UploadExcelForm extends Model
 
     public function upload()
     {
-        Yii::debug(Yii::getAlias('@webroot') . '/excel/' . $this->file->baseName . '.' . $this->file->extension);
+
         if ($this->validate()) {
             Yii::debug("Validado");
             $path = Yii::getAlias('@webroot') . '/excel/' . $this->file->baseName . '.' . $this->file->extension;
             return $this->file->saveAs($path);
         } else {
-            Yii::debug('Validation failed. Errors: ' . json_encode($this->getErrors()));
             return false;
         }
     }
