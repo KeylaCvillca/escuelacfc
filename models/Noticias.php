@@ -76,4 +76,13 @@ class Noticias extends \yii\db\ActiveRecord
         // Usa la relación definida para obtener el autor
         return $this->getAutor()->one() ? $this->getAutor()->one()->nombre_apellidos : 'Desconocido';
     }
+    
+    public function getFechaFormateada() {
+        if ($this->fecha_publicacion) {
+            setlocale(LC_TIME, 'es_ES.UTF-8');
+            $timestamp = strtotime($this->fecha_publicacion);
+            return strftime('%d de %B de %Y', $timestamp);
+            }
+        return null;
+    }
 }         

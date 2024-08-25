@@ -10,7 +10,7 @@ use yii\helpers\Html;
 /* @var $maestraProvider yii\data\ActiveDataProvider */
 /* @var $alumnaProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Manage Users';
+$this->title = 'Usuarios';
 ?>
 
 <div class="usuarios-index">
@@ -20,10 +20,14 @@ $this->title = 'Manage Users';
         <?php $form = ActiveForm::begin([
             'method' => 'get',
         ]); ?>
-
-        <?= $form->field($searchModel, 'nombre_apellidos')->textInput(['placeholder' => 'Search by name'])->label(false) ?>
-        <?= $form->field($searchModel, 'telefono')->textInput(['placeholder' => 'Search by phone'])->label(false) ?>
-
+        <div class="d-flex">
+            <h2>Filtros:</h2>
+            <?= $form->field($searchModel, 'nombre_apellidos')->textInput(['placeholder' => 'Nombre y Apellidos'])->label(false) ?>
+            <?= $form->field($searchModel, 'rol')->textInput(['placeholder' => 'Rol'])->label(false) ?>
+            <?= $form->field($searchModel, 'email')->textInput(['placeholder' => 'Email'])->label(false) ?>
+            <?= $form->field($searchModel, 'color')->textInput(['placeholder' => 'Color'])->label(false) ?>
+            <?= $form->field($searchModel, 'telefono')->textInput(['placeholder' => 'Teléfono'])->label(false) ?>
+        </div>
         <div class="form-group">
             <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
             <?= Html::a('Reset', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
@@ -35,12 +39,9 @@ $this->title = 'Manage Users';
         <p><?= Html::a('Crear Usuario', ['usuarios/create'],['class' => 'btn btn-success'])?></p>
         <p><?= Html::a('Añadir usuarios desde excel', ['usuarios/upload'],['class' => 'btn btn-success'])?></p>
     </div>
-
-    <h2>All Users</h2>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             'nombre_apellidos',
             'email',
             'rol',
@@ -53,43 +54,6 @@ $this->title = 'Manage Users';
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
-
-    <h2>Users with Maestra Role</h2>
-    <?= GridView::widget([
-        'dataProvider' => $maestraProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'nombre_apellidos',
-            'email',
-            'rol',
-            'celula',
-            [
-                'label' => 'Phone',
-                'value' => function($model) {
-                    return implode(', ', array_column($model->telefonos, 'telefono'));
-                },
-            ],
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
-    <h2>Users with Alumna Role</h2>
-    <?= GridView::widget([
-        'dataProvider' => $alumnaProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'nombre_apellidos',
-            'email',
-            'rol',
-            'celula',
-            [
-                'label' => 'Phone',
-                'value' => function($model) {
-                    return implode(', ', array_column($model->telefonos, 'telefono'));
-                },
-            ],
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
+        'summary' => ''
     ]); ?>
 </div>

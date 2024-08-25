@@ -26,7 +26,7 @@ use yii\widgets\LinkPager;
         </div>
         <div class="col-md-4 text-right">
             <p class="text-muted">
-                Fecha de publicación: <?= Yii::$app->formatter->asDate($noticia->fecha_publicacion, 'long') ?>
+                Fecha de publicación: <?= $noticia->getFechaFormateada() ?>
             </p>
         </div>
     </div>
