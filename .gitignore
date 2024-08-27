@@ -34,3 +34,6 @@ tests/_support/_generated
 
 # Python Virtual Enviroment
 .venv/
+
+# Archivos Excel que estén abiertos
+/web/excel/~*

@@ -16,7 +16,6 @@ class MenuHelper {
             case "guest":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Soy un invitado', 'url' => ['/site/index']],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
                     ['label' => 'Noticias', 'url' => ['/noticias/public']],
                     ['label' => 'Contacto', 'url' => ['/site/contact']],
@@ -24,13 +23,11 @@ class MenuHelper {
                     ];
             case "alumna":
                 return [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Conócenos', 'url' => ['/site/about']],       
+                    ['label' => 'Home', 'url' => ['/site/index']],      
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
-                    ['label' => 'Quiz', 'url' => ['/site/quiz']],
+                    ['label' => 'Quiz', 'url' => ['/pasos/quiz']],
                     ['label' => 'Noticias', 'url' => ['/noticias/read']],
-                    ['label' => 'Contacto', 'url' => ['/site/contact']],
                     ['label' => 'Alumna (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
@@ -39,13 +36,11 @@ class MenuHelper {
             case "maestra":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Conócenos', 'url' => ['/site/about']],
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Mis alumnas', 'url' => ['/usuarios/alumnas']],
-                    ['label' => 'Quiz', 'url' => ['/site/quiz']],
+                    ['label' => 'Quiz', 'url' => ['/pasos/quiz']],
                     ['label' => 'Publicaciones', 'url' => ['/noticias/misnoticias']],
                     ['label' => 'Noticias', 'url' => ['/noticias/read']],
-                    ['label' => 'Contacto', 'url' => ['/site/contact']],
                     ['label' => 'Maestra (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
@@ -61,11 +56,9 @@ class MenuHelper {
                         ['label'=> 'Archivos','url'=>['/site/files']],
                         ['label'=> 'Noticias','url'=>['/noticias/index']],
                     ]],
-                    ['label' => 'Conócenos', 'url' => ['/site/about']],
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Quiz', 'url' => ['/pasos/quiz']],
                     ['label' => 'Noticias', 'url' => ['/noticias/read']],
-                    ['label' => 'Contacto', 'url' => ['/site/contact']],
                     ['label' => 'Administrador (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
