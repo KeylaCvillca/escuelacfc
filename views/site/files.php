@@ -20,14 +20,14 @@ $this->title = 'Archivos';
                 <p><?= basename($file) ?></p>
                 <p><?= Html::a('Ver', '#', [
                         'class' => 'btn btn-primary view-file-btn',
-                        'data-filename' => basename($file),
+                        'data-filename' => $file,
                         'data-toggle' => 'modal',
                         'data-target' => '#fileModal'
                     ]) ?></p>
                 <p><?= Html::a('<i class="fa-regular fa-trash-can"></i> ' . Yii::t('app', 'Eliminar'), ['delete-file', 'filename' => basename($file)], [
                         'class' => 'btn btn-primary',
                         'data' => [
-                            'confirm' => 'Are you sure you want to delete this file?',
+                            'confirm' => '¿Seguro que deseas eliminar este archivo?',
                             'method' => 'post',
                         ],
                     ]) ?></p>

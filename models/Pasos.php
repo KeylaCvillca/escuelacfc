@@ -89,9 +89,8 @@ class Pasos extends \yii\db\ActiveRecord
     }
     
     public function getImgUrl() {
-        $imgPath = Yii::getAlias('@webroot/imagenes/' . $this->imagen);
-        $defaultImgUrl = Url::to("@web/imagenes/default.jpg");
-
-        return Url::to((file_exists($imgPath)? '@web/imagenes/' . $this->imagen:$defaultImgUrl));
+        $imgPath = Yii::getAlias('@webroot/imagenes/pasos/' . $this->imagen);
+        
+        return Url::to((file_exists($imgPath)? '@web/imagenes/pasos/' . $this->imagen:"@web/imagenes/pasos/default.jpg"));
     }
 }

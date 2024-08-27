@@ -28,8 +28,8 @@ class AddUserForm extends Model
     public $status;
     public $telefonos = [];
     public $id;
-    public $niveles; // Array to hold selected levels
-    public $funcion; // Array to hold corresponding functions (titular or auxiliar)
+    public $niveles = []; // Array to hold selected levels
+    public $funcion = []; // Array to hold corresponding functions (titular or auxiliar)
     public $auth_key;
     public $password_hash;
     public $password_reset_token;

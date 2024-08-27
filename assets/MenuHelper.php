@@ -18,6 +18,7 @@ class MenuHelper {
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'Soy un invitado', 'url' => ['/site/index']],
                     ['label' => 'Conócenos', 'url' => ['/site/about']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/public']],
                     ['label' => 'Contacto', 'url' => ['/site/contact']],
                     ['label' => 'Conectarse', 'url' => ['/site/login']]    
                     ];
@@ -42,6 +43,7 @@ class MenuHelper {
                     ['label' => 'Materiales', 'url' => ['/pasos/index']],
                     ['label' => 'Mis alumnas', 'url' => ['/usuarios/alumnas']],
                     ['label' => 'Quiz', 'url' => ['/site/quiz']],
+                    ['label' => 'Publicaciones', 'url' => ['/noticias/misnoticias']],
                     ['label' => 'Noticias', 'url' => ['/noticias/read']],
                     ['label' => 'Contacto', 'url' => ['/site/contact']],
                     ['label' => 'Maestra (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],

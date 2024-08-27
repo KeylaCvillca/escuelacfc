@@ -181,4 +181,38 @@ class NoticiasController extends Controller
         ]);
     }
     
+    public function actionMisnoticias()
+    {
+        // Crear un ActiveDataProvider para listar las noticias del usuario actual
+        $dataProvider = new ActiveDataProvider([
+            'query' => Noticias::find()->where(['autor' => Yii::$app->user->id]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        return $this->render('misnoticias', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionPublic() {
+        // Configurar la paginación
+        $query = Noticias::find()->where(['publico' => true]); // Usa el modelo Noticias
+        $pagination = new Pagination([
+            'defaultPageSize' => 10, // Número de noticias por página
+            'totalCount' => $query->count(),
+        ]);
+
+        $noticias = $query->offset($pagination->offset)
+                          ->limit($pagination->limit)
+                          ->all();
+
+        return $this->render('public', [
+            'noticias' => $noticias,
+            'pagination' => $pagination,
+        ]);
+    }
+    
+    
 }

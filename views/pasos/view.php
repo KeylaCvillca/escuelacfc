@@ -27,6 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+    <?= Html::img($model->getImgUrl()) ?>
+    
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -48,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ["class" => "btn btn-primary"]
             ) ?>
     </div>
+    
     
     
 

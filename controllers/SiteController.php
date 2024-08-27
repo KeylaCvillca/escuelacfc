@@ -208,15 +208,19 @@ class SiteController extends Controller
 
     public function actionViewFile($filename)
     {
-        $imagePath = Yii::getAlias('@web/imagenes/' . $filename);
-        $videoPath = Yii::getAlias('@web/videos/' . $filename);
+        $imagePath = 'imagenes/' . $filename;
+        $videoPath = 'videos/' . $filename;
 
-        if (!file_exists($imagePath) && !file_exists($videoPath)) {
+        // Check if file exists in either directory
+        if (!file_exists(Yii::getAlias('@webroot/' . $imagePath)) && !file_exists(Yii::getAlias('@webroot/' . $videoPath))) {
             throw new NotFoundHttpException('The requested file does not exist.');
         }
 
-        $filePath = file_exists($imagePath) ? $imagePath : $videoPath;
+        // Determine the correct file path to display
+        $filePath = file_exists(Yii::getAlias('@webroot/' . $imagePath)) ? $imagePath : $videoPath;
+
         return $this->renderAjax('view-file', ['filePath' => $filePath, 'filename' => $filename]);
+
     }
 
     
