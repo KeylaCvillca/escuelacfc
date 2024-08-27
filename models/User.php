@@ -101,6 +101,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ]);
         return $data->getModels()[0];
     }
+    
+    public static function findByUsernameOrEmail($usernameOrEmail)
+    {
+        return self::find()
+            ->where(['username' => $usernameOrEmail])
+            ->orWhere(['email' => $usernameOrEmail])
+            ->one();
+    }
 
     /**
      * {@inheritdoc}

@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -9,16 +8,14 @@ use yii\base\Model;
  * LoginForm is the model behind the login form.
  *
  * @property-read User|null $user
- *
  */
 class LoginForm extends Model
 {
-    public $username;
+    public $usernameOrEmail;  // Cambiado de $username a $usernameOrEmail
     public $password;
     public $rememberMe = true;
 
     private $_user = false;
-
 
     /**
      * @return array the validation rules.
@@ -26,19 +23,21 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
+            // usernameOrEmail and password are both required
+            [['usernameOrEmail', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
     }
-    
-    public function attributeLabels() {
+
+    public function attributeLabels()
+    {
         return [
-            'username' => 'Usuario',
-            'password' => 'Contraseña'
+            'usernameOrEmail' => 'Usuario o Email',
+            'password' => 'Contraseña',
+            'rememberMe' => 'Recordarme',
         ];
     }
 
@@ -61,7 +60,7 @@ class LoginForm extends Model
     }
 
     /**
-     * Logs in a user using the provided username and password.
+     * Logs in a user using the provided username/email and password.
      * @return bool whether the user is logged in successfully
      */
     public function login()
@@ -73,14 +72,14 @@ class LoginForm extends Model
     }
 
     /**
-     * Finds user by [[username]]
+     * Finds user by [[usernameOrEmail]]
      *
      * @return User|null
      */
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::findByUsernameOrEmail($this->usernameOrEmail);
         }
 
         return $this->_user;
