@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\AddUserForm */
 
-$this->title = 'My Data';
+$this->title = 'Mis datos';
 ?>
 
 <div class="usuarios-misdatos">
@@ -16,8 +16,8 @@ $this->title = 'My Data';
         'options' => ['enctype' => 'multipart/form-data']
     ]); ?>
 
-    <?= $form->field($model, 'nombre_apellidos')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+    <p>Nombre y Apellidos: <?= $model->nombre_apellidos ?></p>
+    <p>Email: <?= $model->email ?></p>
     <?= $form->field($model, 'fecha_nacimiento')->input('date') ?>
     <?= $form->field($model, 'celula')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'fecha_ingreso')->input('date') ?>

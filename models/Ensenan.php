@@ -17,6 +17,8 @@ use Yii;
  */
 class Ensenan extends \yii\db\ActiveRecord
 {
+    public $nombre;
+    
     /**
      * {@inheritdoc}
      */
@@ -68,7 +70,7 @@ class Ensenan extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getMaestra0()
+    public function getMaestra()
     {
         return $this->hasOne(Usuarios::class, ['id' => 'maestra']);
     }

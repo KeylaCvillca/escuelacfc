@@ -7,6 +7,10 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Usuarios;
+use app\models\Niveles;
+use yii\data\SqlDataProvider;
+use Yii;
 
 /**
  * EnsenanController implements the CRUD actions for Ensenan model.
@@ -38,23 +42,25 @@ class EnsenanController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Ensenan::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $dataProvider = new SqlDataProvider([
+        'sql' => '
+            SELECT usuarios.nombre_apellidos AS nombre, ensenan.color, ensenan.funcion
+            FROM ensenan
+            INNER JOIN usuarios ON ensenan.maestra = usuarios.id
+        ',
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        'sort' => [
+            'attributes' => [
+                'maestra',
+                'color',
+                'funcion',
+            ],
+        ],
+    ]);
+
+    return $this->render('index', [
+        'dataProvider' => $dataProvider,
+    ]);
     }
 
     /**
@@ -79,16 +85,18 @@ class EnsenanController extends Controller
     {
         $model = new Ensenan();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        // Fetch all maestras
+        $maestras = Usuarios::find()->where(['rol' => 'maestra'])->all();
+        $niveles = Niveles::find()->all();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'maestras' => $maestras,
+            'niveles' => $niveles,
         ]);
     }
 

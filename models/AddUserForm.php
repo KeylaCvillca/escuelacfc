@@ -126,4 +126,63 @@ class AddUserForm extends Model
             'created_at' => time(),
         ])->execute();
     }
+    
+    public function updateUser($id)
+    {
+        // Find the existing user by ID
+        $user = Usuarios::findOne($id);
+        if (!$user) {
+            return false; // User not found
+        }
+
+        // Update user attributes with the form data
+        $user->nombre_apellidos = $this->nombre_apellidos;
+        $user->rol = $this->rol;
+        $user->fecha_nacimiento = $this->fecha_nacimiento;
+        $user->celula = $this->celula;
+        $user->fecha_ingreso = $this->fecha_ingreso;
+        $user->fecha_graduacion = $this->fecha_graduacion;
+        $user->foto = $this->foto;
+        $user->color = $this->color;
+        $user->username = $this->username;
+        $user->email = $this->email;
+        $user->status = $this->status;
+        $user->updated_at = time();
+
+        // If the password was provided, update it
+        if (!empty($this->password)) {
+            $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
+        }
+
+        if ($this->validate() && $user->save()) {
+            // Update phones
+            Telefonos::deleteAll(['usuario' => $user->id]); // Clear existing phone numbers
+            foreach ($this->telefonos as $numero) {
+                $telefono = new Telefonos();
+                $telefono->usuario_id = $user->id;
+                $telefono->telefono = $numero;
+                $telefono->save();
+            }
+
+            // Re-assign roles
+            $this->assignRole($user->id);
+
+            // Update teaching assignments if the role is "maestra"
+            if ($this->rol === 'maestra') {
+                Ensenan::deleteAll(['maestra' => $user->id]); // Clear existing teaching assignments
+                foreach ($this->niveles as $key => $nivel) {
+                    $ensenan = new Ensenan();
+                    $ensenan->usuario_id = $user->id;
+                    $ensenan->nivel_id = $nivel;
+                    $ensenan->funcion = $this->funcion[$key];
+                    $ensenan->save();
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
 }
