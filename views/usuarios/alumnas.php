@@ -1,39 +1,26 @@
 <?php
-use yii\grid\GridView;
-use yii\data\ArrayDataProvider;
-
 /* @var $this yii\web\View */
 /* @var $alumnasPorNivel array */
 
-$this->title = 'Alumnas por Nivel';
+use yii\helpers\Html;
 
+$this->title = 'Alumnas por Nivel';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="alumnas-por-nivel">
+<div class="alumnas-index">
+    <h1><?= Html::encode($this->title) ?></h1>
 
-    <h1><?= \yii\helpers\Html::encode($this->title) ?></h1>
-
-    <?php foreach ($alumnasPorNivel as $nivel => $alumnas): ?>
-        <h2><?= "Nivel: " . \yii\helpers\Html::encode($nivel) ?></h2>
-
-        <?= GridView::widget([
-            'dataProvider' => new ArrayDataProvider([
-                'allModels' => $alumnas,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-            ]),
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-
-                'nombre',
-                'email',
-                'telefono',
-
-                // Otras columnas según tu modelo Usuarios
-            ],
-        ]); ?>
-    <?php endforeach; ?>
-
+    <?php if (empty($alumnasPorNivel)): ?>
+        <p>No hay alumnas en los niveles asignados.</p>
+    <?php else: ?>
+        <?php foreach ($alumnasPorNivel as $color => $alumnas): ?>
+            <h2>Color: <?= Html::encode($color) ?></h2>
+            <ul>
+                <?php foreach ($alumnas as $alumna): ?>
+                    <li><?= Html::encode($alumna->nombre) ?> (<?= Html::encode($alumna->email) ?>)</li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>
-

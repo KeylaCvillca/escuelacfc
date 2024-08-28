@@ -38,11 +38,6 @@ $prefijos = [
     <?= $form->field($model, 'fecha_ingreso')->input('date') ?>
     <?= $form->field($model, 'fecha_graduacion')->input('date') ?>
     <?= $form->field($model, 'rol')->dropDownList(['admin' => 'Admin', 'maestra' => 'Maestra', 'alumna' => 'Alumna'], ['prompt' => 'Elige un rol']) ?>
-
-    <div id="maestra-fields" style="display: none;">
-        <?= $form->field($model, 'niveles')->checkboxList($nivelesList) ?>
-        <?= $form->field($model, 'funcion')->dropDownList(['titular' => 'Titular', 'auxiliar' => 'Auxiliar']) ?>
-    </div>
     <?= $form->field($model, 'foto')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'pais')->dropDownList($paises, ['prompt' => 'Seleccione su país', 'value' => $model->pais]) ?>
 

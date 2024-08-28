@@ -45,6 +45,7 @@ $this->title = 'Usuarios';
             'nombre_apellidos',
             'email',
             'rol',
+            'color',
             'celula',
             [
                 'label' => 'Phone',

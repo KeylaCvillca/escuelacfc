@@ -18,7 +18,7 @@ use app\models\UploadExcelForm;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use app\models\Telefonos;
-
+use yii\helpers\ArrayHelper;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -124,13 +124,26 @@ class UsuariosController extends Controller
         $model = new AddUserForm();
         $model->scenario = AddUserForm::SCENARIO_UPDATE;
         $model->attributes = $user->attributes;
-
+        $model->telefonos = ArrayHelper::getColumn($user->telefonos, 'numero');
         if (Yii::$app->request->isPost) {
-            $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
-            if ($model->load(Yii::$app->request->post()) && $model->updateUser($userId)) {
-                Yii::$app->session->setFlash('success', 'Your data has been updated.');
-                return $this->redirect(['misdatos']);
+            if ($model->fotoFile) {
+            $filename = 'usuario_' . $user->id . '.' . $model->fotoFile->extension;
+            $model->fotoFile->saveAs(Yii::getAlias('@webroot') . '/imagenes/usuarios/' . $filename);
+            $user->foto = $filename;
             }
+            $user->save(false);
+
+            // Guardar los teléfonos
+            Telefonos::deleteAll(['usuario' => $user->id]); // Eliminar los teléfonos anteriores
+            foreach ($model->telefonos as $telefono) {
+                $userPhone = new Telefonos();
+                $userPhone->usuario = $user->id;
+                $userPhone->numero = $telefono;
+                $userPhone->save(false);
+            }
+
+        // Redireccionar o mostrar mensaje de éxito
+        return $this->redirect(['misdatos']);
         }
 
         return $this->render('misdatos', [
@@ -160,7 +173,7 @@ class UsuariosController extends Controller
 
         if (Yii::$app->request->isPost) {
             $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
-            if ($model->load(Yii::$app->request->post()) && $model->updateUser($userId)) {
+            if ($model->load(Yii::$app->request->post()) && $model->updateUser($id)) {
                 Yii::$app->session->setFlash('success', 'Your data has been updated.');
                 return $this->redirect(['misdatos']);
             }
@@ -213,30 +226,42 @@ class UsuariosController extends Controller
         ]);
     }
     
-    public function actionAlumnas() {
-         // Obtener todos los niveles en los que enseña el usuario actual
-        $niveles = Ensenan::find()
-            ->select('color')
-            ->distinct()
-            ->where(['maestra' => Yii::$app->user->identity->id])
-            ->column();
+    public function actionAlumnas()
+{
+    // Obtener el ID del usuario actual
+    $maestraId = Yii::$app->user->identity->id;
 
-        // Obtener todas las alumnas que están en los niveles seleccionados
-        $alumnas = Usuarios::find()
-            ->where(['rol' => 'alumna', 'color' => $niveles])
-            ->all();
+    // Obtener todos los colores (niveles) en los que enseña la maestra actual
+    $niveles = Ensenan::find()
+        ->select('color')
+        ->distinct()
+        ->where(['maestra' => $maestraId])
+        ->column();
 
-        // Agrupar las alumnas por nivel
-        $alumnasPorNivel = [];
-        foreach ($alumnas as $alumna) {
-            $alumnasPorNivel[$alumna->color][$alumna->id] = $alumna;
-        }
-
-        // Renderizar la vista y pasar el array $alumnasPorNivel
+    // Si no hay niveles asociados, no es necesario continuar
+    if (empty($niveles)) {
         return $this->render('alumnas', [
-            'alumnasPorNivel' => $alumnasPorNivel,
+            'alumnasPorNivel' => [],
         ]);
     }
+
+    // Obtener todas las alumnas que están en los niveles seleccionados
+    $alumnas = Usuarios::find()
+        ->where(['rol' => 'alumna', 'color' => $niveles])
+        ->all();
+
+    // Agrupar las alumnas por color (nivel)
+    $alumnasPorNivel = [];
+    foreach ($alumnas as $alumna) {
+        $alumnasPorNivel[$alumna->color][] = $alumna;
+    }
+
+    // Renderizar la vista y pasar el array $alumnasPorNivel
+    return $this->render('alumnas', [
+        'alumnasPorNivel' => $alumnasPorNivel,
+    ]);
+}
+
     
     public function actionUpload()
     {

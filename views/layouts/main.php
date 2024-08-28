@@ -12,7 +12,7 @@ use yii\bootstrap4\NavBar;
 use app\controllers\UsuariosController;
 use app\assets\MenuHelper;
 
-$isRbacView = in_array(Yii::$app->controller->id, ['permission', 'role', 'assignment', 'rule']);
+$isRbacView = in_array(Yii::$app->controller->id, ['route','permission', 'role', 'assignment', 'rule']);
 
 AppAsset::register($this);
 ?>

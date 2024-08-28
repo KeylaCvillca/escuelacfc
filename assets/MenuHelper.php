@@ -51,7 +51,7 @@ class MenuHelper {
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'Administración', 
                         'items' => [
-                        ['label' => 'Páginas','url'=>['/site/rbac']],
+                        ['label' => 'Acceso','url'=>['/rbac/route']],
                         ['label'=> 'Usuarios','url'=>['/usuarios/index']],
                         ['label'=> 'Funciones','url'=>['/ensenan/index']],
                         ['label'=> 'Archivos','url'=>['/site/files']],

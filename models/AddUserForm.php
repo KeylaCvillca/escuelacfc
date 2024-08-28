@@ -28,8 +28,6 @@ class AddUserForm extends Model
     public $status;
     public $telefonos = [];
     public $id;
-    public $niveles = []; // Array to hold selected levels
-    public $funcion = []; // Array to hold corresponding functions (titular or auxiliar)
     public $auth_key;
     public $password_hash;
     public $password_reset_token;
@@ -54,6 +52,7 @@ class AddUserForm extends Model
             [['email'], 'email'],
             [['email', 'username'], 'unique', 'targetClass' => Usuarios::class],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
+            [['telefonos'], 'each', 'rule' => ['string', 'max' => 15]]
 
         ];
     }
@@ -87,16 +86,6 @@ class AddUserForm extends Model
                     $telefono->save();
                 }
                 $this->assignRole($user->id);
-                // Save teaching assignments if role is maestra
-                if ($this->rol === 'maestra') {
-                    foreach ($this->niveles as $key => $nivel) {
-                        $ensenan = new Ensenan();
-                        $ensenan->usuario_id = $user->id;
-                        $ensenan->nivel_id = $nivel;
-                        $ensenan->funcion = $this->funcion[$key];
-                        $ensenan->save();
-                    }
-                }
                 
                 return true;
             }
@@ -135,8 +124,6 @@ class AddUserForm extends Model
             return false; // User not found
         }
 
-        // Update user attributes with the form data
-        $user->nombre_apellidos = $this->nombre_apellidos;
         $user->rol = $this->rol;
         $user->fecha_nacimiento = $this->fecha_nacimiento;
         $user->celula = $this->celula;
@@ -144,8 +131,6 @@ class AddUserForm extends Model
         $user->fecha_graduacion = $this->fecha_graduacion;
         $user->foto = $this->foto;
         $user->color = $this->color;
-        $user->username = $this->username;
-        $user->email = $this->email;
         $user->status = $this->status;
         $user->updated_at = time();
 
@@ -153,7 +138,9 @@ class AddUserForm extends Model
         if (!empty($this->password)) {
             $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
         }
-
+        if (!$user->validate()) {
+            Yii::debug($model->errors, __METHOD__);
+        }
         if ($this->validate() && $user->save()) {
             // Update phones
             Telefonos::deleteAll(['usuario' => $user->id]); // Clear existing phone numbers
@@ -166,18 +153,6 @@ class AddUserForm extends Model
 
             // Re-assign roles
             $this->assignRole($user->id);
-
-            // Update teaching assignments if the role is "maestra"
-            if ($this->rol === 'maestra') {
-                Ensenan::deleteAll(['maestra' => $user->id]); // Clear existing teaching assignments
-                foreach ($this->niveles as $key => $nivel) {
-                    $ensenan = new Ensenan();
-                    $ensenan->usuario_id = $user->id;
-                    $ensenan->nivel_id = $nivel;
-                    $ensenan->funcion = $this->funcion[$key];
-                    $ensenan->save();
-                }
-            }
 
             return true;
         }
