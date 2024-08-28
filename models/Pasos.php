@@ -93,4 +93,18 @@ class Pasos extends \yii\db\ActiveRecord
         
         return Url::to((file_exists($imgPath)? '@web/imagenes/pasos/' . $this->imagen:"@web/imagenes/pasos/default.jpg"));
     }
+    
+    /**
+     * Devuelve una cadena con los nombres de los instrumentos utilizados en este paso, separados por comas.
+     * 
+     * @return string Los nombres de los instrumentos separados por comas.
+     */
+    public function getInstrumentosNombres()
+    {
+        // Obtén todos los nombres de los instrumentos asociados a este paso
+        $instrumentos = $this->getInstrumentos()->select('nombre')->column();
+
+        // Une los nombres de los instrumentos con comas
+        return implode(', ', $instrumentos);
+    }
 }

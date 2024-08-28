@@ -19,17 +19,22 @@ use yii\helpers\Html;
 
     </div>
     <div class="text-align-center">
-        <h3>Patrón <?= $model->id ?></h3>
-        <h2><?= $model->nombre ?></h2>
+        <h2><strong><?= $model->nombre ?></strong>Paso <?= $model->id ?> Nivel: <?= $model->color ?></h2>
         <p><?= BibliaController::getText($model->cita_biblica) ?></p>
         <h4><?= $model->cita_biblica ?></h4>
     </div>
-    <div class="row" style="background-color: #a469a8">
-        <?= Html::img("@web/imagenes/" . $model->imagen) ?>
+    <div class="row">
+        <h3>Descripción</h3>
+        <p><?= $model->descripcion?></p>
     </div>
     <div class="row">
-        <p>Dirección: Calle Nueve Valles 3, Polígono de Candina.</p>
-        <p><?= date("d-m-Y") ?></p>
+        <p><strong>Instrumentos<strong><?= $model->getInstrumentosNombres()?></p>
+    </div>
+    <div class="row" >
+        <?= Html::img("@web/imagenes/pasos/" . $model->imagen) ?>
+    </div>
+    <div class="row">
+        <p>Dirección: Calle Nueve Valles 3, Polígono de Candina. <?= date("d-m-Y") ?></p>
     </div>
 
 
