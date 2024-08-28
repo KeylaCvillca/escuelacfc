@@ -9,6 +9,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Mpdf\Mpdf;
 use app\models\Niveles;
+use app\models\PasosSearch;
+use Yii;
 
 /**
  * PasosController implements the CRUD actions for Pasos model.
@@ -40,18 +42,12 @@ class PasosController extends Controller
      */
     public function actionIndex()
 {
-    $niveles = Niveles::find()->all(); // Fetch all Niveles models
-    $pasos = [];
-    
-    foreach ($niveles as $nivel) {
-        $pasos[$nivel->color] = new ActiveDataProvider([
-            'query' => Pasos::find()->where(['color' => $nivel->color]),
-        ]);
-    }
+    $searchModel = new PasosSearch();
+    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
     return $this->render('index', [
-        'pasos' => $pasos,
-        'niveles' => $niveles,
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
     ]);
 }
 

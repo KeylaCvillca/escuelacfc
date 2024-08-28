@@ -1,35 +1,37 @@
 <?php
-use yii\grid\GridView;
 use yii\helpers\Html;
-use app\models\Niveles;
-use yii\grid\ActionColumn;
-use yii\helpers\Url;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
-/* @var $pasos array */
-/* @var $niveles array */
+/* @var $searchModel app\models\PasosSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->title = 'Pasos';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<h1>Pasos by Nivel Color</h1>
+<h1><?= Html::encode($this->title) ?></h1>
+<div class="d-flex justify-content-around">
+    <?php if (Yii::$app->user->can('maestra') || Yii::$app->user->can('admin')): ?>
+            <p>
+                <?= Html::a('Crear Nuevo Paso', ['create'], ['class' => 'btn btn-success']) ?>
+            </p>
+    <?php endif; ?>
+    <div class="pasos-search">
+        <?= $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
+</div>
 
-<?php foreach ($niveles as $nivel): ?>
-    <h2><?= Html::encode($nivel->color) ?></h2>
-    
-    <?= GridView::widget([
-        'dataProvider' => $pasos[$nivel->color],
-        'columns' => [
-            // Customize the columns as needed
-            'nombre',
-            'cita_biblica', // Example column
-            'descripcion',
-            [
-                'header' => Yii::t('yii2mod.rbac', 'Action'),
-                'class' => ActionColumn::class,
-                'urlCreator' => function ($action, $model, $key, $index) {
-                // Here, we explicitly reference the AuthItem model class
-                return Url::to([$action, 'id' => $model->id]);
-            }]
-        ],
-    ]); ?>
-<?php endforeach; ?>
+
+<div class="pasos-index">
+    <div class="row d-flex">
+        <?= ListView::widget([
+            'dataProvider' => $dataProvider,
+            'itemOptions' => ['class' => 'item col-md-4'],
+            'layout' => "{items}",
+            'itemView' => function ($model, $key, $index, $widget) {
+                return $this->render('_card', ['model' => $model]);
+            },
+        ]); ?>
+    </div>
+</div>
