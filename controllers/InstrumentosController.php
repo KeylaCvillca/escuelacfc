@@ -7,6 +7,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
+use yii\web\UploadedFile;
 
 /**
  * InstrumentosController implements the CRUD actions for Instrumentos model.
@@ -65,8 +67,15 @@ class InstrumentosController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        
+        $pasos = new ActiveDataProvider([
+            'query' => $model->getPasos(),
+        ]);
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'pasos' => $pasos
         ]);
     }
 
@@ -77,14 +86,17 @@ class InstrumentosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Instrumentos();
+         $model = new Instrumentos();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // Procesa el archivo de imagen
+            $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
+
+            if ($model->imagenFile && $model->uploadImage()) {
+                if ($model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -101,10 +113,21 @@ class InstrumentosController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // Procesa el archivo de imagen
+            $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
+
+            if ($model->imagenFile && $model->uploadImage()) {
+                if ($model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
+                // Si no se sube una nueva imagen, solo guarda el modelo
+                $model->save(false);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [

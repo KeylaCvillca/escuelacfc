@@ -17,6 +17,9 @@ use Yii;
  */
 class Instrumentos extends \yii\db\ActiveRecord
 {
+    public $imagenFile;
+    public $texto;
+    
     /**
      * {@inheritdoc}
      */
@@ -34,6 +37,7 @@ class Instrumentos extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 20],
             [['significado'], 'string', 'max' => 3000],
             [['cita_biblica'], 'string', 'max' => 50],
+            [['imagenFile'], 'file', 'extensions' => 'jpg', 'checkExtensionByMimeType' => true],
         ];
     }
 
@@ -68,5 +72,17 @@ class Instrumentos extends \yii\db\ActiveRecord
     public function getUtilizans()
     {
         return $this->hasMany(Utilizan::class, ['instrumento' => 'id']);
+    }
+    
+    public function uploadImage()
+    {
+        if ($this->validate()) {
+            $fileName = strtolower($this->nombre) . '.' . $this->imagenFile->extension;
+            $filePath = Yii::getAlias('@webroot/imagenes/instrumentos/') . $fileName;
+            if ($this->imagenFile->saveAs($filePath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

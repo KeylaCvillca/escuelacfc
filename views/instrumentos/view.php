@@ -2,11 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\controllers\BibliaController;
+use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Instrumentos $model */
 
-$this->title = $model->id;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Instrumentos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -29,11 +31,34 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'nombre',
             'significado',
             'cita_biblica',
+            [
+                'attribute' => 'texto',
+                'value' => function ($model) {
+                    $textoCita = BibliaController::getText($model->cita_biblica);
+                    return Html::encode($textoCita);
+                }, 
+            ],
         ],
     ]) ?>
+    <img src="<?= Yii::getAlias('@web') . '/imagenes/instrumentos/' . strtolower($model->nombre) . '.jpg' ?>" alt="<?= Html::encode($model->nombre) ?>" class="img-fluid">
+    
+    <h2>Pasos relacionados</h2>
+    <?= GridView::widget([
+            'dataProvider' => $pasos,
+            'columns' => [
+                'nombre',
+                'color',
+                'cita_biblica',            
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        return ['pasos/' . $action, 'id' => $model->id];
+                    },
+                ],
+            ],
+            'summary' => ''
+    ]);?>
 
 </div>
