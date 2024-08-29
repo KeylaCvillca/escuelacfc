@@ -15,6 +15,10 @@ use Yii;
  */
 class Telefonos extends \yii\db\ActiveRecord
 {
+    public $username;
+    public $email;
+    public $nombre_apellidos;
+    
     /**
      * {@inheritdoc}
      */
@@ -53,8 +57,12 @@ class Telefonos extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUsuario0()
+    public function getUsuario()
     {
         return $this->hasOne(Usuarios::class, ['id' => 'usuario']);
+    }
+    
+    public function GetUsuarioAttribute($attribute) {
+        return implode('',$this->getUsuario()->select($attribute)->column());
     }
 }
