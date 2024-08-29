@@ -155,4 +155,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $usuario->getAttribute('rol');
     }
     
+    /**Comprueba si el usuario actual tiene el rol adecuado para acceder a esto
+     * 
+     * @param type $rol
+     * @return boolean
+     */
+    public static function can($rol){
+        return Yii::$app->user->isGuest?
+            false:Yii::$app->user->getRole() === $rol;
+    }
+    
+    
 }

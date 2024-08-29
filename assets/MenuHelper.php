@@ -11,10 +11,19 @@ use yii\bootstrap4\Nav;
 use Yii;
 
 class MenuHelper {
-    const SECTIONS = [
-      'rbac' => ['route','permission', 'role', 'assignment', 'rule'],
-      'usuarios' => ['usuarios','ensenan', 'telefonos'],
-      'materiales' => ['pasos','instrumentos', 'niveles', 'utilizan','noticias'],
+    private const SIDEBAR = [
+        'rbac' => [
+            'controllers' => ['route','permission', 'role', 'assignment', 'rule'],
+            'permisos' => ['admin']
+        ],
+        'usuarios' => [
+            'controllers' => ['usuarios','ensenan', 'telefonos'],
+            'permisos' => ['admin']
+        ],
+        'materiales' => [
+            'controllers' => ['pasos','instrumentos', 'niveles', 'utilizan','noticias'],
+            'permisos' => ['admin','maestra']
+        ]
     ];
     
     private static function links($role) {
@@ -75,16 +84,13 @@ class MenuHelper {
         }
     
     public static function sideBar($section) {
-        switch($section) {
-            case 'rbac':
-                return in_array(Yii::$app->controller->id, self::SECTIONS['rbac']) && Yii::$app->user->can('admin');
-            case 'usuarios':
-                return in_array(Yii::$app->controller->id, self::SECTIONS['usuarios']) && Yii::$app->user->can('admin');
-            case 'materiales':
-                return in_array(Yii::$app->controller->id, self::SECTIONS['materiales']) && (Yii::$app->user->can('admin') || Yii::$app->user->can('maestra'));
-            default:
-                return false;
+        if (!array_key_exists($section, self::SIDEBAR)) {
+            return false;
         }
+        if (!in_array(Yii::$app->controller->id, self::SIDEBAR[$section]['controllers'])) {
+            return false;
+        }
+        return self::canIn(self::SIDEBAR[$section]['permisos']);
     }
     
     public static function navMenu() {
@@ -94,6 +100,15 @@ class MenuHelper {
                 MenuHelper::links("guest")
                 :MenuHelper::links(Yii::$app->user->identity->getRole())
         ]);
+    }
+    
+    public static function canIn($roles) {
+        foreach ($roles as $rol) {
+            if (Yii::$app->user->can($rol)) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }
