@@ -14,7 +14,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="d-flex justify-content-around">
     <?php if (Yii::$app->user->can('maestra') || Yii::$app->user->can('admin')): ?>
             <p>
-                <?= Html::a('Crear Nuevo Paso', ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Añadir paso', ['create'], ['class' => 'btn btn-success']) ?>
+            </p>
+            <p>
+                <?= Html::a('Añadir vídeo', ['utilizan/create'], ['class' => 'btn btn-success']) ?>
+            </p>
+            <p>
+                <?= Html::a('Añadir instrumento', ['instrumentos/create'], ['class' => 'btn btn-success']) ?>
             </p>
     <?php endif; ?>
     <div class="pasos-search">

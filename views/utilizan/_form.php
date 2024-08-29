@@ -2,24 +2,33 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\Instrumentos;
+use app\models\Pasos;
 
-/** @var yii\web\View $this */
-/** @var app\models\Utilizan $model */
-/** @var yii\widgets\ActiveForm $form */
+/* @var $this yii\web\View */
+/* @var $model app\models\Utilizan */
+/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="utilizan-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'instrumento')->textInput() ?>
+    <?= $form->field($model, 'instrumento')->dropDownList(
+        ArrayHelper::map(Instrumentos::find()->all(), 'id', 'nombre'),
+        ['prompt' => 'Seleccionar Instrumento']
+    ) ?>
 
-    <?= $form->field($model, 'paso')->textInput() ?>
+    <?= $form->field($model, 'paso')->dropDownList(
+        ArrayHelper::map(Pasos::find()->all(), 'id', 'nombre'),
+        ['prompt' => 'Seleccionar Paso']
+    ) ?>
 
-    <?= $form->field($model, 'video')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'file')->fileInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

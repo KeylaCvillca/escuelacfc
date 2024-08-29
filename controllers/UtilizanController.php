@@ -7,6 +7,9 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
+use yii\web\UploadedFile;
+use app\models\UtilizanSearch;
 
 /**
  * UtilizanController implements the CRUD actions for Utilizan model.
@@ -38,21 +41,11 @@ class UtilizanController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Utilizan::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $searchModel = new UtilizanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -79,12 +72,21 @@ class UtilizanController extends Controller
     {
         $model = new Utilizan();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+
+            if ($model->file && $model->validate()) {
+                // Guardar el archivo en la carpeta especificada
+                $filePath =  Yii::getAlias('@webroot/videos/pasos/') . $model->file->baseName . '.' . $model->file->extension;
+                if ($model->file->saveAs($filePath)) {
+                    // Guardar el nombre del archivo en la base de datos
+                    $model->video = $model->file->baseName . '.' . $model->file->extension;
+
+                    if ($model->save()) {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
