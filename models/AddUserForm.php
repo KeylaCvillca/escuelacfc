@@ -52,47 +52,57 @@ class AddUserForm extends Model
             [['email'], 'email'],
             [['email', 'username'], 'unique', 'targetClass' => Usuarios::class],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
-            [['telefonos'], 'each', 'rule' => ['string', 'max' => 15]]
-
+            [['telefonos'], 'each', 'rule' => ['string', 'max' => 15]],
         ];
     }
 
     public function addUser()
-    {
-        $user = new Usuarios();
-        
-        // IMPORTANTE: Esta parte es necesaria para que $this->validate() sea true y pueda pasar a la siguiente fase.
-        $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
-        $celulaPart = substr($this->celula, 0, 3);           // First 3 letters of celula
-        $datePart = date('dm');                              // Current day and month in 'ddmm' format
-        $this->username = strtolower($nombrePart . $celulaPart . $datePart);
-        // Hasta aquí.
-        
-        
-        if ($this->validate()) {
-            $user->attributes = $this->attributes;
-            $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
-            $user->auth_key = Yii::$app->security->generateRandomString();
-            $user->status = 10; 
-            $user->created_at = time();
-            $user->updated_at = time();
-            
-            if ($user->save()) {
-                // Save phones
-                foreach ($this->telefonos as $numero) {
-                    $telefono = new Telefonos();
-                    $telefono->usuario_id = $user->id;
-                    $telefono->telefono = $numero;
-                    $telefono->save();
-                }
-                $this->assignRole($user->id);
-                
-                return true;
-            }
-        }
+{
+    $user = new Usuarios();
+    
+    // Generate a unique username
+    $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
+    $celulaPart = substr($this->celula, 0, 3);          
+    $datePart = date('dm');                            
+    $this->username = strtolower($nombrePart . $celulaPart . $datePart);
+    
+    if ($this->validate()) {
+        // Assign attributes individually
+        $user->username = $this->username;
+        $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
+        $user->auth_key = Yii::$app->security->generateRandomString();
+        $user->status = 10; 
+        $user->created_at = time();
+        $user->updated_at = time();
+        $user->nombre_apellidos = $this->nombre_apellidos;
+        $user->rol = $this->rol;
+        $user->fecha_nacimiento = $this->fecha_nacimiento;
+        $user->celula = $this->celula;
+        $user->fecha_ingreso = $this->fecha_ingreso;
+        $user->fecha_graduacion = $this->fecha_graduacion;
+        $user->foto = $this->foto;
+        $user->color = $this->color;
+        $user->email = $this->email;
 
-        return false;
+        if ($user->save()) {
+            // Save phones
+            foreach ($this->telefonos as $numero) {
+                if ($numero == "") {
+                    continue;
+                }
+                $telefono = new Telefonos();
+                $telefono->usuario = Usuarios::findOne(['email' => $user->email])->id;
+                $telefono->telefono = $numero;
+                $telefono->save();
+            }
+            $this->assignRole($user->id);
+            return true;
+        }
     }
+
+    return false;
+}
+
     
     /**
      * Método que asigna un rol dentro del RBAC al usuario que estamos creando o actualizando.
@@ -117,47 +127,43 @@ class AddUserForm extends Model
     }
     
     public function updateUser($id)
-    {
-        // Find the existing user by ID
-        $user = Usuarios::findOne($id);
-        if (!$user) {
-            return false; // User not found
-        }
-
-        $user->rol = $this->rol;
-        $user->fecha_nacimiento = $this->fecha_nacimiento;
-        $user->celula = $this->celula;
-        $user->fecha_ingreso = $this->fecha_ingreso;
-        $user->fecha_graduacion = $this->fecha_graduacion;
-        $user->foto = $this->foto;
-        $user->color = $this->color;
-        $user->status = $this->status;
-        $user->updated_at = time();
-
-        // If the password was provided, update it
-        if (!empty($this->password)) {
-            $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
-        }
-        if (!$user->validate()) {
-            Yii::debug($model->errors, __METHOD__);
-        }
-        if ($this->validate() && $user->save()) {
-            // Update phones
-            Telefonos::deleteAll(['usuario' => $user->id]); // Clear existing phone numbers
-            foreach ($this->telefonos as $numero) {
-                $telefono = new Telefonos();
-                $telefono->usuario_id = $user->id;
-                $telefono->telefono = $numero;
-                $telefono->save();
-            }
-
-            // Re-assign roles
-            $this->assignRole($user->id);
-
-            return true;
-        }
-
+{
+    $user = Usuarios::findOne($id);
+    if (!$user) {
         return false;
     }
+
+    $user->rol = $this->rol;
+    $user->fecha_nacimiento = $this->fecha_nacimiento;
+    $user->celula = $this->celula;
+    $user->fecha_ingreso = $this->fecha_ingreso;
+    $user->fecha_graduacion = $this->fecha_graduacion;
+    $user->foto = $this->foto;
+    $user->color = $this->color;
+    $user->status = $this->status;
+    $user->updated_at = time();
+
+    if (!empty($this->password)) {
+        $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
+    }
+
+    if ($user->validate() && $user->save()) {
+        // Update phones
+        Telefonos::deleteAll(['usuario' => $user->id]);
+        foreach ($this->telefonos as $numero) {
+            $telefono = new Telefonos();
+            $telefono->usuario = $user->id;
+            $telefono->telefono = $numero;
+            $telefono->save();
+        }
+
+        // Re-assign roles
+        $this->assignRole($user->id);
+        return true;
+    }
+
+    return false;
+}
+
 
 }

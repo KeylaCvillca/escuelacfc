@@ -1,13 +1,14 @@
 <?php
 
-use app\models\Telefonos;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\grid\ActionColumn;
+use app\models\Telefonos;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var app\models\TelefonosSearch $searchModel */
 
 $this->title = 'Telefonos';
 $this->params['breadcrumbs'][] = $this->title;
@@ -20,25 +21,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'telefono',
             ['attribute' => 'nombre_apellidos',
-             'label' => 'Nombre y apellidos',
+             'label' => 'Nombre Apellidos',
              'value' => function($model) {
-                    return $model->getUsuarioAttribute('nombre_apellidos'); // Usamos el método del modelo
+                    return $model->getUsuarioAttribute('nombre_apellidos'); // Adjust based on your data
                 },
             ],
-            ['attribute' => 'email',
+            ['attribute' => 'usuario_email',
              'label' => 'Email',
              'value' => function($model) {
-                    return $model->getUsuarioAttribute('email'); // Usamos el método del modelo
+                    return $model->getUsuarioAttribute('email');
                 },
             ],
-            ['attribute' => 'username',
+            ['attribute' => 'usuario_username',
              'label' => 'Username',
              'value' => function($model) {
-                    return $model->getUsuarioAttribute('username'); // Usamos el método del modelo
-                },
+                    return $model->getUsuarioAttribute('username');                },
             ],
+
+            'telefono',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Telefonos $model, $key, $index, $column) {
@@ -46,8 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                  }
             ],
         ],
-        'summary' => ''
     ]); ?>
-
 
 </div>

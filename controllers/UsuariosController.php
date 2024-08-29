@@ -96,7 +96,7 @@ class UsuariosController extends Controller
 
             if ($model->AddUser()) {
                 Yii::$app->session->setFlash('success', 'Usuario guardado exitosamente.');
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => Usuarios::findOne(['email' => $model->email])->id]);
             } else {
                 Yii::$app->session->setFlash('error', 'Error al guardar el usuario.');
             }
@@ -331,9 +331,8 @@ class UsuariosController extends Controller
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
         foreach ($sheetData as $key => $row) {
-            // Saltar la primera fila si es un encabezado
             if ($key == 1) {
-                continue;
+                continue; // Skip header row
             }
 
             $usuario = new Usuarios();
@@ -353,7 +352,6 @@ class UsuariosController extends Controller
             $usuario->updated_at = time();
 
             if ($usuario->save()) {
-                // Guardar teléfonos si hay
                 if (!empty($row['J'])) {
                     $telefonos = explode(',', $row['J']);
                     foreach ($telefonos as $numero) {
@@ -364,7 +362,6 @@ class UsuariosController extends Controller
                     }
                 }
 
-                // Guardar niveles y funciones si es una maestra
                 if ($usuario->rol === 'maestra' && !empty($row['K']) && !empty($row['L'])) {
                     $niveles = explode(',', $row['K']);
                     $funciones = explode(',', $row['L']);
@@ -373,12 +370,11 @@ class UsuariosController extends Controller
                         $ensenan = new Ensenan();
                         $ensenan->maestra = $usuario->id;
                         $ensenan->color = $nivel;
-                        $ensenan->funcion = $funciones[$index];
+                        $ensenan->funcion = $funciones[$index] ?? null;
                         $ensenan->save();
                     }
                 }
 
-                // Asignar rol en RBAC
                 $this->assignRole($usuario->id, $usuario->rol);
             }
         }

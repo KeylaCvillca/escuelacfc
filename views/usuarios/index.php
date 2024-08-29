@@ -35,10 +35,6 @@ $this->title = 'Usuarios';
 
         <?php ActiveForm::end(); ?>
     </div>
-    <div class="add_usuarios">
-        <p><?= Html::a('Crear Usuario', ['usuarios/create'],['class' => 'btn btn-success'])?></p>
-        <p><?= Html::a('Añadir usuarios desde excel', ['usuarios/upload'],['class' => 'btn btn-success'])?></p>
-    </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -48,7 +44,7 @@ $this->title = 'Usuarios';
             'color',
             'celula',
             [
-                'label' => 'Phone',
+                'label' => 'Teléfonos',
                 'value' => function($model) {
                     return implode(', ', array_column($model->telefonos, 'telefono'));
                 },

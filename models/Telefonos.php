@@ -34,7 +34,6 @@ class Telefonos extends \yii\db\ActiveRecord
     {
         return [
             [['usuario'], 'integer'],
-            [['telefono'], 'string', 'max' => 20],
             [['usuario', 'telefono'], 'unique', 'targetAttribute' => ['usuario', 'telefono']],
             [['usuario'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::class, 'targetAttribute' => ['usuario' => 'id']],
         ];
@@ -64,5 +63,17 @@ class Telefonos extends \yii\db\ActiveRecord
     
     public function GetUsuarioAttribute($attribute) {
         return implode('',$this->getUsuario()->select($attribute)->column());
+    }
+    
+    public static function getUserOptions()
+    {
+        return Usuarios::find()
+            ->select(['CONCAT(nombre_apellidos, " (", email, ")") AS name'])
+            ->column();
+    }
+    
+    public function getUserPhones($userId)
+    {
+        return self::find()->where(['usuario' => $userId])->all();
     }
 }

@@ -9,7 +9,7 @@ use yii\helpers\Html;
 </div>
 
 <?php for ($i = 0; $i < 4; $i++) : ?>
-    <div class="slide pregunta" id="question-<?= $i ?>">
+    <div class="slide pregunta" id="question-<?= $i ?>" style="display:none">
         <h2>¿Qué paso es este?</h2>
         <?= Html::img($answers[$i]->getImgUrl(), ["class" => "imagen_paso img-quiz"]) ?>
         <script>console.log(<?= "\"" . $answers[$i]->nombre . "\""?>)</script>
@@ -23,7 +23,7 @@ use yii\helpers\Html;
     </div>
 <?php endfor; ?>
 
-<div class="slide resultado">
+<div class="slide resultado" style="display:none">
     <h2 id="resultado" class="mb-4" >RESULTADO</h2>
     <p><?= Html::a("Volver a jugar", ['pasos/quiz'], ["class" => "btn btn-primary"]) ?></p>
 </div>
@@ -40,7 +40,7 @@ use yii\helpers\Html;
 
     function startQuiz() {
         document.querySelector('.slide.intro').style.display = 'none';
-        document.getElementById('question-0').style.display = 'flex';
+        document.getElementById('question-0').style.display = 'block';
     }
 
     function checkAnswer(questionIndex, answerIndex) {
@@ -48,10 +48,10 @@ use yii\helpers\Html;
         if (selectedAnswer === correctAnswers[questionIndex]) {
             correctCount++;
         }
-        // Ocultar la pregunta actual y mostrar la siguiente
+        // Hide the current question and show the next one
         if (questionIndex < 3) {
             document.getElementById('question-' + questionIndex).style.display = 'none';
-            document.getElementById('question-' + (questionIndex + 1)).style.display = 'flex';
+            document.getElementById('question-' + (questionIndex + 1)).style.display = 'block';
         } else {
             document.getElementById('question-' + questionIndex).style.display = 'none';
             showResult();
@@ -60,7 +60,7 @@ use yii\helpers\Html;
 
     function showResult() {
         const resultDiv = document.querySelector('.slide.resultado');
-        resultDiv.style.display = 'flex';
+        resultDiv.style.display = 'block';
         const resultadoText = document.getElementById('resultado');
         resultadoText.textContent = `Has respondido correctamente ${correctCount} de 4 preguntas.`;
     }

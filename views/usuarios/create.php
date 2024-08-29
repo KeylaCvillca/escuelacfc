@@ -38,7 +38,10 @@ $prefijos = [
     <?= $form->field($model, 'fecha_ingreso')->input('date') ?>
     <?= $form->field($model, 'fecha_graduacion')->input('date') ?>
     <?= $form->field($model, 'rol')->dropDownList(['admin' => 'Admin', 'maestra' => 'Maestra', 'alumna' => 'Alumna'], ['prompt' => 'Elige un rol']) ?>
-    <?= $form->field($model, 'foto')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'color')->dropDownList(
+            \yii\helpers\ArrayHelper::map($niveles, 'color', 'color'),
+            ['prompt' => 'Elige un nivel']
+    ) ?>    <?= $form->field($model, 'foto')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'pais')->dropDownList($paises, ['prompt' => 'Seleccione su país', 'value' => $model->pais]) ?>
 
     <div id="telefonos">
@@ -70,7 +73,7 @@ $('#add-phone').on('click', function () {
                      '<label for="telefono-' + index + '">Teléfono</label>' +
                      '<div class="input-group">' +
                      '<span class="input-group-text" id="prefijo-' + index + '"></span>' +
-                     '<input type="text" name="AddUserForm[telefonos][]" class="form-control">' +
+                     '<input type="digit" name="AddUserForm[telefonos][]" class="form-control">' +
                      '</div>' +
                      '</div>';
     $('#telefonos').append(phoneField);

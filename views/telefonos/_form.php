@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Telefonos;
 
 /** @var yii\web\View $this */
 /** @var app\models\Telefonos $model */
@@ -12,7 +13,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'usuario')->textInput() ?>
+    <?= $form->field($model, 'usuario')->dropDownList(
+            Telefonos::getUserOptions(),
+            ['prompt' => 'Elige un usuario']
+        ) ?>
 
     <?= $form->field($model, 'telefono')->textInput(['maxlength' => true]) ?>
 
