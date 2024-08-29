@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Pasos $model */
 
-$this->title = 'Create Pasos';
+$this->title = 'Añadir paso';
 $this->params['breadcrumbs'][] = ['label' => 'Pasos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

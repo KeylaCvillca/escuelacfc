@@ -11,6 +11,7 @@ use Mpdf\Mpdf;
 use app\models\Niveles;
 use app\models\PasosSearch;
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * PasosController implements the CRUD actions for Pasos model.
@@ -74,8 +75,19 @@ class PasosController extends Controller
         $model = new Pasos();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
+
+            // Asigna el nombre del archivo al modelo antes de guardar
+            if ($model->imagenFile) {
+                if ($model->uploadImage()) {
+                    if ($model->save(false)) {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
+            } else {
+                if ($model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -86,19 +98,25 @@ class PasosController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Pasos model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost) {
+            $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
+
+            if ($model->imagenFile) {
+                if ($model->uploadImage()) {
+                    if ($model->save(false)) {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
+            } else {
+                // Guarda solo si no se ha subido una nueva imagen
+                if ($model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
         }
 
         return $this->render('update', [

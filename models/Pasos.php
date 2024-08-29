@@ -21,6 +21,8 @@ use yii\helpers\Url;
  */
 class Pasos extends \yii\db\ActiveRecord
 {
+    public $imagenFile;
+    
     /**
      * {@inheritdoc}
      */
@@ -36,7 +38,7 @@ class Pasos extends \yii\db\ActiveRecord
     {
         return [
             [['cita_biblica', 'imagen'], 'string', 'max' => 50],
-            [['nombre'], 'string', 'max' => 20],
+            [['nombre'], 'string', 'max' => 30],
             [['descripcion'], 'string', 'max' => 3000],
             [['color'], 'string', 'max' => 15],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
@@ -106,5 +108,21 @@ class Pasos extends \yii\db\ActiveRecord
 
         // Une los nombres de los instrumentos con comas
         return implode(', ', $instrumentos);
+    }
+    
+    public function uploadImage()
+    {
+        if ($this->validate()) {
+        // Genera un nombre de archivo único basado en el nombre del paso y la extensión del archivo
+        $fileName = strtolower($this->nombre) . '.' . $this->imagenFile->extension;
+        $filePath = Yii::getAlias('@webroot/imagenes/pasos/') . $fileName;
+        
+        if ($this->imagenFile->saveAs($filePath)) {
+            // Asigna el nombre del archivo al atributo 'imagen'
+            $this->imagen = $fileName;
+            return true;
+        }
+    }
+    return false;
     }
 }

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Instrumento */
 /* @var $form yii\widgets\ActiveForm */
@@ -19,6 +20,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'cita_biblica')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'imagenFile')->fileInput() ?>
+    
+    
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

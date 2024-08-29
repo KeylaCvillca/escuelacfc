@@ -77,7 +77,8 @@ use Yii;
     
      private static function findSeparator($string) {
          $i = strlen($string)-1; 
-         while ($string[$i]!=" "){$i--;}
+         while ($string[$i]!=" "){
+             $i--;}
          return $i;
      }
  }
