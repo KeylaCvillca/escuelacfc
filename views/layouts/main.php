@@ -66,11 +66,11 @@ AppAsset::register($this);
         <div class="row">
             <aside id="sidebar" class="col-md-3 sidebar-fixed d-none d-md-block">
                 <?php if (MenuHelper::sideBar('rbac')): ?>
-                    <?= $this->render('_rbac_sidebar') ?>
+                    <?= $this->render('_rbac_sidebar',['asideTitle' => 'Control de acceso']) ?>
                 <?php elseif (MenuHelper::sideBar('usuarios')): ?>
-                    <?= $this->render('_usuarios_sidebar') ?>
+                    <?= $this->render('_usuarios_sidebar',['asideTitle' => 'Gestión de usuarios']) ?>
                 <?php elseif (MenuHelper::sideBar('materiales')): ?>
-                    <?= $this->render('_materiales_sidebar') ?>
+                    <?= $this->render('_materiales_sidebar',['asideTitle' => 'Gestión de contenido']) ?>
                 <?php endif; ?>
             </aside>
             <div class="col-md-2"></div>

@@ -14,15 +14,18 @@ class MenuHelper {
     private const SIDEBAR = [
         'rbac' => [
             'controllers' => ['route','permission', 'role', 'assignment', 'rule'],
-            'permisos' => ['admin']
+            'permisos' => ['admin'],
+            'asideTitle' => 'Control de acceso'
         ],
         'usuarios' => [
             'controllers' => ['usuarios','ensenan', 'telefonos'],
-            'permisos' => ['admin']
+            'permisos' => ['admin'],
+            'asideTitle' => 'Gestión de usuarios'
         ],
         'materiales' => [
             'controllers' => ['pasos','instrumentos', 'niveles', 'utilizan','noticias'],
-            'permisos' => ['admin','maestra']
+            'permisos' => ['admin','maestra'],
+            'asideTitle' => 'Gestión de contenido'
         ]
     ];
     
@@ -109,6 +112,22 @@ class MenuHelper {
             }
         }
         return false;
+    }
+    
+    /**
+     * Retrieve the asideTitle based on the controller name.
+     *
+     * @param string $controllerName The controller name to search for.
+     * @return string|null The asideTitle if found, null otherwise.
+     */
+    public static function sideBarTitle($controllerName)
+    {
+        foreach (self::SIDEBAR as $key => $info) {
+            if (in_array($controllerName, $info['controllers'])) {
+                return $info['asideTitle'];
+            }
+        }
+        return ''; // Return null if the controller is not found
     }
     
 }
