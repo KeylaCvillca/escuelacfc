@@ -164,6 +164,4 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return Yii::$app->user->isGuest?
             false:Yii::$app->user->getRole() === $rol;
     }
-    
-    
 }

@@ -9,7 +9,8 @@ use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
-use app\controllers\UsuariosController;
+use yii\bootstrap4\Col;
+use yii\bootstrap4\Row;
 use app\assets\MenuHelper;
 
 AppAsset::register($this);
@@ -23,6 +24,25 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <style>
+        @media (min-width: 768px) {
+            .sidebar-fixed {
+                position: -webkit-fixed;
+                position: fixed;
+                top: 70;
+                left: 0;        
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .sidebar-toggle-fixed {
+                position: fixed;
+                top: 10px;
+                right: 100px;
+                z-index: 1050; /* Ensure it's on top */
+            }
+        }
+    </style>
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -43,33 +63,36 @@ AppAsset::register($this);
 
 <main role="main" class="flex-shrink-0">
     <div class="container">
-        <?php if (MenuHelper::sideBar('rbac')): ?>
-            <div class="col-md-3">
-                <?= $this->render('_rbac_sidebar') ?>
-            </div>
-            <div class="col-md-9">
+        <div class="row">
+            <aside id="sidebar" class="col-md-3 sidebar-fixed d-none d-md-block">
+                <?php if (MenuHelper::sideBar('rbac')): ?>
+                    <?= $this->render('_rbac_sidebar') ?>
+                <?php elseif (MenuHelper::sideBar('usuarios')): ?>
+                    <?= $this->render('_usuarios_sidebar') ?>
+                <?php elseif (MenuHelper::sideBar('materiales')): ?>
+                    <?= $this->render('_materiales_sidebar') ?>
+                <?php endif; ?>
+            </aside>
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <?php if (MenuHelper::sideBar('rbac') || MenuHelper::sideBar('usuarios') || MenuHelper::sideBar('materiales')): ?>
+                    <!-- Toggle Button for Small Screens -->
+                    <button class="btn btn-primary sidebar-toggle-fixed d-md-none" type="button" data-toggle="collapse" data-target="#sidebar-collapsed" aria-expanded="false" aria-controls="sidebar-collapsed">
+                        Toggle Sidebar
+                    </button>
+                    <div id="sidebar-collapsed" class="collapse d-md-none">
+                        <?php if (MenuHelper::sideBar('rbac')): ?>
+                            <?= $this->render('_rbac_sidebar') ?>
+                        <?php elseif (MenuHelper::sideBar('usuarios')): ?>
+                            <?= $this->render('_usuarios_sidebar') ?>
+                        <?php elseif (MenuHelper::sideBar('materiales')): ?>
+                            <?= $this->render('_materiales_sidebar') ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
                 <?= $content ?>
             </div>
-        <?php elseif (MenuHelper::sideBar('usuarios')): ?>
-            <div class="col-md-3">
-                <?= $this->render('_usuarios_sidebar') ?>
-            </div>
-            <div class="col-md-9">
-                <?= $content ?>
-            </div>
-        <?php elseif (MenuHelper::sideBar('materiales')): ?>
-            <div class="col-md-3">
-                <?= $this->render('_materiales_sidebar') ?>
-            </div>
-            <div class="col-md-9">
-                <?= $content ?>
-            </div>
-
-        <?php else: ?>
-            <div class="col-md-12">
-                <?= $content ?>
-            </div>
-        <?php endif; ?>
+        </div>
     </div>
 </main>
 
