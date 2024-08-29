@@ -12,8 +12,6 @@ use yii\bootstrap4\NavBar;
 use app\controllers\UsuariosController;
 use app\assets\MenuHelper;
 
-$isRbacView = in_array(Yii::$app->controller->id, ['route','permission', 'role', 'assignment', 'rule']);
-
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -45,13 +43,28 @@ AppAsset::register($this);
 
 <main role="main" class="flex-shrink-0">
     <div class="container">
-        <?php if ($isRbacView): ?>
+        <?php if (MenuHelper::sideBar('rbac')): ?>
             <div class="col-md-3">
                 <?= $this->render('_rbac_sidebar') ?>
             </div>
             <div class="col-md-9">
                 <?= $content ?>
             </div>
+        <?php elseif (MenuHelper::sideBar('usuarios')): ?>
+            <div class="col-md-3">
+                <?= $this->render('_usuarios_sidebar') ?>
+            </div>
+            <div class="col-md-9">
+                <?= $content ?>
+            </div>
+        <?php elseif (MenuHelper::sideBar('materiales')): ?>
+            <div class="col-md-3">
+                <?= $this->render('_materiales_sidebar') ?>
+            </div>
+            <div class="col-md-9">
+                <?= $content ?>
+            </div>
+
         <?php else: ?>
             <div class="col-md-12">
                 <?= $content ?>

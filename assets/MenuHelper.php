@@ -11,6 +11,12 @@ use yii\bootstrap4\Nav;
 use Yii;
 
 class MenuHelper {
+    const SECTIONS = [
+      'rbac' => ['route','permission', 'role', 'assignment', 'rule'],
+      'usuarios' => ['usuarios','ensenan', 'telefonos'],
+      'materiales' => ['pasos','instrumentos', 'niveles', 'utilizan','noticias'],
+    ];
+    
     private static function links($role) {
         switch($role) { 
             case "guest":
@@ -65,9 +71,21 @@ class MenuHelper {
                         . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
                     ];
-            
             }
         }
+    
+    public static function sideBar($section) {
+        switch($section) {
+            case 'rbac':
+                return in_array(Yii::$app->controller->id, self::SECTIONS['rbac']) && Yii::$app->user->can('admin');
+            case 'usuarios':
+                return in_array(Yii::$app->controller->id, self::SECTIONS['usuarios']) && Yii::$app->user->can('admin');
+            case 'materiales':
+                return in_array(Yii::$app->controller->id, self::SECTIONS['materiales']) && (Yii::$app->user->can('admin') || Yii::$app->user->can('maestra'));
+            default:
+                return false;
+        }
+    }
     
     public static function navMenu() {
         return Nav::widget([
