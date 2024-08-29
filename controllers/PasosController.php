@@ -74,19 +74,29 @@ class PasosController extends Controller
     {
         $model = new Pasos();
 
+        // Si la petición es POST
         if ($this->request->isPost) {
+            // Cargar datos del formulario en el modelo
+            $model->load($this->request->post());
+            // Obtener el archivo de imagen
             $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
 
-            // Asigna el nombre del archivo al modelo antes de guardar
-            if ($model->imagenFile) {
-                if ($model->uploadImage()) {
-                    if ($model->save(false)) {
+            // Validar el modelo
+            if ($model->validate()) {
+                // Si se sube una imagen, guarda el archivo
+                if ($model->imagenFile) {
+                    $model->imagen = strtolower($model->nombre) . '.' . $model->imagenFile->extension;
+                    if ($model->uploadImage()) {
+                        // Guardar el modelo
+                        if ($model->save(false)) {
+                            return $this->redirect(['view', 'id' => $model->id]);
+                        }
+                    }
+                } else {
+                    // Guardar el modelo sin imagen
+                    if ($model->save()) {
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
-                }
-            } else {
-                if ($model->save(false)) {
-                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             }
         } else {

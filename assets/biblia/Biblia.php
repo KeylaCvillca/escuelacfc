@@ -24,7 +24,12 @@ use Yii;
     );
      public static function getVersiculo($vers)
      {
+         
+         
          $i = self::findSeparator($vers);
+         if ($i == -1) {
+             return "No se ha podido procesar el versículo";
+         }
          $libro= self::parseBookName(substr($vers, 0, $i));
          $partes = explode(":", substr($vers,$i+1)); //partes{0}capitulo y partes{1}versiculo
          
@@ -76,8 +81,12 @@ use Yii;
 
     
      private static function findSeparator($string) {
-         $i = strlen($string)-1; 
+         $i = strlen($string)-1;
+         Yii::debug($i . $string);
          while ($string[$i]!=" "){
+             if ($i < 0) {
+                 return -1;
+             }
              $i--;}
          return $i;
      }

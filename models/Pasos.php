@@ -42,7 +42,8 @@ class Pasos extends \yii\db\ActiveRecord
             [['descripcion'], 'string', 'max' => 3000],
             [['color'], 'string', 'max' => 15],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
-        ];
+            [['imagenFile'], 'file', 'extensions' => 'png, jpg, jpeg'], // Agrega la regla para el archivo de imagen
+       ];
     }
 
     /**
@@ -57,6 +58,7 @@ class Pasos extends \yii\db\ActiveRecord
             'descripcion' => 'Descripcion',
             'imagen' => 'Imagen',
             'color' => 'Color',
+            'imagenFile' => 'Imagen'
         ];
     }
 
@@ -113,16 +115,13 @@ class Pasos extends \yii\db\ActiveRecord
     public function uploadImage()
     {
         if ($this->validate()) {
-        // Genera un nombre de archivo único basado en el nombre del paso y la extensión del archivo
-        $fileName = strtolower($this->nombre) . '.' . $this->imagenFile->extension;
-        $filePath = Yii::getAlias('@webroot/imagenes/pasos/') . $fileName;
-        
-        if ($this->imagenFile->saveAs($filePath)) {
-            // Asigna el nombre del archivo al atributo 'imagen'
-            $this->imagen = $fileName;
-            return true;
+            $fileName = $this->imagenFile->name. '.' . $this->imagenFile->extension;
+            $filePath = Yii::getAlias('@webroot/imagenes/pasos/') . $fileName;
+            if ($this->imagenFile->saveAs($filePath)) {
+                $this->imagen = $fileName; // Actualiza el atributo imagen con el nombre del archivo
+                return true;
+            }
         }
-    }
-    return false;
+        return false;
     }
 }
