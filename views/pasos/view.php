@@ -33,6 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => BibliaController::getText($model->cita_biblica)
             ],
             'descripcion',
+            [
+                'label' => 'Instrumentos',
+                'value' => $model->getInstrumentosNombres()
+            ]
 
         ],
         'options' => [
@@ -59,6 +63,27 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </div>
+    
+    
+    <?php
+    // Mostrar videos asociados al paso
+    echo '<h3>Videos asociados</h3>';
+    if ($model->utilizans) {
+        foreach ($model->utilizans as $utilizan) {
+            if ($utilizan->video) {
+                $videoUrl = Yii::getAlias('@web/videos/pasos/') . $utilizan->video;
+                echo '<div class="video-container">';
+                echo '<video width="320" height="240" controls>';
+                echo '<source src="' . Html::encode($videoUrl) . '.mp4" type="video/mp4">';
+                echo 'Your browser does not support the video tag.';
+                echo '</video>';
+                echo '</div>';
+            }
+        }
+    } else {
+        echo '<p>No hay videos asociados a este paso.</p>';
+    }
+    ?>
 
 </div>
 
