@@ -85,4 +85,5 @@ class Noticias extends \yii\db\ActiveRecord
             }
         return null;
     }
+    
 }         

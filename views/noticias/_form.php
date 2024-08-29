@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
     
     <?= $form->field($model, 'titulo')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contenido')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'contenido')->textArea(['maxlength' => true,]) ?>
 
     <?= $form->field($model, 'publico')->checkbox() ?>
 

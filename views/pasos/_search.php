@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-        'options' => ['class' => 'row g-3 d-flex flex-wrap justify-content-around align-items-center'],
+        'options' => ['class' => 'row  d-flex flex-wrap justify-content-around align-items-center'],
     ]); ?>
 
     <?= $form->field($model, 'nombre') ?>

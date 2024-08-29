@@ -16,21 +16,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Noticias', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'fecha_publicacion',
+            'titulo',
+            [
+                'attribute' => 'autor',
+                'value' => function($model) {
+                    return $model->getAutorNombreApellidos();
+                }
+            ],
             'contenido',
-            'autor',
-            'publico',
+            [
+                'attribute' => 'publico',
+                'label' => 'Público',
+                'value' => function($model) {
+                    return $model->publico == 0? "No":"Sí";
+                }
+            ],
+            [
+                'attribute' => 'fecha_publicacion',
+                'value' => function($model) {
+                return $model->getFechaFormateada();
+                }
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Noticias $model, $key, $index, $column) {
