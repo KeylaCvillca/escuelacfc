@@ -94,7 +94,7 @@ class PasosController extends Controller
                     }
                 } else {
                     // Guardar el modelo sin imagen
-                    if ($model->save()) {
+                    if ($model->save(false)) {
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }
@@ -116,17 +116,19 @@ class PasosController extends Controller
             $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
 
             if ($model->imagenFile) {
-                if ($model->uploadImage()) {
+                    $model->imagen = strtolower($model->nombre) . '.' . $model->imagenFile->extension;
+                    if ($model->uploadImage()) {
+                        // Guardar el modelo
+                        if ($model->save(false)) {
+                            return $this->redirect(['view', 'id' => $model->id]);
+                        }
+                    }
+                } else {
+                    // Guardar el modelo sin imagen
                     if ($model->save(false)) {
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }
-            } else {
-                // Guarda solo si no se ha subido una nueva imagen
-                if ($model->save(false)) {
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
-            }
         }
 
         return $this->render('update', [

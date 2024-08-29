@@ -115,7 +115,7 @@ class Pasos extends \yii\db\ActiveRecord
     public function uploadImage()
     {
         if ($this->validate()) {
-            $fileName = $this->imagenFile->name. '.' . $this->imagenFile->extension;
+            $fileName = $this->imagenFile->name;
             $filePath = Yii::getAlias('@webroot/imagenes/pasos/') . $fileName;
             if ($this->imagenFile->saveAs($filePath)) {
                 $this->imagen = $fileName; // Actualiza el atributo imagen con el nombre del archivo
