@@ -34,6 +34,7 @@ class AddUserForm extends Model
     public $password_reset_token;
     public $scenario;
     public $fotoFile;
+    public $change_password;
     
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';

@@ -131,6 +131,10 @@ class UsuariosController extends Controller
             $model->fotoFile->saveAs(Yii::getAlias('@webroot') . '/imagenes/usuarios/' . $filename);
             $user->foto = $filename;
             }
+            
+            if ($model->change_password) {
+                $user->password_hash = Yii::$app->security->generatePasswordHash($model->password);
+            }
             $user->save(false);
 
             // Guardar los teléfonos
@@ -138,7 +142,7 @@ class UsuariosController extends Controller
             foreach ($model->telefonos as $telefono) {
                 $userPhone = new Telefonos();
                 $userPhone->usuario = $user->id;
-                $userPhone->numero = $telefono;
+                $userPhone->telefono = $telefono;
                 $userPhone->save(false);
             }
 

@@ -44,8 +44,6 @@ $prefijos = [
         ['prompt' => 'Elige un nivel', 'id' => 'color-select']
     ) ?>
 
-    <?= $form->field($model, 'pais')->dropDownList($paises, ['prompt' => 'Seleccione su país', 'value' => $model->pais]) ?>
-
     <div id="telefonos">
         <div class="form-group telefono-grupo">
             <label for="telefono-0">Teléfono</label>
