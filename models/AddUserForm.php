@@ -21,6 +21,7 @@ class AddUserForm extends Model
     public $color;
     public $username;
     public $password;
+    public $confirm_password;
     public $email;
     public $pais;
     public $created_at;
@@ -53,6 +54,13 @@ class AddUserForm extends Model
             [['email', 'username'], 'unique', 'targetClass' => Usuarios::class],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
             [['telefonos'], 'each', 'rule' => ['string', 'max' => 15]],
+        ];
+    }
+    
+    public function attributeLabels() {
+        return [
+            'password' => 'Contraseña',
+            'confirm_password' => 'Confirmar contraseña'
         ];
     }
 

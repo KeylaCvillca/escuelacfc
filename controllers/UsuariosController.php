@@ -179,7 +179,7 @@ class UsuariosController extends Controller
             }
         }
 
-        return $this->render('misdatos', [
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
