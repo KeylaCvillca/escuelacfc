@@ -142,5 +142,20 @@ class Usuarios extends \yii\db\ActiveRecord
     public function generateAuthKey() {
         
     }
+    
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            // Verifica si el campo 'color' ha cambiado
+            if (!$this->isAttributeChanged('color')) {
+                // Si no ha cambiado, elimina 'color' de los atributos que se van a guardar
+                unset($this->color);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }

@@ -42,7 +42,7 @@ class AddUserForm extends Model
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'created_at', 'updated_at'], 'required'],
+            [['username', 'email', 'password', 'created_at', 'updated_at','color'], 'required'],
             [['fecha_nacimiento', 'fecha_ingreso', 'fecha_graduacion'], 'safe'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['nombre_apellidos'], 'string', 'max' => 50],
@@ -135,43 +135,57 @@ class AddUserForm extends Model
     }
     
     public function updateUser($id)
-{
-    $user = Usuarios::findOne($id);
-    if (!$user) {
-        return false;
-    }
-
-    $user->rol = $this->rol;
-    $user->fecha_nacimiento = $this->fecha_nacimiento;
-    $user->celula = $this->celula;
-    $user->fecha_ingreso = $this->fecha_ingreso;
-    $user->fecha_graduacion = $this->fecha_graduacion;
-    $user->foto = $this->foto;
-    $user->color = $this->color;
-    $user->status = $this->status;
-    $user->updated_at = time();
-
-    if (!empty($this->password)) {
-        $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
-    }
-
-    if ($user->validate() && $user->save()) {
-        // Update phones
-        Telefonos::deleteAll(['usuario' => $user->id]);
-        foreach ($this->telefonos as $numero) {
-            $telefono = new Telefonos();
-            $telefono->usuario = $user->id;
-            $telefono->telefono = $numero;
-            $telefono->save();
+    {
+        $user = Usuarios::findOne($id);
+        if (!$user) {
+            return false;
         }
 
-        // Re-assign roles
-        $this->assignRole($user->id);
-        return true;
-    }
+        $user->rol = $this->rol;
+        $user->fecha_nacimiento = $this->fecha_nacimiento;
+        $user->celula = $this->celula;
+        $user->fecha_ingreso = $this->fecha_ingreso;
+        $user->fecha_graduacion = $this->fecha_graduacion;
+        $user->foto = $this->foto;
+        $user->color = $this->color;
+        $user->status = $this->status;
+        $user->updated_at = time();
 
-    return false;
-}
+        if (!empty($this->password)) {
+            $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
+        }
+
+        if ($user->validate() && $user->save()) {
+            // Update phones
+            Telefonos::deleteAll(['usuario' => $user->id]);
+            foreach ($this->telefonos as $numero) {
+                $telefono = new Telefonos();
+                $telefono->usuario = $user->id;
+                $telefono->telefono = $numero;
+                $telefono->save();
+            }
+
+            // Re-assign roles
+            $this->assignRole($user->id);
+            return true;
+        }
+
+        return false;
+    }
+    
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            // Verifica si el campo 'color' ha cambiado
+            if (!$this->isAttributeChanged('color')) {
+                // Si no ha cambiado, elimina 'color' de los atributos que se van a guardar
+                unset($this->color);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 }

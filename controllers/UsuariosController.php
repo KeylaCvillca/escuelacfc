@@ -175,12 +175,15 @@ class UsuariosController extends Controller
             $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
             if ($model->load(Yii::$app->request->post()) && $model->updateUser($id)) {
                 Yii::$app->session->setFlash('success', 'Your data has been updated.');
-                return $this->redirect(['misdatos']);
+                return $this->redirect(['view', 'id' => Usuarios::findOne(['email' => $model->email])->id]);
             }
         }
+        
+        $niveles = Niveles::find()->select(['color'])->distinct()->all();
 
         return $this->render('update', [
             'model' => $model,
+            'niveles' => $niveles,
         ]);
     }
 
@@ -267,6 +270,10 @@ class UsuariosController extends Controller
     {
         $model = new UploadExcelForm();
         if (Yii::$app->request->isPost) {
+            if (empty($model->color)) {
+                // Si el color está vacío, no lo actualices
+                unset($model->color);
+            }
             $model->file = UploadedFile::getInstance($model, 'file');
             $uploaded = $model->upload();
             if ($uploaded) {
