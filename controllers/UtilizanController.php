@@ -86,7 +86,7 @@ class UtilizanController extends Controller
                     // Save the file name in the database
                     $model->video = $fileName;
 
-                    if ($model->save()) {
+                    if ($model->save(false)) {
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 } else {

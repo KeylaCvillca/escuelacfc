@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Utilizan $model */
 
-$this->title = $model->id;
+$this->title = $model->video;
 $this->params['breadcrumbs'][] = ['label' => 'Utilizans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -15,25 +15,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'instrumento',
-            'paso',
+            [
+                'attribute' => 'nombre_paso',
+                'label' => 'Paso',
+                'value' => function($model) {
+                    return $model->getNombrePaso(); // Usamos el método del modelo
+                },
+            ],
+            [
+                'attribute' => 'nombre_instrumento',
+                'label' => 'Instrumento',
+                'value' => function($model) {
+                    return $model->getNombreInstrumento(); // Usamos el método del modelo
+                },
+            ],
             'video',
         ],
     ]) ?>
-
+    <?php echo '<div class="video-container">'
+                . '<video width="320" height="240" controls>'
+                . '<source src="' . Yii::getAlias('@web/videos/pasos/') . $model->video . '" type="video/webm">'
+                . 'Your browser does not support the video tag.'
+                . '</video>'
+                . '</div>';
+?>
 </div>
