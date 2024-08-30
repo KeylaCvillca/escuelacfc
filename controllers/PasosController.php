@@ -45,7 +45,7 @@ class PasosController extends Controller
 {
     $searchModel = new PasosSearch();
     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+    $dataProvider->pagination = false;
     return $this->render('index', [
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,

@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'itemView' => function ($model, $key, $index, $widget) {
                 return $this->render('_card', ['model' => $model]);
             },
+
         ]); ?>
     </div>
 </div>
