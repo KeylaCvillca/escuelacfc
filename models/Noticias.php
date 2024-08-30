@@ -14,7 +14,7 @@ use Yii;
  * @property int|null $autor
  * @property int $publico
  *
- * @property Usuarios $autor0
+ * @property Usuarios $autor
  */
 class Noticias extends \yii\db\ActiveRecord
 {
@@ -57,14 +57,14 @@ class Noticias extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Autor0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAutor()
-    {
-        return $this->hasOne(Usuarios::class, ['id' => 'autor']);
-    }
+    * Gets query for [[Autor]].
+    *
+    * @return \yii\db\ActiveQuery
+    */
+   public function getAutor()
+   {
+       return $this->hasOne(Usuarios::class, ['id' => 'autor']);
+   }
 
     /**
      * Devuelve el nombre y apellidos del autor.

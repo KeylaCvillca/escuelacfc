@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             'titulo',
             [
@@ -32,7 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Público',
                 'value' => function($model) {
                     return $model->publico == 0? "No":"Sí";
-                }
+                },
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'publico_filtro',
+                    app\models\NoticiasSearch::getPublicFilterOptions(),
+                    ['prompt' => 'Seleccionar', 'class' => 'form-control']
+                ),
             ],
             [
                 'attribute' => 'fecha_publicacion',

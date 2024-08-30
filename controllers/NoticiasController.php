@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use Yii;
 use app\models\Usuarios;
 use yii\data\Pagination;
+use app\models\NoticiasSearch;
 
 /**
  * NoticiasController implements the CRUD actions for Noticias model.
@@ -41,24 +42,15 @@ class NoticiasController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Noticias::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $searchModel = new NoticiasSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
 
     /**
      * Displays a single Noticias model.
