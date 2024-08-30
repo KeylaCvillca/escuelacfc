@@ -2,51 +2,67 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Usuarios $model */
 
-$this->title = $model->id;
+$this->title = $model->nombre_apellidos;
 $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="usuarios-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <h1>Usuario: <?= Html::encode($this->title) ?></h1>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'nombre_apellidos',
+            [ 
+                'attribute' =>'foto',
+                'format' => 'html',
+                'value' => function($model) {
+                    return Html::img('@web/imagenes/usuarios/' . $model->foto,['alt' => 'Foto del usuario', 'style' => [
+                        'width' => '50px'
+                    ]]);
+                }
+            ],
+            'color',
+            'email:email',
+            'username',
+            'celula',
             'rol',
             'fecha_nacimiento',
-            'celula',
             'fecha_ingreso',
             'fecha_graduacion',
-            'foto',
-            'color',
-            'username',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
-            'email:email',
-            'status',
-            'created_at',
-            'updated_at',
         ],
     ]) ?>
+    <h2>Teléfonos</h2>
+    <?= GridView::widget([
+        'dataProvider' => new \yii\data\ActiveDataProvider([
+            'query' => $model->getTelefonos(),
+        ]),
+        'columns' => [
+            'telefono',
+        ],
+    ]) ?>
+
+    <!-- GridView para los niveles que enseña si el rol es "maestra" -->
+    <?php if ($model->rol === 'maestra'): ?>
+        <h2>Niveles que enseña</h2>
+        <?= GridView::widget([
+            'dataProvider' => new \yii\data\ActiveDataProvider([
+                'query' => $model->getEnsenans(),
+            ]),
+            'columns' => [
+                'color',
+                'funcion',
+                // otras columnas del modelo Ensenanza si las hay
+            ],
+        ]) ?>
+    <?php endif; ?>
+    
 
 </div>

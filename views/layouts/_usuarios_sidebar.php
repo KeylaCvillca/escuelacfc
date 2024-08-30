@@ -35,13 +35,27 @@ echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-
         // View view
         echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
         echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
-        echo Html::a('Actualizar ' . $ALIASES[$controller], ['update', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-success']);
-        echo Html::a('Borrar ' . $ALIASES[$controller], ['delete', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-danger']);
-    } elseif ($actionId === 'update') {
+        echo Html::a('Editar ' . $ALIASES[$controller], ['update', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-success']);
+        echo Html::a('Eliminar ' . $ALIASES[$controller], ['delete', 'id' => Yii::$app->request->get('id')],
+            [
+                'class' => ' list-group-item list-group-item-action btn btn-danger',
+                'data' => [
+                    'method' => 'post',
+                    'confirm' => '¿Seguro que quieres eliminar este elemento?'
+            ]
+            ]
+        );    } elseif ($actionId === 'update') {
         // Update view
         echo Html::a('Ver '  . $ALIASES[$controller], ['view', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-info']);
-        echo Html::a('Borrar ' . $ALIASES[$controller], ['delete', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-danger']);
-        echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
+        echo Html::a('Eliminar ' . $ALIASES[$controller], ['delete', 'id' => Yii::$app->request->get('id')],
+            [
+                'class' => ' list-group-item list-group-item-action btn btn-danger',
+                'data' => [
+                    'method' => 'post',
+                    'confirm' => '¿Seguro que quieres eliminar este elemento?'
+            ]
+            ]
+        );        echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
     }
     echo Html::a('Añadir usuarios desde Excel', ['usuarios/upload'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
 ?>

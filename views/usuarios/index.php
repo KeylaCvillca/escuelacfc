@@ -3,6 +3,8 @@
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use app\models\Niveles;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UsuariosSearch */
@@ -20,17 +22,23 @@ $this->title = 'Usuarios';
         <?php $form = ActiveForm::begin([
             'method' => 'get',
         ]); ?>
-        <div class="d-flex">
-            <h2>Filtros:</h2>
+        <div class="d-flex flex-wrap">
+            <h4>Filtros: </h4>
             <?= $form->field($searchModel, 'nombre_apellidos')->textInput(['placeholder' => 'Nombre y Apellidos'])->label(false) ?>
-            <?= $form->field($searchModel, 'rol')->textInput(['placeholder' => 'Rol'])->label(false) ?>
+            <?= $form->field($searchModel, 'rol')->dropDownList(
+                ['admin' => 'Admin', 'maestra' => 'Maestra', 'alumna' => 'Alumna'],
+                ['prompt' => 'Rol']
+            )->label(false) ?>  
             <?= $form->field($searchModel, 'email')->textInput(['placeholder' => 'Email'])->label(false) ?>
-            <?= $form->field($searchModel, 'color')->textInput(['placeholder' => 'Color'])->label(false) ?>
+            <?= $form->field($searchModel, 'color')->dropDownList(
+                ArrayHelper::map(Niveles::find()->all(), 'color', 'color'),
+                ['prompt' => 'Nivel']
+            )->label(false) ?>
             <?= $form->field($searchModel, 'telefono')->textInput(['placeholder' => 'Teléfono'])->label(false) ?>
         </div>
         <div class="form-group">
-            <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Reset', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
+            <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Todos', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
