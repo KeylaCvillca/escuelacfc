@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $videoUrl = Yii::getAlias('@web/videos/pasos/') . $utilizan->video;
                 echo '<div class="video-container">';
                 echo '<video width="320" height="240" controls>';
-                echo '<source src="' . Html::encode($videoUrl) . '.mp4" type="video/mp4">';
+                echo '<source src="' . Html::encode($videoUrl) . '" type="video/webm">';
                 echo 'Your browser does not support the video tag.';
                 echo '</video>';
                 echo '</div>';

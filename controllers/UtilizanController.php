@@ -73,18 +73,24 @@ class UtilizanController extends Controller
         $model = new Utilizan();
 
         if ($model->load(Yii::$app->request->post())) {
+            // Load the uploaded file instance
             $model->file = UploadedFile::getInstance($model, 'file');
 
             if ($model->file && $model->validate()) {
-                // Guardar el archivo en la carpeta especificada
-                $filePath =  Yii::getAlias('@webroot/videos/pasos/') . $model->file->baseName . '.' . $model->file->extension;
+                $fileName = $model->file->baseName . '.' . $model->file->extension;
+                // Construct the file path
+                $filePath = Yii::getAlias('@webroot/videos/pasos/') . $model->file->baseName . '.' . $model->file->extension;
+                
+                // Attempt to save the file
                 if ($model->file->saveAs($filePath)) {
-                    // Guardar el nombre del archivo en la base de datos
-                    $model->video = $model->file->baseName . '.' . $model->file->extension;
+                    // Save the file name in the database
+                    $model->video = $fileName;
 
                     if ($model->save()) {
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Failed to save the uploaded file.');
                 }
             }
         }
@@ -93,6 +99,7 @@ class UtilizanController extends Controller
             'model' => $model,
         ]);
     }
+
 
     /**
      * Updates an existing Utilizan model.
