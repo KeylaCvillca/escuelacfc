@@ -74,15 +74,30 @@ class SiteController extends Controller
             
         ]);
         $noticias = new ActiveDataProvider([
-            'query' => Noticias::find()
-                            ->where(['publico' => true])
-                            ->orderBy(['fecha_publicacion' => 'asc'])
-                            ->limit(10)
+        'query' => Noticias::find()
+            ->where(['publico' => true])
+            ->orderBy(['fecha_publicacion' => SORT_DESC]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
+        
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
+            Yii::$app->session->setFlash('contactFormSubmitted');
+            Yii::$app->mailer->compose()
+                ->setFrom('pruebas@escuelacfc.com')
+                ->setTo('saul.crespo.sc@gmail.com')
+                ->setSubject('Test Email')
+                ->setTextBody('This is a test email sent from Yii2.')
+                ->send();
+            return $this->refresh();
+        }
         
         return $this->render('index',[
             'instrumentos' => $instrumentos->models,
             'noticias' => $noticias->getModels(),
+            'model' => $model
 
         ]);
     }

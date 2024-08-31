@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap4\ActiveForm;
+use yii\captcha\Captcha;
 
 /** @var yii\web\View $this */
 
@@ -18,7 +20,7 @@ $this->title = 'My Yii Application';
     
     <div class="body-content">
         <div class="jumbotron d-flex justify-content-center bg-transparent pb-2">
-            <h2>Instrumentos</h2>
+            <h2 id="instrumentos"> Instrumentos</h2>
         </div>
 
         <div class="row">
@@ -38,7 +40,7 @@ $this->title = 'My Yii Application';
     
     <div class="noticias-read container mt-4">
 
-    <h2 class="mb-4 text-center">Noticias</h2>
+    <h2 id="noticias" class="mb-4 text-center">Noticias</h2>
 
     <?php foreach ($noticias as $noticia): ?>
     <div class="row mb-3 news-item">
@@ -58,6 +60,160 @@ $this->title = 'My Yii Application';
         </div>
     </div>
 <?php endforeach; ?>
+</div>
+    
+<div class="container quienes-somos">
+    <div class="title-somos d-flex justify-content-center flex-column align-items-center">
+        <h2 id="about" class="mb-4 mt-5">¿Quiénes somos?</h2>
+        <p>Somos Danza CFC , una escuela de danza cristiana dedicada a glorificar a Dios a través del arte del baile.
+            Fundada con la pasión de integrar la fe y la expresión artística, nuestra institución se centra en proporcionar
+            una formación de danza que no solo busca la excelencia técnica, sino que también fomenta el crecimiento espiritual
+            y el desarrollo del carácter cristiano.<br>
+            En Danza CFC, creemos que cada movimiento es una oportunidad para adorar y honrar a Dios. Nuestros programas están
+            diseñados para todos los niveles y edades, desde principiantes hasta avanzados, ofreciendo una variedad de estilos
+            de danza que incluyen danza con pandero, danza hebrea y profética, siempre con un enfoque en principios y valores cristianos.<br>
+            Nuestro equipo está compuesto por instructores altamente calificados y apasionados, quienes no solo son expertos en su campo,
+            sino también mentores comprometidos con el bienestar y crecimiento integral de nuestros estudiantes. Nos esforzamos por
+            crear un ambiente de apoyo y amor, donde cada estudiante se sienta valorado y motivado a alcanzar su máximo potencial.<br>
+            En Danza CFC, nuestra comunidad es una extensión de nuestra fe. Organizamos eventos, presentaciones y proyectos de servicio
+            que permiten a nuestros estudiantes utilizar sus talentos para impactar positivamente a la comunidad y compartir el mensaje
+            de esperanza y amor de Cristo.<br>
+            Únete a nosotros en Danza CFC, donde la danza y la fe se unen para crear algo verdaderamente hermoso y
+            significativo.
+        </p>
+    </div>
+
+    <!-- VISIÓN Y MISIÓN POSIBLE -->
+    <div class="row">
+        <div class="col-6 d-flex align-items-center flex-column">
+            <h3>Visión</h3>
+            <p>"Ser una comunidad de fe donde la danza se convierte en una expresión viva de la adoración a Dios, inspirando y
+                transformando vidas a través del arte y el compromiso cristiano. Aspiramos a ser un faro de luz y esperanza,
+                promoviendo la excelencia en la danza mientras cultivamos valores de amor, fe y servicio en cada estudiante."
+            </p>
+        </div>
+        <div class="col-6 d-flex align-items-center flex-column">
+            <h3>Misión</h3>
+            <p>"Nuestra misión es glorificar a Dios y edificar Su reino a través de la enseñanza de la danza. Nos dedicamos
+                a proporcionar una formación integral que combina la excelencia técnica con el desarrollo espiritual.
+                Fomentamos un ambiente donde los estudiantes pueden crecer en su fe, descubrir sus talentos dados por Dios
+                y usar sus habilidades para impactar positivamente a la comunidad y el mundo. Nos comprometemos a inculcar
+                valores cristianos, promoviendo el respeto, la humildad y el amor en todas nuestras actividades."
+            </p>
+        </div>
+    </div>
+
+    <div class="tarjetas-pasos d-flex justify-content-center mt-5">
+        <div class="card card-tarjeta-pasos" style="width: 18rem;">
+            <div class="contain-image">
+                <img class="card-img-top" src="../../web/imagenes/Directora.jpg" alt="Card image cap">
+            </div>
+            <div class="card-body d-flex justify-content-center flex-column align-items-center">
+                <h5 class="card-title text-center"> Directora <br>Fidelina Hamilton</h5>
+                <p class="card-text text-center">
+                     
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <!-- TARJETA 1 -->
+            <div class="tarjetas-pasos d-flex justify-content-center mt-5">
+                <div class="card card-tarjeta-pasos" style="width: 18rem;">
+                    <div class="contain-image">
+                        <img class="card-img-top" src="../../web/imagenes/Lider.jpg" alt="Card image cap">
+                    </div>
+                    <div class="card-body d-flex justify-content-center flex-column align-items-center">
+                        <h5 class="card-title text-center">Líder <br>Helena Canty</h5>
+                        <p class="card-text text-center">
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <!-- TARJETA 2 -->
+            <div class="tarjetas-pasos d-flex justify-content-center mt-5">
+                <div class="card card-tarjeta-pasos" style="width: 18rem;">
+                    <div class="contain-image">
+                        <img class="card-img-top" src="../../web/imagenes/Secretaria.jpg" alt="Card image cap">
+                    </div>
+                    <div class="card-body d-flex justify-content-center flex-column align-items-center">
+                        <h5 class="card-title text-center">Secretaria<br> Keyla Mccue</h5>
+                        <p class="card-text text-center">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="site-contact">
+    <h1 id="contact">Contacto</h1>
+    <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
+
+        <div class="alert alert-success">
+            Gracias por contactar con nosotros. Responderemos a la mayor brevedad posible.
+        </div>
+
+        <p>
+            
+            <?php if (Yii::$app->mailer->useFileTransport): ?>
+                Puedes ver el email resultante en:  <code><?= Yii::getAlias(Yii::$app->mailer->fileTransportPath) ?></code>.
+            <?php endif; ?>
+        </p>
+
+    <?php else: ?>
+
+        <p>
+            Si tienes preguntas acerca de la inscripción, contacta con nosotros por medio de este formulario, o bien escríbenos un whatsapp.
+        </p>
+
+        <div class="row">
+            <div class="col-lg-5">
+
+                <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
+
+                    <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+
+                    <?= $form->field($model, 'email') ?>
+
+                    <?= $form->field($model, 'subject') ?>
+
+                    <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
+
+                    <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+                        'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
+                    ]) ?>
+
+                    <div class="form-group">
+                        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
+                    </div>
+
+                <?php ActiveForm::end(); ?>
+
+            </div>
+        </div>
+
+    <?php endif; ?>
+    <div class="col-md-5">
+        <!-- Incluir la vista parcial del mapa -->
+        <?= $this->render('map') ?>
+    </div>
+    <div class="Whatsapp row">
+        <h1 class="center">Contacta con nosotros</h1>
+        <p>
+            Puedes contactarnos directamente a través de WhatsApp haciendo clic en el siguiente enlace:
+        </p>
+
+        <p>
+            <?= Html::a('Contáctanos por WhatsApp', 'https://api.whatsapp.com/send?phone=+34605594430&text=Hola%20me%20gustaria%20obtener%20informacion', ['class' => 'btn btn-success']) ?>
+        </p>
+
+    </div>
 </div>
 <?php
 // Añadimos los estilos de hover al final del archivo para hacer que las tarjetas se agranden al pasar el ratón

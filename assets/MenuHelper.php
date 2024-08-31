@@ -34,9 +34,9 @@ class MenuHelper {
             case "guest":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Conócenos', 'url' => ['/site/about']],
-                    ['label' => 'Noticias', 'url' => ['/noticias/public']],
-                    ['label' => 'Contacto', 'url' => ['/site/contact']],
+                    ['label' => 'Conócenos', 'url' => ['/site/index#about']],
+                    ['label' => 'Noticias', 'url' => ['/site/index#noticias']],
+                    ['label' => 'Contacto', 'url' => ['/site/index#contact']],
                     ['label' => 'Conectarse', 'url' => ['/site/login']]    
                     ];
             case "alumna":
