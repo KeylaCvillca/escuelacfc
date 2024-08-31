@@ -7,7 +7,8 @@ $ALIASES = [
     'niveles' => 'nivel',
     'instrumentos' => 'instrumento',
     'utilizan' => 'vídeo',
-    'noticias' => 'noticia'
+    'noticias' => 'noticia',
+    'file' => 'archivo'
 ];
 
 $isAdmin = Yii::$app->user->can('admin');
@@ -22,6 +23,7 @@ $controller = Yii::$app->controller->id;
         <?= Html::a('Instrumentos', ['instrumentos/index'], ['class' => 'list-group-item list-group-item-action']) ?>
         <?= Html::a('Vídeos', ['utilizan/index'], ['class' => 'list-group-item list-group-item-action']) ?>
         <?= Html::a('Niveles', ['niveles/index'], ['class' => 'list-group-item list-group-item-action']) ?>
+        <?= Html::a('Archivos', ['file/index'], ['class' => 'list-group-item list-group-item-action']) ?>
     <?php endif; ?>
     <?php if ($isAdmin): ?>
         <?= Html::a('Noticias', ['noticias/index'], ['class' => 'list-group-item list-group-item-action']) ?>

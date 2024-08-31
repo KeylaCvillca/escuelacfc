@@ -23,7 +23,7 @@ class MenuHelper {
             'asideTitle' => 'Gestión de usuarios'
         ],
         'materiales' => [
-            'controllers' => ['pasos','instrumentos', 'niveles', 'utilizan','noticias'],
+            'controllers' => ['pasos','instrumentos', 'niveles', 'utilizan','noticias','file'],
             'permisos' => ['admin','maestra'],
             'asideTitle' => 'Gestión de contenido'
         ]
@@ -67,17 +67,10 @@ class MenuHelper {
             case "admin":
                 return [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Administración', 
-                        'items' => [
-                        ['label' => 'Acceso','url'=>['/rbac/route']],
-                        ['label'=> 'Usuarios','url'=>['/usuarios/index']],
-                        ['label'=> 'Funciones','url'=>['/ensenan/index']],
-                        ['label'=> 'Archivos','url'=>['/site/files']],
-                        ['label'=> 'Noticias','url'=>['/noticias/index']],
-                    ]],
-                    ['label' => 'Materiales', 'url' => ['/pasos/index']],
+                    ['label' => 'Acceso','url'=>['/rbac/route']],
+                    ['label'=> 'Usuarios','url'=>['/usuarios/index']],
+                    ['label'=> 'Contenido','url'=>['/file/index']],
                     ['label' => 'Quiz', 'url' => ['/pasos/quiz']],
-                    ['label' => 'Noticias', 'url' => ['/noticias/read']],
                     ['label' => 'Administrador (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
