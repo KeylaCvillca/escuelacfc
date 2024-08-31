@@ -21,9 +21,9 @@ class File extends Model
     public function attributeLabels()
     {
         return [
-            'name' => 'File Name',
-            'extension' => 'Extension',
-            'path' => 'Path',
+            'name' => 'Nombre',
+            'extension' => 'Extensión',
+            'path' => 'Ruta',
         ];
     }
 }

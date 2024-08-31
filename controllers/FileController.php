@@ -8,6 +8,7 @@ use yii\web\NotFoundHttpException;
 use yii\helpers\FileHelper;
 use yii\web\Response;
 use app\models\File;
+use app\models\FileSearch;
 
 class FileController extends Controller
 {
@@ -37,9 +38,11 @@ class FileController extends Controller
                 'pageSize' => 20,
             ],
         ]);
-
+        $searchModel = new FileSearch();
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
         ]);
     }
 

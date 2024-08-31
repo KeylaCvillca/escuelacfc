@@ -55,6 +55,7 @@ class AddUserForm extends Model
             [['email', 'username'], 'unique', 'targetClass' => Usuarios::class],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
             [['telefonos'], 'each', 'rule' => ['string', 'max' => 15]],
+            [['fotoFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true]
         ];
     }
     
