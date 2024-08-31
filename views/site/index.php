@@ -8,7 +8,7 @@ use yii\captcha\Captcha;
 
 $this->title = 'My Yii Application';
 ?>
-<div class="site-index">
+<div id="inicio" class="site-index">
 
     <div class="jumbotron text-center bg-transparent" style="height: 100vh; background-image: url('<?= Yii::getAlias('@web/imagenes/banner.png') ?>'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center;">
         <div style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px;">
@@ -103,53 +103,38 @@ $this->title = 'My Yii Application';
         </div>
     </div>
 
-    <div class="tarjetas-pasos d-flex justify-content-center mt-5">
-        <div class="card card-tarjeta-pasos" style="width: 18rem;">
-            <div class="contain-image">
-                <img class="card-img-top" src="../../web/imagenes/Directora.jpg" alt="Card image cap">
-            </div>
-            <div class="card-body d-flex justify-content-center flex-column align-items-center">
-                <h5 class="card-title text-center"> Directora <br>Fidelina Hamilton</h5>
-                <p class="card-text text-center">
-                     
-                </p>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
-        <div class="col-6">
-            <!-- TARJETA 1 -->
-            <div class="tarjetas-pasos d-flex justify-content-center mt-5">
-                <div class="card card-tarjeta-pasos" style="width: 18rem;">
-                    <div class="contain-image">
-                        <img class="card-img-top" src="../../web/imagenes/Lider.jpg" alt="Card image cap">
-                    </div>
-                    <div class="card-body d-flex justify-content-center flex-column align-items-center">
-                        <h5 class="card-title text-center">Líder <br>Helena Canty</h5>
-                        <p class="card-text text-center">
-
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <!-- TARJETA 2 -->
-            <div class="tarjetas-pasos d-flex justify-content-center mt-5">
-                <div class="card card-tarjeta-pasos" style="width: 18rem;">
-                    <div class="contain-image">
-                        <img class="card-img-top" src="../../web/imagenes/Secretaria.jpg" alt="Card image cap">
-                    </div>
-                    <div class="card-body d-flex justify-content-center flex-column align-items-center">
-                        <h5 class="card-title text-center">Secretaria<br> Keyla Mccue</h5>
-                        <p class="card-text text-center">
-                        </p>
-                    </div>
-                </div>
+    <!-- Tarjeta Directora -->
+    <div class="col-lg-4">
+        <div class="card" style="height:400px; background-image: url('<?= Yii::getAlias('@web/imagenes/Directora.jpg') ?>'); background-size: cover; background-position: center; transition: transform 0.3s;">
+            <div class="card-body d-flex flex-column justify-content-end" style="background-color: rgba(255, 255, 255, 0.65);">
+                <h5 class="card-title text-center">Directora</h5>
+                <p class="card-text text-center">Fidelina Hamilton</p>
             </div>
         </div>
     </div>
+
+    <!-- Tarjeta Líder -->
+    <div class="col-lg-4">
+        <div class="card" style="height:400px; background-image: url('<?= Yii::getAlias('@web/imagenes/Lider.jpg') ?>'); background-size: cover; background-position: center; transition: transform 0.3s;">
+            <div class="card-body d-flex flex-column justify-content-end" style="background-color: rgba(255, 255, 255, 0.65);">
+                <h5 class="card-title text-center">Líder</h5>
+                <p class="card-text text-center">Helena Canty</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjeta Secretaria -->
+    <div class="col-lg-4">
+        <div class="card" style="height:400px; background-image: url('<?= Yii::getAlias('@web/imagenes/Secretaria.jpg') ?>'); background-size: cover; background-position: center; transition: transform 0.3s;">
+            <div class="card-body d-flex flex-column justify-content-end" style="background-color: rgba(255, 255, 255, 0.65);">
+                <h5 class="card-title text-center">Secretaria</h5>
+                <p class="card-text text-center">Keyla Mccue</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div> 
 <div class="site-contact">
     <h1 id="contact">Contacto</h1>
@@ -160,9 +145,8 @@ $this->title = 'My Yii Application';
         </div>
 
         <p>
-            
             <?php if (Yii::$app->mailer->useFileTransport): ?>
-                Puedes ver el email resultante en:  <code><?= Yii::getAlias(Yii::$app->mailer->fileTransportPath) ?></code>.
+                Puedes ver el email resultante en: <code><?= Yii::getAlias(Yii::$app->mailer->fileTransportPath) ?></code>.
             <?php endif; ?>
         </p>
 
@@ -173,8 +157,8 @@ $this->title = 'My Yii Application';
         </p>
 
         <div class="row">
-            <div class="col-lg-5">
-
+            <!-- Columna izquierda para el formulario -->
+            <div class="col-lg-6 col-md-6">
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
                     <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
@@ -194,27 +178,26 @@ $this->title = 'My Yii Application';
                     </div>
 
                 <?php ActiveForm::end(); ?>
+            </div>
 
+            <!-- Columna derecha para el mapa y el botón de WhatsApp -->
+            <div class="col-lg-6 col-md-6">
+                <!-- Mapa -->
+                <?= $this->render('map') ?>
+
+                <!-- Botón de WhatsApp -->
+                <div class="Whatsapp">
+                    <p>Puedes contactarnos directamente a través de WhatsApp haciendo clic en el siguiente enlace:</p>
+                    <p>
+                        <?= Html::a('Contáctanos por WhatsApp', 'https://api.whatsapp.com/send?phone=+34605594430&text=Hola%20me%20gustaria%20obtener%20informacion', ['class' => 'btn btn-success']) ?>
+                    </p>
+                </div>
             </div>
         </div>
 
     <?php endif; ?>
-    <div class="col-md-5">
-        <!-- Incluir la vista parcial del mapa -->
-        <?= $this->render('map') ?>
-    </div>
-    <div class="Whatsapp row">
-        <h1 class="center">Contacta con nosotros</h1>
-        <p>
-            Puedes contactarnos directamente a través de WhatsApp haciendo clic en el siguiente enlace:
-        </p>
-
-        <p>
-            <?= Html::a('Contáctanos por WhatsApp', 'https://api.whatsapp.com/send?phone=+34605594430&text=Hola%20me%20gustaria%20obtener%20informacion', ['class' => 'btn btn-success']) ?>
-        </p>
-
-    </div>
 </div>
+
 <?php
 // Añadimos los estilos de hover al final del archivo para hacer que las tarjetas se agranden al pasar el ratón
 $this->registerCss("
