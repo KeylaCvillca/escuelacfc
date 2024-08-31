@@ -23,12 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row d-flex">
         <?= ListView::widget([
             'dataProvider' => $dataProvider,
-            'itemOptions' => ['class' => 'item col-md-4'],
+            'itemOptions' => ['class' => 'item col-md-4 col-sm-6 mb-4'],
             'layout' => "{items}",
             'itemView' => function ($model, $key, $index, $widget) {
                 return $this->render('_card', ['model' => $model]);
             },
-
+            'options' => [
+                'class' => 'd-flex flex-wrap' 
+            ]
         ]); ?>
     </div>
 </div>

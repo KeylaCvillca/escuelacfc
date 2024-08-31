@@ -109,32 +109,29 @@ class PasosController extends Controller
     }
 
     public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+{
+    $model = $this->findModel($id);
 
-        if ($this->request->isPost) {
-            $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
+    if ($model->load(Yii::$app->request->post())) {
+        // Procesar el archivo de imagen solo si se ha subido uno nuevo
+        $model->imagenFile = UploadedFile::getInstance($model, 'imagenFile');
 
-            if ($model->imagenFile) {
-                    $model->imagen = strtolower($model->nombre) . '.' . $model->imagenFile->extension;
-                    if ($model->uploadImage()) {
-                        // Guardar el modelo
-                        if ($model->save(false)) {
-                            return $this->redirect(['view', 'id' => $model->id]);
-                        }
-                    }
-                } else {
-                    // Guardar el modelo sin imagen
-                    if ($model->save(false)) {
-                        return $this->redirect(['view', 'id' => $model->id]);
-                    }
-                }
+        if ($model->imagenFile) {
+            $model->imagen = strtolower($model->nombre) . '.' . $model->imagenFile->extension;
+            if (!$model->uploadImage()) {
+                Yii::$app->session->setFlash('error', 'Error al subir la imagen');
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        if ($model->validate() && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
     }
+
+    return $this->render('update', [
+        'model' => $model,
+    ]);
+}
 
     /**
      * Deletes an existing Pasos model.

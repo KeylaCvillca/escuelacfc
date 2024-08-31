@@ -42,7 +42,7 @@ class Pasos extends \yii\db\ActiveRecord
             [['descripcion'], 'string', 'max' => 3000],
             [['color'], 'string', 'max' => 15],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
-            [['imagenFile'], 'file', 'extensions' => 'png, jpg, jpeg'], // Agrega la regla para el archivo de imagen
+            [['imagenFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true], // Agrega la regla para el archivo de imagen
        ];
     }
 
