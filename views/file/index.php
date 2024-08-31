@@ -2,29 +2,37 @@
 
 use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
-$this->title = 'Archivos Multimedia';
-$this->params['breadcrumbs'][] = $this->title;
+/* @var $this yii\web\View */
+/* @var $searchModel app\models\FileSearch */
+/* @var $dataProvider yii\data\ArrayDataProvider */
+
 ?>
-
 <div class="file-index">
-    <h1><?= Html::encode($this->title) ?></h1>
+
+    <h1>Archivos Multimedia</h1>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'name',
-            'extension',
+            [
+                'attribute' => 'name',
+                'label' => 'Nombre',
+                'filter' => Html::activeTextInput($searchModel, 'name', ['class' => 'form-control']),
+            ],
+            [
+                'attribute' => 'extension',
+                'label' => 'Extensión',
+                'filter' => Html::activeTextInput($searchModel, 'extension', ['class' => 'form-control']),
+            ],
             [
                 'attribute' => 'path',
                 'label' => 'Ruta',
                 'value' => function ($model) {
                     return $model->path;
-                }
+                },
             ],
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {download} {delete}',
@@ -46,4 +54,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
 </div>

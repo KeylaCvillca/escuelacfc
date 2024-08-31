@@ -3,19 +3,17 @@
 namespace app\models;
 
 use yii\base\Model;
-use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 
-/**
- * FileSearch represents the model behind the search form of `app\models\File`.
- */
 class FileSearch extends Model
 {
     public $name;
     public $extension;
     public $path;
 
-    private $files = [];
-
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -23,95 +21,64 @@ class FileSearch extends Model
         ];
     }
 
+    /**
+     * @param array $params
+     * @return ArrayDataProvider
+     */
     public function search($params)
     {
-        // Load file data from the filesystem
-        $this->files = $this->loadFiles(); // Method to load files from the filesystem
+        // Obtener todos los archivos
+        $files = File::findAllFiles();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $this->getQuery(),
+        // Crear el DataProvider con todos los archivos
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $files,
             'pagination' => [
                 'pageSize' => 20,
             ],
+            'sort' => [
+                'attributes' => ['name', 'extension', 'path'],
+                'defaultOrder' => ['name' => SORT_ASC], // Orden por defecto
+            ],
         ]);
 
+        // Cargar los parámetros de búsqueda
         $this->load($params);
 
-        if (!$this->validate()) {
-            $dataProvider->setModels([]); // No results if validation fails
-            return $dataProvider;
-        }
-
-        // Apply filters
-        $models = array_filter($this->files, function ($file) {
-            return (!$this->name || stripos($file['name'], $this->name) !== false) &&
-                   (!$this->extension || stripos($file['extension'], $this->extension) !== false) &&
-                   (!$this->path || stripos($file['path'], $this->path) !== false);
+        // Filtrar los archivos
+        $filteredFiles = array_filter($files, function ($file) {
+            /** @var File $file */
+            return (
+                (!$this->name || stripos($file->name, $this->name) !== false) &&
+                (!$this->extension || stripos($file->extension, $this->extension) !== false) &&
+                (!$this->path || stripos($file->path, $this->path) !== false)
+            );
         });
 
-        // Apply sorting
-        usort($models, function ($a, $b) {
-            foreach ($this->sortAttributes() as $attribute) {
-                if (isset($a[$attribute]) && isset($b[$attribute])) {
-                    $result = strcmp($a[$attribute], $b[$attribute]);
-                    if ($result !== 0) {
-                        return $result;
-                    }
-                }
+        // Aplicar la ordenación según el DataProvider
+        $sort = $dataProvider->sort;
+        $sortAttribute = $sort->attributes ? array_key_first($sort->attributes) : 'name';
+        $sortDirection = $sort->defaultOrder[$sortAttribute] ?? SORT_ASC;
+
+        usort($filteredFiles, function ($a, $b) use ($sortAttribute, $sortDirection) {
+            $valueA = $a->{$sortAttribute};
+            $valueB = $b->{$sortAttribute};
+
+            if ($valueA == $valueB) {
+                return 0;
             }
-            return 0;
+
+            $result = ($valueA < $valueB) ? -1 : 1;
+            return $sortDirection === SORT_DESC ? -$result : $result;
         });
 
-        // Set the filtered and sorted results
-        $dataProvider->setModels($models);
+        // Aplicar la paginación manualmente
+        $pagination = $dataProvider->pagination;
+        $pageSize = $pagination->pageSize;
+        $currentPage = $pagination->page;
+
+        $dataProvider->allModels = array_slice($filteredFiles, $currentPage * $pageSize, $pageSize);
 
         return $dataProvider;
-    }
-
-    private function loadFiles()
-    {
-        $files = [];
-        $directories = [
-            \Yii::getAlias('@webroot/imagenes'),
-            \Yii::getAlias('@webroot/videos'),
-            \Yii::getAlias('@webroot/excel'),
-        ];
-
-        foreach ($directories as $directory) {
-            $files = array_merge($files, $this->scanDirectory($directory));
-        }
-
-        return $files;
-    }
-
-    private function scanDirectory($directory)
-    {
-        $files = [];
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
-        foreach ($iterator as $file) {
-            if ($file->isFile()) {
-                $files[] = [
-                    'name' => $file->getBasename(),
-                    'extension' => $file->getExtension(),
-                    'path' => str_replace(\Yii::getAlias('@webroot'), '', $file->getPathname()),
-                ];
-            }
-        }
-        return $files;
-    }
-
-    private function getQuery()
-    {
-        return new \yii\data\ArrayDataProvider([
-            'allModels' => $this->files,
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-    }
-
-    private function sortAttributes()
-    {
-        return ['name', 'extension', 'path'];
     }
 }

@@ -14,35 +14,26 @@ class FileController extends Controller
 {
     public function actionIndex()
     {
-        $paths = [
-            Yii::getAlias('@webroot/imagenes'),
-            Yii::getAlias('@webroot/videos'),
-            Yii::getAlias('@webroot/excel'),
+        $searchModel = new FileSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // Modify the dataProvider for path-based filtering
+        $dataProvider->sort->attributes['name'] = [
+            'asc' => ['path' => SORT_ASC],
+            'desc' => ['path' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['extension'] = [
+            'asc' => ['path' => SORT_ASC],
+            'desc' => ['path' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['path'] = [
+            'asc' => ['path' => SORT_ASC],
+            'desc' => ['path' => SORT_DESC],
         ];
 
-        $files = [];
-        foreach ($paths as $basePath) {
-            $allFiles = FileHelper::findFiles($basePath);
-            foreach ($allFiles as $filePath) {
-                $file = new File();
-                $file->name = basename($filePath);
-                $file->extension = pathinfo($filePath, PATHINFO_EXTENSION);
-                $file->path = str_replace(Yii::getAlias('@webroot'), '', $filePath);
-                $files[] = $file;
-            }
-        }
-
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => $files,
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-        $searchModel = new FileSearch();
-        
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel
         ]);
     }
 
