@@ -62,6 +62,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'file/view' => 'file/view',
+                'file/download' => 'file/download',
+                'file/delete' => 'file/delete',
             ],
         ],
         'i18n' => [
