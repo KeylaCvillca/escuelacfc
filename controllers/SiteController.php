@@ -16,6 +16,7 @@ use yii\web\NotFoundHttpException;
 use yii2mod\rbac\models\RouteModel;
 use yii\rbac\Item;
 use yii2mod\rbac\models\search\AuthItemSearch;
+use app\models\Noticias;
 
 class SiteController extends Controller
 {
@@ -72,9 +73,17 @@ class SiteController extends Controller
             'query' => Instrumentos::find()->select("*")
             
         ]);
+        $noticias = new ActiveDataProvider([
+            'query' => Noticias::find()
+                            ->where(['publico' => true])
+                            ->orderBy(['fecha_publicacion' => 'asc'])
+                            ->limit(10)
+        ]);
         
         return $this->render('index',[
             'instrumentos' => $instrumentos->models,
+            'noticias' => $noticias->getModels(),
+
         ]);
     }
 

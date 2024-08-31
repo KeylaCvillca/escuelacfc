@@ -35,8 +35,30 @@ $this->title = 'My Yii Application';
         </div>
 
     </div>
+    
+    <div class="noticias-read container mt-4">
+
+    <h2 class="mb-4 text-center">Noticias</h2>
+
+    <?php foreach ($noticias as $noticia): ?>
+    <div class="row mb-3 news-item">
+        <div class="col-md-8">
+            <h3><?= Html::encode($noticia->titulo) ?></h3>
+            <p class="text-muted">
+                Autor: <?= Html::encode($noticia->autorNombreApellidos) ?>
+            </p>
+            <p style="text-align: justify;">
+                <?= nl2br(Html::encode($noticia->contenido)) ?>
+            </p>
+        </div>
+        <div class="col-md-4 text-right">
+            <p class="text-muted">
+                Fecha de publicación: <?= $noticia->getFechaFormateada() ?>
+            </p>
+        </div>
+    </div>
+<?php endforeach; ?>
 </div>
-<p><?=Yii::$app->getSecurity()->generatePasswordHash("admin123")?></p>
 <?php
 // Añadimos los estilos de hover al final del archivo para hacer que las tarjetas se agranden al pasar el ratón
 $this->registerCss("

@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Utilizan $model */
 
-$this->title = $model->video;
+$this->title = $model->getNombrePaso() . ': ' . $model->getNombreInstrumento();
 $this->params['breadcrumbs'][] = ['label' => 'Utilizans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);

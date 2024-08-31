@@ -17,10 +17,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     
-    <div class="d-flex flex-wrap">
-    <?= Html::img($model->getImgUrl(),[
-        'class' => 'img-fluid col-md-6'
-    ]) ?>
+    <div class="d-flex flex-wrap flex-row-reverse">
+    <div class="col-md-6">
+        <?= Html::img($model->getImgUrl(),[
+            'class' => 'img-fluid'
+        ]) ?>
+        <div class="btn-right  btn-pasos">
+            <?= Html::a(
+                '<i class="fa-regular fa-file-pdf"></i>' .
+                        "Descargar",
+                    ['download-pdf', 'id' => $model->id],
+                    ["class" => "btn btn-primary"]
+                ) ?>
+            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ]) ?>
+        </div>
+    </div>
     
     <?= DetailView::widget([
         'model' => $model,
@@ -47,43 +65,31 @@ $this->params['breadcrumbs'][] = $this->title;
     
   
     <p></p>
-    <div class="btn-right  btn-pasos">
-            <?= Html::a(
-                '<i class="fa-regular fa-file-pdf"></i>' .
-                    "Descargar",
-                ['download-pdf', 'id' => $model->id],
-                ["class" => "btn btn-primary"]
-            ) ?>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </div>
     
     
-    <?php
-    // Mostrar videos asociados al paso
-    echo '<h3>Videos asociados</h3>';
-    if ($model->utilizans) {
-        foreach ($model->utilizans as $utilizan) {
-            if ($utilizan->video) {
-                $videoUrl = Yii::getAlias('@web/videos/pasos/') . $utilizan->video;
-                echo '<div class="video-container">';
-                echo '<video width="320" height="240" controls>';
-                echo '<source src="' . Html::encode($videoUrl) . '" type="video/webm">';
-                echo 'Your browser does not support the video tag.';
-                echo '</video>';
-                echo '</div>';
-            }
-        }
-    } else {
-        echo '<p>No hay videos asociados a este paso.</p>';
-    }
-    ?>
+    
+   <?php if (!empty($model->utilizans)): ?>
+        <?php foreach ($model->utilizans as $utilizan): ?>
+            <?php if (!empty($utilizan->video)): ?>
+            <div>
+                <div class="video-container">
+                    <video width="320" height="240" controls>
+                        <?= Html::tag('source', '', [
+                            'src' => Yii::getAlias('@web/videos/pasos/') . $utilizan->video,
+                            'type' => 'video/webm',
+                        ]) ?>
+                        <?= Yii::t('app', 'Your browser does not support the video tag.') ?>
+                    </video>
+                </div>
+                <h6><?= Html::a($utilizan->getNombreInstrumento(),"instrumentos/view",["id"=>$utilizan->instrumento, "class" =>'list-group-item list-group-item-action', "style" => "width:320px"])?></h6>
+            </div>
+                
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p><?= Yii::t('app', 'No hay vídeos asociados a este paso.') ?></p>
+    <?php endif; ?>
+
 
 </div>
 

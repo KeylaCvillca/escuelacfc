@@ -64,6 +64,7 @@ AppAsset::register($this);
 <main role="main" class="flex-shrink-0">
     <div class="container">
         <div class="row">
+            <?php if (MenuHelper::isSideBar()): ?>
             <aside id="sidebar" class="col-md-3 sidebar-fixed d-none d-md-block">
                 <?php if (MenuHelper::sideBar('rbac')): ?>
                     <?= $this->render('_rbac_sidebar',['asideTitle' => 'Control de acceso']) ?>
@@ -78,7 +79,7 @@ AppAsset::register($this);
                 <?php if (MenuHelper::sideBar('rbac') || MenuHelper::sideBar('usuarios') || MenuHelper::sideBar('materiales')): ?>
                     <!-- Toggle Button for Small Screens -->
                     <button class="btn btn-primary sidebar-toggle-fixed d-md-none" type="button" data-toggle="collapse" data-target="#sidebar-collapsed" aria-expanded="false" aria-controls="sidebar-collapsed">
-                        Toggle Sidebar
+                        Gestión
                     </button>
                     <div id="sidebar-collapsed" class="collapse d-md-none">
                         <?php if (MenuHelper::sideBar('rbac')): ?>
@@ -92,6 +93,11 @@ AppAsset::register($this);
                 <?php endif; ?>
                 <?= $content ?>
             </div>
+            <?php else: ?>
+            <div class="col-md-12">
+                <?= $content ?>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </main>

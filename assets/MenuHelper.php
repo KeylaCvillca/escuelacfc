@@ -86,6 +86,15 @@ class MenuHelper {
             }
         }
     
+    public static function isSideBar() {
+        foreach(self::SIDEBAR as $section => $data) {
+            if ((in_array(Yii::$app->controller->id, self::SIDEBAR[$section]['controllers']))    
+                && in_array(Yii::$app->user->identity->getRole(), self::SIDEBAR[$section]['permisos']))
+                return true;
+        }
+        return false;
+    }    
+        
     public static function sideBar($section) {
         if (!array_key_exists($section, self::SIDEBAR)) {
             return false;
