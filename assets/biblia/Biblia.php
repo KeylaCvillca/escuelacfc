@@ -34,8 +34,15 @@ use Yii;
          $partes = explode(":", substr($vers,$i+1)); //partes{0}capitulo y partes{1}versiculo
          
          $data = self::read($libro);
-         return (strpos($partes[1],"-") !== false)?Biblia::findVersiculos($partes,$data):Biblia::findVersiculo($partes, $data);
-     }
+         $result = (strpos($partes[1], "-") !== false) 
+              ? self::findVersiculos($partes, $data) 
+              : self::findVersiculo($partes, $data);
+
+    // Remove underscores and convert newlines to <br>
+    $result = str_replace('_', '', $result); 
+    $result = str_replace('/n','',$result);
+
+    return $result;     }
     
     /** Devuelve un array asociativo leyendo el archivo _index.json
      */
@@ -75,8 +82,21 @@ use Yii;
          return $temp;
      }
    
-     private static function parseBookName($name) {
-        return strtr(strtolower(str_replace(" ", "_", $name)), self::$VOCALS) . ".json";
+    private static function parseBookName($name) {
+        // Ensure the string is in UTF-8 encoding
+        $name = mb_convert_encoding($name, 'UTF-8', mb_detect_encoding($name));
+
+        // Replace accented vowels with their non-accented equivalents
+        $name = strtr($name, self::$VOCALS);
+
+        // Convert to lowercase and replace spaces with underscores
+        $name = strtolower(str_replace(" ", "_", $name));
+
+        // Debugging output to check the resulting filename
+        Yii::debug("Parsed book name: $name");
+
+        // Return the final filename with .json extension
+        return $name . ".json";
     }
 
     

@@ -87,6 +87,9 @@ class MenuHelper {
         }
     
     public static function isSideBar() {
+        if (Yii::$app->user->isGuest) {
+            return false;
+        }
         foreach(self::SIDEBAR as $section => $data) {
             if ((in_array(Yii::$app->controller->id, self::SIDEBAR[$section]['controllers']))    
                 && in_array(Yii::$app->user->identity->getRole(), self::SIDEBAR[$section]['permisos']))
