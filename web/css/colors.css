@@ -56,8 +56,8 @@ nav a:hover, nav .like-nav-colors:hover {
 * {
     color: #a6845b;
 }
-h1 h2 h3 h4 h5 h6 {
-    color: #a6845b;
+h1,h2,h3 {
+    color: var(--dark);
 }
 
 nav * {

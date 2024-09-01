@@ -3,18 +3,24 @@
 namespace app\models;
 
 use yii\base\Model;
+use Yii;
 
 class File extends Model
 {
+    private const BASE_DIRECTORY = 'escuelacfc';
+    
     public $name;
     public $extension;
     public $path;
+    public $realPath;
+    public $file;
 
     public function rules()
     {
         return [
             [['name', 'extension', 'path'], 'required'],
             [['name', 'extension', 'path'], 'string'],
+            [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'jpg, png, gif, mp4, pdf, xls, xlsx, doc, docx'],
         ];
     }
 
@@ -62,18 +68,37 @@ class File extends Model
 
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile()) {
-                $path = $fileinfo->getRealPath();
+                $path = self::getPath($fileinfo);
                 $name = basename($path);
                 $extension = pathinfo($path, PATHINFO_EXTENSION);
+                $realPath = $fileinfo->getRealPath();
 
                 $files[] = new self([
                     'name' => $name,
                     'extension' => $extension,
                     'path' => str_replace(\Yii::getAlias('@webroot'), '', $path),
+                    'realPath' => $realPath
                 ]);
             }
         }
 
         return $files;
     }
+    
+    private static function getPath($fileInfo) {
+            return explode(self::BASE_DIRECTORY,$fileInfo->getRealPath())[1];
+    }
+    
+    public static function getRealPath($relativePath)
+    {
+        // Obtener el alias de la raíz de la aplicación
+        $webRoot = str_replace("/", "\\", Yii::getAlias('@app'));
+
+        // Reemplazar las barras hacia adelante con barras invertidas en la ruta relativa
+        $relativePath = str_replace('/', '\\', $relativePath);
+
+        // Concatenar la raíz de la aplicación con la ruta relativa
+        return $webRoot . $relativePath;
+    }
+    
 }

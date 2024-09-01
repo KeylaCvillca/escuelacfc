@@ -30,17 +30,17 @@ $controller = Yii::$app->controller->id;
     <?php endif; ?>
     
 </div>
-<h4>Acciones</h4>
+<h4><?= ($controller != 'file')?'Acciones':''?></h4>
 <div class="actions-group">
 <?php
 
-    if ($actionId === 'index') {
+    if ($controller != 'file' && $actionId === 'index') {
         // Index view
         echo Html::a('Añadir ' . $ALIASES[$controller] , ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success', 'style' => 'margin-bottom: 10px;']);
     } elseif ($actionId === 'create') {
         // Añadir view
         echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-primary','style' => 'color:#ffffff;margin-bottom: 10px;']);
-    } elseif ($actionId === 'view') {
+    } elseif ($actionId === 'view' && $controller != 'file') {
         // View view
         echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-primary', 'style' => 'color:#ffffff;margin-bottom: 10px;']);
         echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success','style' => 'margin-bottom: 10px;']);

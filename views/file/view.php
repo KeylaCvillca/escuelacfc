@@ -15,10 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="file-content">
         <?php if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])): ?>
-            <img src="<?= Yii::getAlias('@web') . '/' . $filePath ?>" alt="Imagen" style="max-width: 100%;">
+            <img src="<?= $filePath ?>" alt="Imagen" style="max-width: 100%;">
         <?php elseif (in_array($extension, ['mp4', 'webm', 'ogg'])): ?>
             <video controls style="max-width: 100%;">
-                <source src="<?= Yii::getAlias('@web') . '/' . $filePath ?>" type="<?= $mimeType ?>">
+                <source src="<?= $filePath ?>" type="<?= $mimeType ?>">
                 Tu navegador no soporta la reproducción de videos.
             </video>
         <?php elseif (in_array($extension, ['pdf'])): ?>

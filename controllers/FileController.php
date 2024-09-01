@@ -9,6 +9,7 @@ use yii\helpers\FileHelper;
 use yii\web\Response;
 use app\models\File;
 use app\models\FileSearch;
+use yii\web\UploadedFile;
 
 class FileController extends Controller
 {
@@ -17,7 +18,6 @@ class FileController extends Controller
         $searchModel = new FileSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        // Modify the dataProvider for path-based filtering
         $dataProvider->sort->attributes['name'] = [
             'asc' => ['path' => SORT_ASC],
             'desc' => ['path' => SORT_DESC],
@@ -39,15 +39,17 @@ class FileController extends Controller
 
     public function actionView($path)
     {
-        $filePath = Yii::getAlias('@webroot') . '/' . $path;
-        
-        if (!file_exists($filePath)) {
+        $realPath = File::getRealPath($path);
+        $filePath = Yii::getAlias('@web') . str_replace('web/','',str_replace('\\','/',$path));
+        Yii::debug($realPath);
+        Yii::debug($filePath);
+        if (!file_exists($realPath)) {
             throw new NotFoundHttpException('El archivo no existe.');
         }
 
-        $fileInfo = pathinfo($filePath);
+        $fileInfo = pathinfo($realPath);
         $extension = strtolower($fileInfo['extension']);
-        $mimeType = mime_content_type($filePath);
+        $mimeType = mime_content_type($realPath);
 
         return $this->render('view', [
             'filePath' => $filePath,
@@ -58,29 +60,32 @@ class FileController extends Controller
 
     public function actionDownload($path)
     {
-        $filePath = Yii::getAlias('@webroot') . $path;
 
-        if (!file_exists($filePath)) {
-            throw new NotFoundHttpException("El archivo no existe.");
+        $realPath = File::getRealPath($path);
+
+        if (!file_exists($realPath)) {
+            throw new NotFoundHttpException('El archivo no existe.');
         }
 
-        return Yii::$app->response->sendFile($filePath, basename($filePath), ['inline' => false]);
+        return Yii::$app->response->sendFile($realPath, basename($realPath), ['inline' => false]);
     }
+
 
     public function actionDelete($path)
     {
-        $filePath = Yii::getAlias('@webroot') . $path;
 
-        if (!file_exists($filePath)) {
-            throw new NotFoundHttpException("El archivo no existe.");
+        $realPath = File::getRealPath($path);
+
+        if (!file_exists($realPath)) {
+            throw new NotFoundHttpException('El archivo no existe.');
         }
 
-        if (unlink($filePath)) {
-            Yii::$app->session->setFlash('success', "El archivo ha sido eliminado.");
+        if (unlink($realPath)) {
+            Yii::$app->session->setFlash('success', 'El archivo ha sido eliminado.');
         } else {
-            Yii::$app->session->setFlash('error', "No se pudo eliminar el archivo.");
+            Yii::$app->session->setFlash('error', 'No se pudo eliminar el archivo.');
         }
 
         return $this->redirect(['index']);
-    }
+    }  
 }
