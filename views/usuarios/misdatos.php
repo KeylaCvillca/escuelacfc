@@ -30,9 +30,14 @@ $prefijos = [
 
 <div class="usuarios-misdatos">
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <!-- DetailView para mostrar datos no modificables -->
-    <?= DetailView::widget([
+    <div class="d-flex">
+    <?php if ($model->foto): ?>
+        <div>
+            <img src="<?= Yii::getAlias('@web') ?>/imagenes/usuarios/<?= Html::encode($model->foto) ?>" alt="Foto de perfil"
+                 style="max-width: 230px; max-height: 230px; border-radius:10px;padding-right: 5px; overflow: hidden">
+        </div>
+    <?php endif; ?>
+        <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'nombre_apellidos',
@@ -45,37 +50,38 @@ $prefijos = [
             'fecha_graduacion:date',
         ],
     ]) ?>
+        
+    </div>
+    
+    <!-- DetailView para mostrar datos no modificables -->
+    
 
     <?php $form = ActiveForm::begin([
         'options' => ['enctype' => 'multipart/form-data']
     ]); ?>
-
+    <?= $form->field($model, 'fotoFile')->fileInput()->label("Subir foto") ?>
     <?= $form->field($model, 'nombre_apellidos')->textInput() ?>
     <?= $form->field($model, 'username')->textInput() ?>
 
     <div id="telefonos">
         <div class="form-group telefono-grupo">
             <label for="telefono-0">Teléfono</label>
-            <div class="input-group">
-                <?= Html::dropDownList('AddUserForm[pais_telefonos][]', null, $paises, ['class' => 'form-control pais-telefono', 'data-index' => '0']) ?>
-                <span class="input-group-text" id="prefijo-0"><?= $prefijos[$model->pais] ?? '' ?></span>
-                <input type="text" name="AddUserForm[telefonos][]" class="form-control">
+            <div class="input-group d-flex">
+                <?= Html::dropDownList('AddUserForm[pais_telefonos][]', null, $paises, ['class' => 'form-control pais-telefono col-sm-3', 'data-index' => '0']) ?>
+                <span class="input-group-text col-sm-1" id="prefijo-0"><?= $prefijos[$model->pais] ?? '' ?></span>
+                <input type="text" name="AddUserForm[telefonos][]" class="form-control col-sm-8">
             </div>
         </div>
     </div>
     <button type="button" id="add-phone" class="btn btn-primary">Añadir Teléfono</button>
 
-    <?= $form->field($model, 'fotoFile')->fileInput() ?>
     
-    <?php if ($model->foto): ?>
-        <div>
-            <p>Foto actual:</p>
-            <img src="<?= Yii::getAlias('@web') ?>/imagenes/usuarios/<?= Html::encode($model->foto) ?>" alt="Foto de perfil" style="max-width: 150px; max-height: 150px;">
-        </div>
-    <?php endif; ?>
+    
+    
 
     <!-- Checkbox para activar el cambio de contraseña -->
-    <?= $form->field($model, 'change_password')->checkbox(['id' => 'change-password-checkbox']) ?>
+    <?= $form->field($model, 'change_password')->checkbox(['id' => 'change-password-checkbox'], false)
+    ->label('Cambiar Contraseña') ?>
     
     <div id="password-fields" style="display: none;">
         <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'id' => 'password']) ?>
