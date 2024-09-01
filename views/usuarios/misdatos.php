@@ -42,12 +42,27 @@ $prefijos = [
         'attributes' => [
             'nombre_apellidos',
             'email:email',
-            'fecha_nacimiento:date',
+            [   
+                'attribute' => 'fecha_nacimiento',
+                'value' => function($model) {
+                    return $model->getFechaFormateada('fecha_nacimiento');
+                }
+            ],
             [
                 'attribute' => 'color',
                 'label' => 'Nivel'],
-            'fecha_ingreso:date',
-            'fecha_graduacion:date',
+            [   
+                'attribute' => 'fecha_nacimiento',
+                'value' => function($model) {
+                    return $model->getFechaFormateada('fecha_nacimiento');
+                }
+            ],
+            [   
+                'attribute' => 'fecha_graduacion',
+                'value' => function($model) {
+                    return $model->getFechaFormateada('fecha_nacimiento');
+                }
+            ],
         ],
     ]) ?>
         
@@ -63,27 +78,9 @@ $prefijos = [
     <?= $form->field($model, 'nombre_apellidos')->textInput() ?>
     <?= $form->field($model, 'username')->textInput() ?>
 
-    <div id="telefonos">
-        <div class="form-group telefono-grupo">
-            <label for="telefono-0">Teléfono</label>
-            <div class="input-group d-flex">
-                <?= Html::dropDownList('AddUserForm[pais_telefonos][]', null, $paises, ['class' => 'form-control pais-telefono col-sm-3', 'data-index' => '0']) ?>
-                <span class="input-group-text col-sm-1" id="prefijo-0"><?= $prefijos[$model->pais] ?? '' ?></span>
-                <input type="text" name="AddUserForm[telefonos][]" class="form-control col-sm-8">
-            </div>
-        </div>
-    </div>
-    <button type="button" id="add-phone" class="btn btn-primary">Añadir Teléfono</button>
-
+    <?= $form->field($model, 'change_password')->checkbox()?>
     
-    
-    
-
-    <!-- Checkbox para activar el cambio de contraseña -->
-    <?= $form->field($model, 'change_password')->checkbox(['id' => 'change-password-checkbox'], false)
-    ->label('Cambiar Contraseña') ?>
-    
-    <div id="password-fields" style="display: none;">
+    <div id="password-fields">
         <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'id' => 'password']) ?>
         <?= $form->field($model, 'confirm_password')->passwordInput(['maxlength' => true, 'id' => 'confirm_password']) ?>
 
@@ -98,106 +95,3 @@ $prefijos = [
     <?php ActiveForm::end(); ?>
 </div>
 
-<?php
-$prefijosJson = json_encode($prefijos);
-$script = <<< JS
-$(document).ready(function() {
-    var prefijos = $prefijosJson;
-
-    $('#add-phone').on('click', function () {
-        var index = $('#telefonos .telefono-grupo').length;
-        var phoneField = '<div class="form-group telefono-grupo">' +
-                         '<label for="telefono-' + index + '">Teléfono</label>' +
-                         '<div class="input-group">' +
-                         '<select class="form-control pais-telefono" data-index="' + index + '" name="AddUserForm[pais_telefonos][]">' +
-                         Object.keys(prefijos).map(function(key) {
-                            return '<option value="' + key + '">' + key + '</option>';
-                         }).join('') +
-                         '</select>' +
-                         '<span class="input-group-text" id="prefijo-' + index + '"></span>' +
-                         '<input type="text" name="AddUserForm[telefonos][]" class="form-control">' +
-                         '</div>' +
-                         '</div>';
-        $('#telefonos').append(phoneField);
-        updatePrefijos(index);
-    });
-
-    $('#telefonos').on('change', '.pais-telefono', function () {
-        var index = $(this).data('index');
-        updatePrefijos(index);
-    });
-
-    function updatePrefijos(index) {
-        var pais = $('.pais-telefono[data-index="' + index + '"]').val();
-        var prefijo = prefijos[pais] || '';
-        $('#prefijo-' + index).text(prefijo);
-    }
-
-    // Inicializar prefijos al cargar la página
-    updatePrefijos(0);
-
-    $('#change-password-checkbox').on('change', function () {
-        $('#password-fields').toggle(this.checked);
-    });
-
-    // Validación de contraseñas
-    function validatePassword() {
-        const password = $('#password').val();
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-        const message = $('#password-message');
-        
-        if (passwordRegex.test(password)) {
-            message.text('La contraseña es válida.').css('color', 'green');
-        } else {
-            message.text('La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un dígito y un símbolo.').css('color', 'red');
-        }
-    }
-
-    function validateConfirmPassword() {
-        const password = $('#password').val();
-        const confirmPassword = $('#confirm_password').val();
-        const message = $('#confirm-password-message');
-        
-        if (password === confirmPassword) {
-            message.text('Las contraseñas coinciden.').css('color', 'green');
-        } else {
-            message.text('Las contraseñas no coinciden.').css('color', 'red');
-        }
-    }
-
-    $('#password').on('input', validatePassword);
-    $('#confirm_password').on('input', validateConfirmPassword);
-
-    $('form').on('submit', function(event) {
-        if ($('#change-password-checkbox').is(':checked')) {
-            validatePassword();
-            validateConfirmPassword();
-            const passwordMessageColor = $('#password-message').css('color');
-            const confirmPasswordMessageColor = $('#confirm-password-message').css('color');
-
-            if (passwordMessageColor === 'red' || confirmPasswordMessageColor === 'red') {
-                event.preventDefault();
-                alert('Corrija los errores en las contraseñas antes de enviar el formulario.');
-            }
-        }
-    });
-
-    // Alternar visibilidad de contraseñas
-    $('#toggle-password').on('click', function () {
-        const passwordField = $('#password');
-        const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
-        passwordField.attr('type', type);
-        $(this).text(type === 'password' ? 'Mostrar Contraseña' : 'Ocultar Contraseña');
-    });
-
-    $('#toggle-confirm-password').on('click', function () {
-        const confirmPasswordField = $('#confirm_password');
-        const type = confirmPasswordField.attr('type') === 'password' ? 'text' : 'password';
-        confirmPasswordField.attr('type', type);
-        $(this).text(type === 'password' ? 'Mostrar Confirmar Contraseña' : 'Ocultar Confirmar Contraseña');
-    });
-});
-JS;
-$this->registerJs($script);
-?>
-  

@@ -114,44 +114,53 @@ class UsuariosController extends Controller
 
     public function actionMisdatos()
     {
-        $userId = Yii::$app->user->id;
-        $user = Usuarios::findOne($userId);
-
-        if (!$user) {
-            throw new NotFoundHttpException('User not found.');
-        }
-
+        $user = $this->findModel(Yii::$app->user->id);
         $model = new AddUserForm();
-        $model->scenario = AddUserForm::SCENARIO_UPDATE;
-        $model->attributes = $user->attributes;
-        $model->telefonos = ArrayHelper::getColumn($user->telefonos, 'numero');
+        $model->setScenario(AddUserForm::SCENARIO_UPDATE);
+        $model->nombre_apellidos = $user->nombre_apellidos;
+        $model->email = $user->email;
+        $model->fecha_nacimiento = $user->fecha_nacimiento;
+        $model->fecha_ingreso = $user->fecha_ingreso;
+        $model->fecha_graduacion = $user->fecha_graduacion;
+        $model->foto = $user->foto;
+        $model->username = $user->username;
+        $model->id = $user->id;
+        Yii::debug( $model->attributes);
         if (Yii::$app->request->isPost) {
-            if ($model->fotoFile) {
-            $filename = 'usuario_' . $user->id . '.' . $model->fotoFile->extension;
-            $model->fotoFile->saveAs(Yii::getAlias('@webroot') . '/imagenes/usuarios/' . $filename);
-            $user->foto = $filename;
+            if ($model->load(Yii::$app->request->post())) {
+                Yii::debug($model->change_password); // Debug output to check the value
+                Yii::debug($model->attributes);
+                if ($model->change_password) {
+                    Yii::debug('1' . $user->password_hash);
+                    $user->password_hash = Yii::$app->security->generatePasswordHash($model->password);
+                    Yii::debug('2' . $user->password_hash);
+                }
+                $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
+    
+                if ($model->fotoFile) {
+                    // Guardar la foto en el servidor
+                    $fileName = 'uploads/' . Yii::$app->security->generateRandomString() . '.' . $model->fotoFile->extension;
+                    if ($model->fotoFile->saveAs($fileName)) {
+                        // Si la foto se guarda correctamente, actualiza la ruta en el modelo de usuario
+                        $user->foto = $fileName;
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Error al subir la foto.');
+                    }
+                }
+                if ($user->save(false)) {
+                    Yii::debug("a");
+                    Yii::$app->session->setFlash('success', 'Los datos han sido actualizados.');
+                    return $this->redirect(['index']);
+                } else {
+                    Yii::debug("b");
+                    Yii::$app->session->setFlash('error', 'Error al actualizar los datos.');
+                }
             }
-            
-            if ($model->change_password) {
-                $user->password_hash = Yii::$app->security->generatePasswordHash($model->password);
-            }
-            $user->save(false);
-
-            // Guardar los teléfonos
-            Telefonos::deleteAll(['usuario' => $user->id]); // Eliminar los teléfonos anteriores
-            foreach ($model->telefonos as $telefono) {
-                $userPhone = new Telefonos();
-                $userPhone->usuario = $user->id;
-                $userPhone->telefono = $telefono;
-                $userPhone->save(false);
-            }
-
-        // Redireccionar o mostrar mensaje de éxito
-        return $this->redirect(['misdatos']);
         }
-
+        
         return $this->render('misdatos', [
             'model' => $model,
+            'user' => $user,
         ]);
     }
 

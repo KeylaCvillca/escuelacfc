@@ -7,7 +7,6 @@ use Yii;
 use app\models\Usuarios;
 use app\models\Telefonos;
 use app\models\Niveles;
-use app\models\Ensenan;
 
 class AddUserForm extends Model
 {
@@ -35,10 +34,9 @@ class AddUserForm extends Model
     public $scenario;
     public $fotoFile;
     public $change_password;
-    
+
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
-        
 
     public function rules()
     {
@@ -55,72 +53,68 @@ class AddUserForm extends Model
             [['email', 'username'], 'unique', 'targetClass' => Usuarios::class],
             [['color'], 'exist', 'skipOnError' => true, 'targetClass' => Niveles::class, 'targetAttribute' => ['color' => 'color']],
             [['telefonos'], 'each', 'rule' => ['string', 'max' => 15]],
-            [['fotoFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true]
+            [['fotoFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
+            [['change_password'], 'boolean'],
+            [['password', 'confirm_password'], 'string', 'min' => 6],
+            [['confirm_password'], 'compare', 'compareAttribute' => 'password'],
         ];
     }
-    
+
     public function attributeLabels() {
         return [
             'password' => 'Contraseña',
-            'confirm_password' => 'Confirmar contraseña'
+            'confirm_password' => 'Confirmar contraseña',
+            'change_password' => 'Cambiar contraseña'
         ];
     }
 
     public function addUser()
-{
-    $user = new Usuarios();
-    
-    // Generate a unique username
-    $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
-    $celulaPart = substr($this->celula, 0, 3);          
-    $datePart = date('dm');                            
-    $this->username = strtolower($nombrePart . $celulaPart . $datePart);
-    
-    if ($this->validate()) {
-        // Assign attributes individually
-        $user->username = $this->username;
-        $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
-        $user->auth_key = Yii::$app->security->generateRandomString();
-        $user->status = 10; 
-        $user->created_at = time();
-        $user->updated_at = time();
-        $user->nombre_apellidos = $this->nombre_apellidos;
-        $user->rol = $this->rol;
-        $user->fecha_nacimiento = $this->fecha_nacimiento;
-        $user->celula = $this->celula;
-        $user->fecha_ingreso = $this->fecha_ingreso;
-        $user->fecha_graduacion = $this->fecha_graduacion;
-        $user->foto = $this->foto;
-        $user->color = $this->color;
-        $user->email = $this->email;
+    {
+        $user = new Usuarios();
+        
+        // Generate a unique username
+        $nombrePart = substr(str_replace(' ', '', $this->nombre_apellidos), 0, 4);
+        $celulaPart = substr($this->celula, 0, 3);          
+        $datePart = date('dm');                            
+        $this->username = strtolower($nombrePart . $celulaPart . $datePart);
+        
+        if ($this->validate()) {
+            // Assign attributes individually
+            $user->username = $this->username;
+            $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
+            $user->auth_key = Yii::$app->security->generateRandomString();
+            $user->status = 10; 
+            $user->created_at = time();
+            $user->updated_at = time();
+            $user->nombre_apellidos = $this->nombre_apellidos;
+            $user->rol = $this->rol;
+            $user->fecha_nacimiento = $this->fecha_nacimiento;
+            $user->celula = $this->celula;
+            $user->fecha_ingreso = $this->fecha_ingreso;
+            $user->fecha_graduacion = $this->fecha_graduacion;
+            $user->foto = $this->foto;
+            $user->color = $this->color;
+            $user->email = $this->email;
 
-        if ($user->save()) {
-            // Save phones
-            foreach ($this->telefonos as $numero) {
-                if ($numero == "") {
-                    continue;
+            if ($user->save()) {
+                // Save phones
+                foreach ($this->telefonos as $numero) {
+                    if ($numero == "") {
+                        continue;
+                    }
+                    $telefono = new Telefonos();
+                    $telefono->usuario = Usuarios::findOne(['email' => $user->email])->id;
+                    $telefono->telefono = $numero;
+                    $telefono->save();
                 }
-                $telefono = new Telefonos();
-                $telefono->usuario = Usuarios::findOne(['email' => $user->email])->id;
-                $telefono->telefono = $numero;
-                $telefono->save();
+                $this->assignRole($user->id);
+                return true;
             }
-            $this->assignRole($user->id);
-            return true;
         }
+
+        return false;
     }
 
-    return false;
-}
-
-    
-    /**
-     * Método que asigna un rol dentro del RBAC al usuario que estamos creando o actualizando.
-     * 
-     * Importante para que el RBAC funcione de manera intuitiva.
-     * 
-     * @param type $userId
-     */
     public function assignRole($userId)
     {
         // Remove the previous role assignment, if any
@@ -135,7 +129,7 @@ class AddUserForm extends Model
             'created_at' => time(),
         ])->execute();
     }
-    
+
     public function updateUser($id)
     {
         $user = Usuarios::findOne($id);
@@ -153,7 +147,7 @@ class AddUserForm extends Model
         $user->status = $this->status;
         $user->updated_at = time();
 
-        if (!empty($this->password)) {
+        if (!empty($this->password) && $this->change_password) {
             $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
         }
 
@@ -174,20 +168,31 @@ class AddUserForm extends Model
 
         return false;
     }
-    
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            // Verifica si el campo 'color' ha cambiado
-            if (!$this->isAttributeChanged('color')) {
-                // Si no ha cambiado, elimina 'color' de los atributos que se van a guardar
-                unset($this->color);
-            }
-            return true;
-        } else {
-            return false;
+
+    public function getFechaFormateada($attribute) {
+        setlocale(LC_TIME, 'es_ES.UTF-8');
+        switch($attribute) {
+            case 'fecha_nacimiento':
+                if ($this->fecha_nacimiento) {
+                    $timestamp = strtotime($this->fecha_nacimiento);
+                    return strftime('%d de %B de %Y', $timestamp);
+                }
+            case 'fecha_ingreso':
+                if ($this->fecha_ingreso) {
+                    $timestamp = strtotime($this->fecha_ingreso);
+                    return strftime('%d de %B de %Y', $timestamp);
+                }
+            case 'fecha_graduacion':
+                if ($this->fecha_graduacion) {
+                    $timestamp = strtotime($this->fecha_graduacion);
+                    return strftime('%d de %B de %Y', $timestamp);
+                }
         }
+        return 'Fecha sin definir';
     }
 
+    public function setScenario($scenario) {
+        $this->scenario = $scenario;
+    }
 
 }
