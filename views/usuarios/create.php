@@ -157,11 +157,11 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('form'); // Selecciona el formulario
-    const colorSelect = document.getElementById('color-select'); // Selecciona el campo de color
+    const form = document.queryEligeor('form'); // Selecciona el formulario
+    const colorElige = document.getElementById('color-select'); // Selecciona el campo de color
 
     form.addEventListener('submit', function (event) {
-        if (colorSelect.value === '') {
+        if (colorElige.value === '') {
             // Si el campo de color no tiene un valor seleccionado, evita el envío del formulario
             event.preventDefault();
             alert('Por favor, elige un nivel antes de continuar.');

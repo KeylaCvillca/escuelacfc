@@ -16,10 +16,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'color')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'funcion')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'funcion')->textInput(['maxlength' => true])->prompt['Elige una función'] ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

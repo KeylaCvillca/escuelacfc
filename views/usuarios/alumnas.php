@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <h2>Color: <?= Html::encode($color) ?></h2>
             <ul>
                 <?php foreach ($alumnas as $alumna): ?>
-                    <li><?= Html::encode($alumna->nombre) ?> (<?= Html::encode($alumna->email) ?>)</li>
+                    <li><?= Html::encode($alumna->nombre_apellido) ?> (<?= Html::encode($alumna->email) ?>)</li>
                 <?php endforeach; ?>
             </ul>
         <?php endforeach; ?>

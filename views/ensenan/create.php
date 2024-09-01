@@ -15,21 +15,21 @@ $this->title = 'Asignar Función';
 
         <?= $form->field($model, 'maestra')->dropDownList(
             \yii\helpers\ArrayHelper::map($maestras, 'id', 'nombre_apellidos'),
-            ['prompt' => 'Select Maestra']
+            ['prompt' => 'Elige Maestra']
         ) ?>
 
         <?= $form->field($model, 'color')->dropDownList(
             \yii\helpers\ArrayHelper::map($niveles, 'color', 'color'),
-            ['prompt' => 'Select Color']
+            ['prompt' => 'Elige Color']
         ) ?>
 
         <?= $form->field($model, 'funcion')->dropDownList([
             'titular' => 'Titular',
             'auxiliar' => 'Auxiliar',
-        ], ['prompt' => 'Select Function']) ?>
+        ], ['prompt' => 'Elige Función']) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

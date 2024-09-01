@@ -39,7 +39,7 @@ use yii\helpers\Html;
     let correctCount = 0;
 
     function startQuiz() {
-        document.querySelector('.slide.intro').style.display = 'none';
+        document.queryEligeor('.slide.intro').style.display = 'none';
         document.getElementById('question-0').style.display = 'block';
     }
 
@@ -59,7 +59,7 @@ use yii\helpers\Html;
     }
 
     function showResult() {
-        const resultDiv = document.querySelector('.slide.resultado');
+        const resultDiv = document.queryEligeor('.slide.resultado');
         resultDiv.style.display = 'block';
         const resultadoText = document.getElementById('resultado');
         resultadoText.textContent = `Has respondido correctamente ${correctCount} de 4 preguntas.`;

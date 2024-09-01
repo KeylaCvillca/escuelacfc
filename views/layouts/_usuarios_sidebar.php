@@ -30,7 +30,7 @@ $controller = Yii::$app->controller->id;
 echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => 'list-group-item list-group-item-action btn btn-success', 'style' => 'margin-bottom: 10px;']);
     } elseif ($actionId === 'create' || $actionId === 'upload') {
         // Añadir view
-        echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-primary', 'style' => 'margin-bottom: 10px;']);
+        echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-primary', 'style' => 'color: #ffffff;margin-bottom: 10px;']);
     } elseif ($actionId === 'view') {
         // View view
         echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-primary', 'style' => 'color: #ffffff;margin-bottom: 10px;']);
