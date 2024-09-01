@@ -16,34 +16,28 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="Instrumentos-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => '¿Estás seguro de querer eliminar este elemento?',
-                'method' => 'post',
+    <div class='d-flex'>
+        <img src="<?= Yii::getAlias('@web') . '/imagenes/instrumentos/' . strtolower($model->nombre) . '.jpg' ?>"
+        alt="<?= Html::encode($model->nombre) ?>" class="col-md-2" style="border-radius: 10px !important; overflow:hidden !important;padding:0 !important;margin-right:10px">
+    
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'significado',
+                'cita_biblica',
+                [
+                    'attribute' => 'texto',
+                    'value' => function ($model) {
+                        $textoCita = BibliaController::getText($model->cita_biblica);
+                        return Html::encode($textoCita);
+                    }, 
+                ],
+                
             ],
         ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'significado',
-            'cita_biblica',
-            [
-                'attribute' => 'texto',
-                'value' => function ($model) {
-                    $textoCita = BibliaController::getText($model->cita_biblica);
-                    return Html::encode($textoCita);
-                }, 
-            ],
-        ],
-    ]) ?>
-    <img src="<?= Yii::getAlias('@web') . '/imagenes/instrumentos/' . strtolower($model->nombre) . '.jpg' ?>" alt="<?= Html::encode($model->nombre) ?>" class="img-fluid">
+    </div>
     
+       
     <h2>Pasos relacionados</h2>
     <?= GridView::widget([
             'dataProvider' => $pasos,
@@ -53,9 +47,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'cita_biblica',            
                 [
                     'class' => 'yii\grid\ActionColumn',
+                    'template' => Yii::$app->user->identity->getRole() == 'alumna' ? '{view} {downloadPdf}' : '{view} {update} {delete}',
                     'urlCreator' => function ($action, $model, $key, $index) {
                         return ['pasos/' . $action, 'id' => $model->id];
                     },
+                    'buttons' => [
+                            'downloadPdf' => function ($url, $model) {
+                                return Html::a('<i class="bi bi-download"></i>', ['pasos/download-pdf', 'id' => $model->id], [
+                                    'title' => 'Descargar PDF',
+                                    'aria-label' => 'Descargar PDF',
+                                    'data-pjax' => '0',
+                            ]);
+                        
+                        },
+                    ]
                 ],
             ],
             'summary' => ''

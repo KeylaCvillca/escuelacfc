@@ -41,19 +41,17 @@ class MenuHelper {
                     ];
             case "alumna":
                 return [
-                    ['label' => 'Home', 'url' => ['/site/index'],
+                    ['label' => 'Home', 'url' => ['/site/index#inicio'],
                         'options' => ['style' => (self::checkRoute('site/index'))?self::underlineStyle():'']],      
                     ['label' => 'Materiales', 'url' => ['/pasos/index'],
                         'options' => ['style' => (self::checkController('materiales') &&
                                 Yii::$app->controller->action->id != "quiz"&&
                                 Yii::$app->controller->action->id != "misnoticias" &&
                                 Yii::$app->controller->action->id != "read")?self::underlineStyle():'']],
-                    ['label' => 'Conócenos', 'url' => ['/site/index#conocenos'],
-                        'options' => ['style' => (self::checkRoute('site/index'))?self::underlineStyle():'']],
                     ['label' => 'Quiz', 'url' => ['/pasos/quiz'],
                         'options' => ['style' => (self::checkRoute('pasos/quiz'))?self::underlineStyle():'']],
-                    ['label' => 'Mis noticias', 'url' => ['/noticias/misnoticias'],
-                        'options' => ['style' => (self::checkRoute('noticias/misnoticias'))?self::underlineStyle():'']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/read'],
+                        'options' => ['style' => (self::checkRoute('noticias/read'))?self::underlineStyle():'']],
                     ['label' => 'Alumna(' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos'],
                         'options' => ['style' => (self::checkRoute('usuarios/misdatos'))?self::underlineStyle():'']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
@@ -107,7 +105,7 @@ class MenuHelper {
         }
     
     public static function isSideBar() {
-        if (Yii::$app->user->isGuest) {
+        if (Yii::$app->user->isGuest || Yii::$app->controller->action->id === 'quiz') {
             return false;
         }
         foreach(self::SIDEBAR as $section => $data) {

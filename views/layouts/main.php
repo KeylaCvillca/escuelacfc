@@ -83,7 +83,7 @@ AppAsset::register($this);
                     <?= $this->render('_materiales_sidebar',['asideTitle' => 'Gestión de contenido']) ?>
                 <?php endif; ?>
             </aside>
-            <div class="col-md-2"></div>
+            <div class="col-md-2" style="z-index:-1000"></div>
             <div class="col-md-10">
                 <?php if (MenuHelper::sideBar('rbac') || MenuHelper::sideBar('usuarios') || MenuHelper::sideBar('materiales')): ?>
                     <!-- Toggle Button for Small Screens -->

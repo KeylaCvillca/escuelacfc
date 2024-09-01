@@ -19,6 +19,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use app\models\Telefonos;
 use yii\helpers\ArrayHelper;
+use app\models\Noticias;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -117,14 +118,7 @@ class UsuariosController extends Controller
         $user = $this->findModel(Yii::$app->user->id);
         $model = new AddUserForm();
         $model->setScenario(AddUserForm::SCENARIO_UPDATE);
-        $model->nombre_apellidos = $user->nombre_apellidos;
-        $model->email = $user->email;
-        $model->fecha_nacimiento = $user->fecha_nacimiento;
-        $model->fecha_ingreso = $user->fecha_ingreso;
-        $model->fecha_graduacion = $user->fecha_graduacion;
-        $model->foto = $user->foto;
-        $model->username = $user->username;
-        $model->id = $user->id;
+        $model->attributes = $user->attributes;
         Yii::debug( $model->attributes);
         if (Yii::$app->request->isPost) {
             if ($model->load(Yii::$app->request->post())) {
@@ -136,17 +130,21 @@ class UsuariosController extends Controller
                     Yii::debug('2' . $user->password_hash);
                 }
                 $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
-    
+
                 if ($model->fotoFile) {
+                    // Definir la ruta completa para guardar la imagen
+                    $fileName = 'imagenes/usuarios/' . $model->fotoFile->baseName . '.' . $model->fotoFile->extension;
+                    $filePath = Yii::getAlias('@webroot') . '/' . $fileName;
+
                     // Guardar la foto en el servidor
-                    $fileName = 'uploads/' . Yii::$app->security->generateRandomString() . '.' . $model->fotoFile->extension;
-                    if ($model->fotoFile->saveAs($fileName)) {
+                    if ($model->fotoFile->saveAs($filePath)) {
                         // Si la foto se guarda correctamente, actualiza la ruta en el modelo de usuario
-                        $user->foto = $fileName;
+                        $user->foto = $model->fotoFile->baseName . '.' . $model->fotoFile->extension;
                     } else {
                         Yii::$app->session->setFlash('error', 'Error al subir la foto.');
                     }
                 }
+
                 if ($user->save(false)) {
                     Yii::debug("a");
                     Yii::$app->session->setFlash('success', 'Los datos han sido actualizados.');
@@ -209,8 +207,11 @@ class UsuariosController extends Controller
      */
     public function actionDelete($id)
     {
+        Noticias::deleteAll(['autor' => $id]);
+        Telefonos::deleteAll(['usuario' => $id]);
+        Ensenan::deleteAll(['maestra' => $id]);
         $this->findModel($id)->delete();
-
+         
         return $this->redirect(['index']);
     }
 

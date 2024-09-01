@@ -30,7 +30,7 @@ $controller = Yii::$app->controller->id;
     <?php endif; ?>
     
 </div>
-<h4><?= ($controller != 'file')?'Acciones':''?></h4>
+<h4><?= ($controller != 'file' && $actionId != 'quiz')?'Acciones':''?></h4>
 <div class="actions-group">
 <?php
 

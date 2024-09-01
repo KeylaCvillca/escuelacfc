@@ -19,7 +19,7 @@ use yii\helpers\Html;
 
     </div>
     <div class="text-align-center">
-        <h2><strong><?= $model->nombre ?></strong>Paso <?= $model->id ?> Nivel: <?= $model->color ?></h2>
+        <h2><strong><?= $model->nombre ?> </strong>(Paso <?= $model->id ?>) Nivel: <?= $model->color ?></h2>
         <p><?= BibliaController::getText($model->cita_biblica) ?></p>
         <h4><?= $model->cita_biblica ?></h4>
     </div>
@@ -28,7 +28,7 @@ use yii\helpers\Html;
         <p><?= $model->descripcion?></p>
     </div>
     <div class="row">
-        <p><strong>Instrumentos<strong><?= $model->getInstrumentosNombres()?></p>
+        <p><strong>Instrumentos: </strong><?= $model->getInstrumentosNombres()?></p>
     </div>
     <div class="row" >
         <?= Html::img("@web/imagenes/pasos/" . $model->imagen) ?>

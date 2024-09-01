@@ -47,10 +47,10 @@ $prefijos = [
     <div id="telefonos">
         <div class="form-group telefono-grupo">
             <label for="telefono-0">Teléfono</label>
-            <div class="input-group">
-                <?= Html::dropDownList('AddUserForm[pais_telefonos][]', null, $paises, ['class' => 'form-control pais-telefono', 'data-index' => '0']) ?>
-                <span class="input-group-text" id="prefijo-0"><?= $prefijos[$model->pais] ?? '' ?></span>
-                <input type="text" name="AddUserForm[telefonos][]" class="form-control">
+            <div class="input-group d-flex">
+                <?= Html::dropDownList('AddUserForm[pais_telefonos][]', null, $paises, ['class' => 'form-control pais-telefono col-sm-3', 'data-index' => '0']) ?>
+                <span class="input-group-text col-sm-1" id="prefijo-0"><?= $prefijos[$model->pais] ?? '' ?></span>
+                <input type="text" name="AddUserForm[telefonos][]" class="form-control col-sm-8">
             </div>
         </div>
     </div>

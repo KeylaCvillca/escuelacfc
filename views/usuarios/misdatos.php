@@ -50,17 +50,18 @@ $prefijos = [
             ],
             [
                 'attribute' => 'color',
-                'label' => 'Nivel'],
+                'label' => 'Nivel',
+            ],
             [   
-                'attribute' => 'fecha_nacimiento',
+                'attribute' => 'fecha_inscripcion',
                 'value' => function($model) {
-                    return $model->getFechaFormateada('fecha_nacimiento');
+                    return $model->getFechaFormateada('fecha_inscripcion');
                 }
             ],
             [   
                 'attribute' => 'fecha_graduacion',
                 'value' => function($model) {
-                    return $model->getFechaFormateada('fecha_nacimiento');
+                    return $model->getFechaFormateada('fecha_graduacion');
                 }
             ],
         ],

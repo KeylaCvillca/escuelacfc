@@ -10,8 +10,10 @@ use yii\filters\VerbFilter;
 use Mpdf\Mpdf;
 use app\models\Niveles;
 use app\models\PasosSearch;
+use app\models\Utilizan;
 use Yii;
 use yii\web\UploadedFile;
+
 
 /**
  * PasosController implements the CRUD actions for Pasos model.
@@ -142,7 +144,12 @@ class PasosController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        
+        $model = $this->findModel($id);
+
+        Utilizan::deleteAll(['paso' => $model->id]);  
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }

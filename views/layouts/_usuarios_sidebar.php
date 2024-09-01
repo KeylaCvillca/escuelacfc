@@ -46,7 +46,8 @@ echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => 'list-g
             ]
             ]
         );    } elseif ($actionId === 'update') {
-        // Editar view
+
+        echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-primary', 'style' => 'color: #ffffff;margin-bottom: 10px;']);
         echo Html::a('Ver '  . $ALIASES[$controller], ['view', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-info', 'style' => 'color: #ffffff;margin-bottom: 10px;']);
         echo Html::a('Eliminar ' . $ALIASES[$controller], ['delete', 'id' => Yii::$app->request->get('id')],
             [
