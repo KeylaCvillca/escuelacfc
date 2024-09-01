@@ -196,5 +196,6 @@ ul.list-unstyled {
 }
 
 .table {
-    border-radius: 20px !important;
+    border-radius: 10px;
+    overflow: hidden; /* Ensures that content stays within the rounded corners */
 }

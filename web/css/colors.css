@@ -1,4 +1,9 @@
-/* colors.css */
+/* colors.css 
+
+Este archivo contiene el código para sobreescribir los colores de las variables y clases
+por defecto de Bootstrap, estandarizando los colores de toda la aplicación.
+
+*/
 
 /* Variables CSS */
 :root {

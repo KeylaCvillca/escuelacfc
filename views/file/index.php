@@ -13,15 +13,18 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'method' => 'get',
         'action' => ['index'],
-        'options' => ['class' => 'form-inline'],
+        'options' => ['class' => 'form-inline row  d-flex flex-wrap justify-content-around'],
     ]); ?>
 
     <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Buscar por Nombre'])->label('') ?>
     <?= $form->field($searchModel, 'extension')->textInput(['placeholder' => 'Buscar por Extensión'])->label('') ?>
     <?= $form->field($searchModel, 'path')->textInput(['placeholder' => 'Buscar por Ruta'])->label('') ?>
 
-    <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
+    <div class="form-group d-flex justify-content-between" style="margin-top: -1vh;">
+    <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary', 'style' => 'margin-right:1vw']) ?>
     <?= Html::a('Restablecer', ['index'], ['class' => 'btn btn-secondary']) ?>
+    </div>
+    
 
     <?php ActiveForm::end(); ?>
 

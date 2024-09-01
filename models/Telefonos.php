@@ -18,6 +18,7 @@ class Telefonos extends \yii\db\ActiveRecord
     public $username;
     public $email;
     public $nombre_apellidos;
+    public $pais;
     
     /**
      * {@inheritdoc}
