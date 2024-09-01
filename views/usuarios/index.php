@@ -22,8 +22,8 @@ $this->title = 'Usuarios';
         <?php $form = ActiveForm::begin([
             'method' => 'get',
         ]); ?>
-        <div class="d-flex flex-wrap">
-            <h4>Filtros: </h4>
+        <div class="d-flex justify-content-between">
+            <h4 style="padding-right: 20px">Filtros:</h4>
             <?= $form->field($searchModel, 'nombre_apellidos')->textInput(['placeholder' => 'Nombre y Apellidos'])->label(false) ?>
             <?= $form->field($searchModel, 'rol')->dropDownList(
                 ['admin' => 'Admin', 'maestra' => 'Maestra', 'alumna' => 'Alumna'],
@@ -38,7 +38,7 @@ $this->title = 'Usuarios';
         </div>
         <div class="form-group">
             <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Todos', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
+            <?= Html::a('Todos', ['index'], ['class' => 'btn btn-secondary']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

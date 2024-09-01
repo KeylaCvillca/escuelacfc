@@ -13,7 +13,7 @@ use yii\helpers\Html;
         <h2>¿Qué paso es este?</h2>
         <?= Html::img($answers[$i]->getImgUrl(), ["class" => "imagen_paso img-quiz img-fluid"]) ?>
         <script>console.log(<?= "\"" . $answers[$i]->nombre . "\""?>)</script>
-        <div class="d-flex botones-quiz">
+        <div class="d-flex botones-quiz justify-content-evenly">
             <?php foreach ($questions[$i] as $j => $question) : ?>
                 <button id="ans<?= $i . $j ?>" class="btn btn-primary" onclick="checkAnswer(<?= $i ?>, <?= $j ?>)">
                     <?= Html::encode($question->nombre) ?>

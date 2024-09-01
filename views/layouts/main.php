@@ -87,7 +87,7 @@ AppAsset::register($this);
             <div class="col-md-10">
                 <?php if (MenuHelper::sideBar('rbac') || MenuHelper::sideBar('usuarios') || MenuHelper::sideBar('materiales')): ?>
                     <!-- Toggle Button for Small Screens -->
-                    <button class="btn btn-primary sidebar-toggle-fixed d-md-none" type="button" data-toggle="collapse" data-target="#sidebar-collapsed" aria-expanded="false" aria-controls="sidebar-collapsed">
+                    <button class="btn btn-dark sidebar-toggle-fixed d-md-none like-nav-colors" type="button" data-toggle="collapse" data-target="#sidebar-collapsed" aria-expanded="false" aria-controls="sidebar-collapsed">
                         Gestión
                     </button>
                     <div id="sidebar-collapsed" class="collapse d-md-none">

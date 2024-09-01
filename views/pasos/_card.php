@@ -6,7 +6,7 @@ use yii\helpers\Html;
 
 <div class="card shadow-sm">
     <div class="card-header bg-secondary text-white">
-        <h5 class="card-title"><?= Html::encode($model->nombre) ?></h5>
+        <h5 class="card-title" style="color:var(--primary)"><?= Html::encode($model->nombre) ?></h5>
         <small><strong>Nivel:</strong> <?= Html::encode($model->color) ?></small>
     </div>
     <div class="card-body">

@@ -10,14 +10,9 @@ $this->title = 'Pasos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<h1><?= Html::encode($this->title) ?></h1>
-<div class="d-flex justify-content-around">
-        
-    <div class="pasos-search">
-        <?= $this->render('_search', ['model' => $searchModel]); ?>
-    </div>
-</div>
+<h1><?= Html::encode($this->title) ?></h1>       
 
+<?= $this->render('_search', ['model' => $searchModel]); ?>
 
 <div class="pasos-index">
     <div class="row d-flex">
