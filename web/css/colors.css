@@ -47,10 +47,9 @@ nav a:hover, nav .like-nav-colors:hover {
     background-color: var(--color-hover-fondo) !important; /* Fondo del enlace en hover */
 }
 
-/* Estilo para el Enlace Activo */
-nav a.active {
-    color: var(--color-hover-texto) !important;
-    border-bottom: 2px solid var(--color-hover-borde) !important; /* Línea debajo del enlace activo */
+.btn.btn-link.logout:hover {
+    color: var(--color-hover-texto) !important; /* Color del texto en hover */
+    background-color: var(--color-hover-fondo) !important; /* Fondo del enlace en hover */
 }
 
 
@@ -306,4 +305,17 @@ a.desc::after {
     background-color: #422320; /* Fondo del botón primario al pasar el ratón por encima */
     border-color: #422320; /* Borde del botón primario al pasar el ratón por encima */
     color: #E4C8B3; /* Color del texto del botón primario al pasar el ratón por encima */
+}
+
+.pagination *, .pagination.active {
+    color: var(--dark) !important;
+}
+
+.pagination.active a {
+    background-color: var(--primary) !important;
+}
+
+.pagination *:hover, .pagination *:active, .pagination.active:hover {
+    background-color: var(--primary) !important;
+    color: var(--secondary) !important;
 }

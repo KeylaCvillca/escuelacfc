@@ -34,6 +34,14 @@ nav a {
     /* padding: 8px 12px; Padding para facilitar el hover */
 }
 
+.btn.btn-link.logout {
+    margin-top: 0.88vh;
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: bold;
+    transition: color 0.3s ease, background-color 0.3s ease, border 0.3s ease;
+}
+
 nav .btn {
     text-decoration: none;
     margin-right: 20px;

@@ -41,37 +41,64 @@ class MenuHelper {
                     ];
             case "alumna":
                 return [
-                    ['label' => 'Home', 'url' => ['/site/index']],      
-                    ['label' => 'Materiales', 'url' => ['/pasos/index']],
-                    ['label' => 'Conócenos', 'url' => ['/site/about']],
-                    ['label' => 'Quiz', 'url' => ['/pasos/quiz']],
-                    ['label' => 'Noticias', 'url' => ['/noticias/read']],
-                    ['label' => 'Alumna (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
+                    ['label' => 'Home', 'url' => ['/site/index'],
+                        'options' => ['style' => (self::checkRoute('site/index'))?self::underlineStyle():'']],      
+                    ['label' => 'Materiales', 'url' => ['/pasos/index'],
+                        'options' => ['style' => (self::checkController('materiales') &&
+                                Yii::$app->controller->action->id != "quiz"&&
+                                Yii::$app->controller->action->id != "misnoticias" &&
+                                Yii::$app->controller->action->id != "read")?self::underlineStyle():'']],
+                    ['label' => 'Conócenos', 'url' => ['/site/index#conocenos'],
+                        'options' => ['style' => (self::checkRoute('site/index'))?self::underlineStyle():'']],,
+                    ['label' => 'Quiz', 'url' => ['/pasos/quiz'],
+                        'options' => ['style' => (self::checkRoute('pasos/quiz'))?self::underlineStyle():'']],
+                    ['label' => 'Mis noticias', 'url' => ['/noticias/misnoticias'],
+                        'options' => ['style' => (self::checkRoute('noticias/misnoticias'))?self::underlineStyle():'']],
+                    ['label' => 'Alumna(' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos'],
+                        'options' => ['style' => (self::checkRoute('usuarios/misdatos'))?self::underlineStyle():'']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
                     ];
             case "maestra":
                 return [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Materiales', 'url' => ['/pasos/index']],
-                    ['label' => 'Mis alumnas', 'url' => ['/usuarios/alumnas']],
-                    ['label' => 'Quiz', 'url' => ['/pasos/quiz']],
-                    ['label' => 'Publicaciones', 'url' => ['/noticias/misnoticias']],
-                    ['label' => 'Noticias', 'url' => ['/noticias/read']],
-                    ['label' => 'Maestra (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
+                    ['label' => 'Home', 'url' => ['/site/index'],
+                        'options' => ['style' => (self::checkRoute('site/index'))?self::underlineStyle():'']],
+                    ['label' => 'Materiales', 'url' => ['/pasos/index'],
+                        'options' => ['style' => (self::checkController('materiales') &&
+                                Yii::$app->controller->action->id != "quiz"&&
+                                Yii::$app->controller->action->id != "misnoticias" &&
+                                Yii::$app->controller->action->id != "read")?self::underlineStyle():'']],
+                    ['label' => 'Mis alumnas', 'url' => ['/usuarios/alumnas'],
+                        'options' => ['style' => (self::checkRoute('usuarios/alumnas'))?self::underlineStyle():'']],
+                    ['label' => 'Quiz', 'url' => ['/pasos/quiz'],
+                        'options' => ['style' => (self::checkRoute('pasos/quiz'))?self::underlineStyle():'']],
+                    ['label' => 'Mis noticias', 'url' => ['/noticias/misnoticias'],
+                        'options' => ['style' => (self::checkRoute('noticias/misnoticias'))?self::underlineStyle():'']],
+                    ['label' => 'Noticias', 'url' => ['/noticias/read'],
+                        'options' => ['style' => (self::checkRoute('noticias/read'))?self::underlineStyle():'']],,
+                    ['label' => 'Maestra(' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos'],
+                        'options' => ['style' => (self::checkRoute('usuarios/misdatos'))?self::underlineStyle():'']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
                     ];
             case "admin":
                 return [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Acceso','url'=>['/rbac/route']],
-                    ['label'=> 'Usuarios','url'=>['/usuarios/index']],
-                    ['label'=> 'Contenido','url'=>['/file/index']],
-                    ['label' => 'Quiz', 'url' => ['/pasos/quiz']],
-                    ['label' => 'Administrador (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos']],
+                    ['label' => 'Home', 'url' => ['/site/index'],
+                        'options' => ['style' => (self::checkRoute('site/index'))?self::underlineStyle():'']],
+                    ['label' => 'Acceso','url'=>['/rbac/route'],
+                        'options' => ['style' => (self::checkController('rbac'))?self::underlineStyle():'']],
+                    ['label'=> 'Usuarios','url'=>['/usuarios/index'],
+                        'options' => ['style' => (self::checkController('usuarios')
+                                && Yii::$app->controller->action->id != 'misdatos')?self::underlineStyle():'']],
+                    ['label'=> 'Contenido','url'=>['/file/index'],
+                        'options' => ['style' => (self::checkController('materiales') &&
+                                Yii::$app->controller->action->id != "quiz")?self::underlineStyle():'']],
+                    ['label' => 'Quiz', 'url' => ['/pasos/quiz'],
+                        'options' => ['style' => (self::checkRoute('pasos/quiz'))?self::underlineStyle():'']],
+                    ['label' => 'Administrador (' . Yii::$app->user->identity->username . ')', 'url' => ['/usuarios/misdatos'],
+                        'options' => ['style' => (self::checkRoute('usuarios/misdatos'))?self::underlineStyle():'']],
                     '<li>' . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                         . Html::submitButton('Salir',
                         ['class' => 'btn btn-link logout']) . Html::endForm(). '</li>'    
@@ -133,6 +160,20 @@ class MenuHelper {
             }
         }
         return ''; // Return null if the controller is not found
+    }
+    
+    private static function checkController($section) {
+        return in_array(Yii::$app->controller->id, self::SIDEBAR[$section]['controllers']);
+    }
+    
+    private static function checkRoute($route) {
+        return Yii::$app->controller->id . '/' . Yii::$app->controller->action->id === $route;
+    }
+    
+    private static function underlineStyle() {
+        return 'color: var(--color-hover-texto) !important;
+                                 border-bottom: 2px solid var(--color-hover-borde) !important;
+                                 text-align:center';
     }
     
 }
