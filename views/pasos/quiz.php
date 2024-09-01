@@ -11,7 +11,7 @@ use yii\helpers\Html;
 <?php for ($i = 0; $i < 4; $i++) : ?>
     <div class="slide pregunta" id="question-<?= $i ?>" style="display:none">
         <h2>¿Qué paso es este?</h2>
-        <?= Html::img($answers[$i]->getImgUrl(), ["class" => "imagen_paso img-quiz"]) ?>
+        <?= Html::img($answers[$i]->getImgUrl(), ["class" => "imagen_paso img-quiz img-fluid"]) ?>
         <script>console.log(<?= "\"" . $answers[$i]->nombre . "\""?>)</script>
         <div class="d-flex botones-quiz">
             <?php foreach ($questions[$i] as $j => $question) : ?>
