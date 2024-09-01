@@ -29,7 +29,7 @@ $controller = Yii::$app->controller->id;
         // Index view
 echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
     } elseif ($actionId === 'create' || $actionId === 'upload') {
-        // Create view
+        // Añadir view
         echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
     } elseif ($actionId === 'view') {
         // View view
@@ -45,7 +45,7 @@ echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-
             ]
             ]
         );    } elseif ($actionId === 'update') {
-        // Update view
+        // Editar view
         echo Html::a('Ver '  . $ALIASES[$controller], ['view', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-info']);
         echo Html::a('Eliminar ' . $ALIASES[$controller], ['delete', 'id' => Yii::$app->request->get('id')],
             [

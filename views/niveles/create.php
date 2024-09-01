@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Niveles $model */
 
-$this->title = 'Create Niveles';
+$this->title = 'Añadir Niveles';
 $this->params['breadcrumbs'][] = ['label' => 'Niveles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

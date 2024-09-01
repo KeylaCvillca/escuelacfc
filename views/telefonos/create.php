@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Telefonos $model */
 
-$this->title = 'Create Telefonos';
+$this->title = 'Añadir Telefonos';
 $this->params['breadcrumbs'][] = ['label' => 'Telefonos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

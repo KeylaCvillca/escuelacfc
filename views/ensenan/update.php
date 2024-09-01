@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Ensenan $model */
 
-$this->title = 'Update Ensenan: ' . $model->id;
+$this->title = 'Editar Ensenan: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Ensenans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Editar';
 ?>
 <div class="ensenan-update">
 

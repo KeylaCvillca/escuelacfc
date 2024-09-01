@@ -31,7 +31,7 @@ $this->title = "Rutas Disponibles";
 <div class="item-index">
     <h1>Permisos</h1>
     <p>
-        <?php echo Html::a(Yii::t('yii2mod.rbac', 'Create ' . $labels['Item']), ['create'], ['class' => 'btn btn-success']); ?>
+        <?php echo Html::a(Yii::t('yii2mod.rbac', 'Añadir ' . $labels['Item']), ['create'], ['class' => 'btn btn-success']); ?>
     </p>
     <?php Pjax::begin(['timeout' => 5000, 'enablePushState' => false]); ?>
 
