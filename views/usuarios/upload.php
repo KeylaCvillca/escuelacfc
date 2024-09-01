@@ -15,7 +15,7 @@ $this->title = 'Cargar Usuarios desde Excel';
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'file')->fileInput() ?>
+    <?= $form->field($model, 'file')->fileInput()->label('') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Cargar', ['class' => 'btn btn-success']) ?>
@@ -69,5 +69,9 @@ $this->title = 'Cargar Usuarios desde Excel';
             ['attribute' => 'K: niveles'],
             ['attribute' => 'L: funciones'],
         ],
+        'options' => [
+            'style' => 'overflow-x: scroll'
+        ],
+        'summary' => ''
     ]) ?>
 </div>

@@ -42,12 +42,14 @@ $controller = Yii::$app->controller->id;
         echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
     } elseif ($actionId === 'view') {
         // View view
-        echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
+        echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-primary', 'style' => 'color:#ffffff']);
         echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
-        echo Html::a('Editar ' . $ALIASES[$controller], ['update', 'id' => Yii::$app->request->get('id')], ['class' => ' list-group-item list-group-item-action btn btn-warning']);
+        echo Html::a('Editar ' . $ALIASES[$controller], ['update', 'id' => Yii::$app->request->get('id')], ['class' => 'list-group-item list-group-item-action btn btn-warning',
+                    'style' => 'color:#ffffff']);        
         echo Html::a('Eliminar ' . $ALIASES[$controller], ['delete', 'id' => Yii::$app->request->get('id')],
             [
                 'class' => ' list-group-item list-group-item-action btn btn-danger',
+                'style' => 'color:#ffffff',
                 'data' => [
                     'method' => 'post',
                     'confirm' => '¿Seguro que quieres eliminar este elemento?'

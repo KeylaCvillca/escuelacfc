@@ -28,7 +28,7 @@ $controller = Yii::$app->controller->id;
     if ($actionId === 'index') {
         // Index view
 echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
-    } elseif ($actionId === 'create') {
+    } elseif ($actionId === 'create' || $actionId === 'upload') {
         // Create view
         echo Html::a('Volver a principal', ['index'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
     } elseif ($actionId === 'view') {
@@ -57,6 +57,9 @@ echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-
             ]
         );        echo Html::a('Añadir ' . $ALIASES[$controller], ['create'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
     }
-    echo Html::a('Añadir usuarios desde Excel', ['usuarios/upload'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
+    if ($actionId != 'upload') {
+        echo Html::a('Añadir usuarios desde Excel', ['usuarios/upload'], ['class' => ' list-group-item list-group-item-action btn btn-success']);
+    }
+    
 ?>
 </div>

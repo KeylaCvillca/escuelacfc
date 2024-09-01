@@ -21,23 +21,27 @@ class UtilizanSearch extends Utilizan
 
     public function search($params)
     {
-        $query = Utilizan::find();
+        $query = Utilizan::find()
+            ->joinWith('instrumento') // Unir con la tabla instrumentos
+            ->joinWith('paso'); // Unir con la tabla pasos
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'attributes' => [
+                    'nombre_instrumento' => [
+                        'asc' => ['instrumentos.nombre' => SORT_ASC],
+                        'desc' => ['instrumentos.nombre' => SORT_DESC],
+                    ],
+                    'nombre_paso' => [
+                        'asc' => ['pasos.nombre' => SORT_ASC],
+                        'desc' => ['pasos.nombre' => SORT_DESC],
+                    ],
+                    'video',
+                ],
+            ],
         ]);
 
-        $dataProvider->sort->attributes['nombre_instrumento'] = [
-            'asc' => ['instrumentos.nombre' => SORT_ASC],
-            'desc' => ['instrumentos.nombre' => SORT_DESC],
-        ];
-
-        $dataProvider->sort->attributes['nombre_paso'] = [
-            'asc' => ['pasos.nombre' => SORT_ASC],
-            'desc' => ['pasos.nombre' => SORT_DESC],
-        ];
-        
-        
         // Cargar los parámetros de búsqueda
         $this->load($params);
 
@@ -48,23 +52,19 @@ class UtilizanSearch extends Utilizan
 
         // Filtrar por ID, video
         $query->andFilterWhere([
-            'id' => $this->id,
-            'instrumento' => $this->instrumento,
-            'paso' => $this->paso,
+            'utilizan.id' => $this->id,
+            'utilizan.instrumento' => $this->instrumento,
+            'utilizan.paso' => $this->paso,
         ]);
 
         // Búsqueda por nombre del instrumento (convertir a ID)
         if ($this->nombre_instrumento) {
-            $query->joinWith(['instrumento' => function($q) {
-                $q->where(['instrumentos.id' => $this->nombre_instrumento]);
-            }]);
+            $query->andFilterWhere(['instrumentos.nombre' => $this->nombre_instrumento]);
         }
 
         // Búsqueda por nombre del paso (convertir a ID)
         if ($this->nombre_paso) {
-            $query->joinWith(['paso' => function($q) {
-                $q->where(['pasos.id' => $this->nombre_paso]);
-            }]);
+            $query->andFilterWhere(['pasos.nombre' => $this->nombre_paso]);
         }
 
         // Búsqueda por nombre del video

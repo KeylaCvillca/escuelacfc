@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\FileSearch */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 ?>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 <div class="file-index">
     <h1>Archivos Multimedia</h1>
     <?php $form = ActiveForm::begin([

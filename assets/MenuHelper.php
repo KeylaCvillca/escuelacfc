@@ -33,7 +33,7 @@ class MenuHelper {
         switch($role) { 
             case "guest":
                 return [
-                    ['label' => 'Home', 'url' => ['/site/index']],
+                    ['label' => 'Home', 'url' => ['/site/index#inicio']],
                     ['label' => 'Conócenos', 'url' => ['/site/index#about']],
                     ['label' => 'Noticias', 'url' => ['/site/index#noticias']],
                     ['label' => 'Contacto', 'url' => ['/site/index#contact']],

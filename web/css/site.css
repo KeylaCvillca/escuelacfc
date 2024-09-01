@@ -1,3 +1,46 @@
+body {
+    font-family: 'Poppins', sans-serif !important;
+    /* color: var(--blanco) !important; */
+    /* font-family: "Expletus Sans", sans-serif !important; */
+}
+
+h1,h2,h3 {
+    font-family: 'Playfair Display', serif !important;
+}
+
+.special-heading {
+    font-family: 'Dancing Script', cursive !important;
+}
+
+nav {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position:fixed !important;
+    top: 0;
+    left:0;
+    width:100%;
+    z-index:1000;
+    border-radius:0% !important;
+}
+
+/* Estilo de los Enlaces en el Nav */
+nav a {
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: bold;
+    transition: color 0.3s ease, background-color 0.3s ease, border 0.3s ease; /* Transiciones suaves */
+    /* padding: 8px 12px; Padding para facilitar el hover */
+}
+
+/* Estilo para el Enlace Activo */
+nav a.active {
+    padding-bottom: 10px !important; /* Añade padding adicional para la línea */
+}
+
+
+
 main > .container {
     padding: 70px 15px 20px;
 }

@@ -1,0 +1,295 @@
+/* colors.css */
+
+/* Variables CSS */
+:root {
+    --color2: #e4c8b3;
+    --color3: #a6845b;
+    --color4: #734f30;
+    --color5: #422320;
+    --primary: #734f30;
+    --secondary: #E4c8b3;
+    --success: #6b8e23;
+    --danger: #c74b41;
+    --warning: #a6845b;
+    --info: #9e9e9e;
+    --light: #e7e3e2; /* Color de fondo */
+    --dark: #422320;
+    --white: #ffffff;
+    --transparent: transparent;
+    /*colores Nav*/
+    --color-nav: #422320; /* Fondo del nav */
+    --color-texto-nav: #E4C8B3; /* Texto principal en el nav */
+    --color-hover-fondo: #734F30; /* Fondo del enlace en hover */
+    --color-hover-texto: #E4C8B3; /* Texto en hover, igual al principal para contraste */
+    --color-hover-borde: #FFD700; /* Borde o línea en hover para resaltar */ 
+}
+
+
+/* Barra de Navegación */
+nav {
+    color: var(--color-texto-nav);
+    border-bottom: 2px solid var(--color-borde);
+}
+
+/* Estilo de los Enlaces en el Nav */
+nav a {
+    color: var(--color-texto-nav);
+}
+
+/* Efecto de Hover */
+nav a:hover {
+    color: var(--color-hover-texto) !important; /* Color del texto en hover */
+    background-color: var(--color-hover-fondo) !important; /* Fondo del enlace en hover */
+}
+
+/* Estilo para el Enlace Activo */
+nav a.active {
+    color: var(--color-hover-texto) !important;
+    border-bottom: 2px solid var(--color-hover-borde) !important; /* Línea debajo del enlace activo */
+}
+
+
+* {
+    color: #a6845b;
+}
+h1 h2 h3 h4 h5 h6 {
+    color: #a6845b;
+}
+
+nav * {
+    color: #e4c8b3 !important;
+}
+
+
+/* Color de fondo */
+body {
+    background-color: var(--light) !important;
+}
+
+/* Botones */
+.btn-primary {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+.btn-secondary {
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+}
+.btn-success {
+    color: #ffffff !important;
+    background-color: var(--success) !important;
+    border-color: var(--success) !important;
+}
+.btn-danger {
+    background-color: var(--danger) !important;
+    border-color: var(--danger) !important;
+}
+.btn-warning {
+    background-color: var(--warning) !important;
+    border-color: var(--warning) !important;
+}
+.btn-info {
+    color: #422320 !important;
+    background-color: var(--info) !important;
+    border-color: var(--info) !important;
+}
+.btn-light {
+    background-color: var(--light) !important;
+    border-color: var(--light) !important;
+}
+.btn-dark {
+    background-color: var(--dark) !important;
+    border-color: var(--dark) !important;
+}
+
+.btn-primary:hover {
+    background-color: #5c3a21 !important;
+    border-color: var(--primary) !important;
+}
+.btn-secondary:hover {
+    background-color: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+}
+.btn-success:hover {
+    background-color: #4a5d23 !important;
+    border-color: var(--success) !important;
+}
+.btn-danger:hover {
+    background-color: #b73a2a !important;
+    border-color: var(--danger) !important;
+}
+.btn-warning:hover { /* Actualizar */
+    background-color: #8c6d4c !important;
+    border-color: var(--warning) !important;
+}
+.btn-info:hover {
+    color: var(--secondary) !important;
+    background-color: #707070 !important;
+    border-color: var(--info) !important;
+}
+.btn-light:hover {
+    background-color: var(--light) !important;
+    border-color: var(--light) !important;
+}
+.btn-dark:hover {
+    background-color: var(--dark) !important;
+    border-color: var(--dark) !important;
+}
+
+/* Fondos (backgrounds) */
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+.bg-secondary {
+    background-color: var(--secondary) !important;
+}
+.bg-success {
+    background-color: var(--success) !important;
+}
+.bg-danger {
+    background-color: var(--danger) !important;
+}
+.bg-warning {
+    background-color: var(--warning) !important;
+}
+.bg-info {
+    background-color: var(--info) !important;
+}
+.bg-light {
+    background-color: var(--light) !important;
+}
+.bg-dark {
+    background-color: var(--dark) !important;
+}
+.bg-white {
+    background-color: var(--white) !important;
+}
+.bg-transparent {
+    background-color: var(--transparent) !important;
+}
+
+/* Bordes */
+.border-primary {
+    border-color: var(--primary) !important;
+}
+.border-secondary {
+    border-color: var(--secondary) !important;
+}
+.border-success {
+    border-color: var(--success) !important;
+}
+.border-danger {
+    border-color: var(--danger) !important;
+}
+.border-warning {
+    border-color: var(--warning) !important;
+}
+.border-info {
+    border-color: var(--info) !important;
+}
+.border-light {
+    border-color: var(--light) !important;
+}
+.border-dark {
+    border-color: var(--dark) !important;
+}
+.border-white {
+    border-color: var(--white) !important;
+}
+
+/* Texto */
+.text-primary {
+    color: var(--primary) !important;
+}
+.text-secondary {
+    color: var(--secondary) !important;
+}
+.text-success {
+    color: var(--success) !important;
+}
+.text-danger {
+    color: var(--danger) !important;
+}
+.text-warning {
+    color: var(--warning) !important;
+}
+.text-info {
+    color: var(--info) !important;
+}
+.text-light {
+    color: var(--light) !important;
+}
+.text-dark {
+    color: var(--dark) !important;
+}
+.text-white {
+    color: var(--white) !important;
+}
+.text-muted {
+    color: #6c757d !important; /* No definido en variables, se mantiene el color por defecto */
+}
+.text-black-50 {
+    color: rgba(0, 0, 0, 0.5) !important; /* No definido en variables, se mantiene el color por defecto */
+}
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.5) !important; /* No definido en variables, se mantiene el color por defecto */
+}
+
+
+/* TABLAS */
+.table {
+    /* Opcional: Cambiar el borde de la tabla */
+    /* border-color: #734F30; Color del borde de la tabla */
+}
+
+/* Cambiar el color de fondo de las filas en la GridView */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #F7F3F0; /* Color de fondo de filas alternas */
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #FFFFFF; /* Color de fondo de filas alternas */
+}
+
+/* Cambiar el color del encabezado */
+.table thead th {
+    background-color: var(--primary); /* Color de fondo del encabezado */
+    color: #f5f5dc; /* Color del texto en el encabezado */
+}
+
+.table thead th a {
+    color: #ffffff;
+    font-weight: 400;
+}
+/* 4a5d23 */
+a.asc::after {
+    border-bottom: solid 7px var(--secondary);
+}
+
+a.desc::after {
+    border-top: solid 7px var(--secondary);
+}
+
+/* Cambiar el color del texto en las celdas */
+.table td, .table th {
+    color: #422320; /* Color del texto en las celdas */
+}
+
+/* Cambiar el color de las filas al pasar el ratón por encima */
+.table tbody tr:hover {
+    background-color: #E4C8B3; /* Color de fondo al pasar el ratón por encima */
+    color: #422320; /* Color del texto al pasar el ratón por encima */
+}
+
+/* Estilos para los botones dentro de GridView */
+.table .btn-primary {
+    background-color: #734F30; /* Fondo del botón primario */
+    border-color: #734F30; /* Borde del botón primario */
+    color: #E4C8B3; /* Color del texto del botón primario */
+}
+
+.table .btn-primary:hover {
+    background-color: #422320; /* Fondo del botón primario al pasar el ratón por encima */
+    border-color: #422320; /* Borde del botón primario al pasar el ratón por encima */
+    color: #E4C8B3; /* Color del texto del botón primario al pasar el ratón por encima */
+}
