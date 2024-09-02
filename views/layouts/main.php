@@ -48,7 +48,7 @@ AppAsset::register($this);
             .sidebar-toggle-fixed {
                 position: fixed;
                 top: 10px;
-                right: 100px;
+                right: 40px;
                 z-index: 1050; /* Ensure it's on top */
             }
         }

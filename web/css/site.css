@@ -27,12 +27,20 @@ nav {
 
 /* Estilo de los Enlaces en el Nav */
 nav a {
+    text-align: center;
     text-decoration: none;
-    margin-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     font-weight: bold;
     transition: color 0.3s ease, background-color 0.3s ease, border 0.3s ease; /* Transiciones suaves */
     /* padding: 8px 12px; Padding para facilitar el hover */
 }
+
+nav li {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 
 .btn.btn-link.logout {
     margin-top: 0.88vh;
@@ -123,7 +131,7 @@ a.desc:after {
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;
-        text-align: left;
+        text-align: center;
         width: 100%;
         padding: 10px 0;
     }
