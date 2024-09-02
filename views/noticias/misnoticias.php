@@ -22,17 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 'titulo',
                 [
-                    'attribute' => 'fecha',
-                    'format' => ['date', 'php:d-m-Y'],
+                    'attribute' => 'fecha_publicacion',
+                    'value' => function($model) {
+                        return $model->getFechaFormateada();
+                    }
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
-                    'template' => '{update}',
-                    'buttons' => [
-                        'update' => function ($url, $model) {
-                            return Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
-                        },
-                    ],
                 ],
             ],
         ]) ?>

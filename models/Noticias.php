@@ -52,7 +52,7 @@ class Noticias extends \yii\db\ActiveRecord
             'fecha_publicacion' => 'Fecha Publicacion',
             'contenido' => 'Contenido',
             'autor' => 'Autor',
-            'publico' => 'Publico',
+            'publico' => 'Público',
         ];
     }
 

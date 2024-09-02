@@ -144,7 +144,7 @@ class UsuariosController extends Controller
                         Yii::$app->session->setFlash('error', 'Error al subir la foto.');
                     }
                 }
-
+                $user->attributes =$model->attributes;
                 if ($user->save(false)) {
                     Yii::debug("a");
                     Yii::$app->session->setFlash('success', 'Los datos han sido actualizados.');
@@ -244,40 +244,38 @@ class UsuariosController extends Controller
     }
     
     public function actionAlumnas()
-{
-    // Obtener el ID del usuario actual
-    $maestraId = Yii::$app->user->identity->id;
+    {
+        // Obtener el ID del usuario actual
+        $maestraId = Yii::$app->user->identity->id;
 
-    // Obtener todos los colores (niveles) en los que enseña la maestra actual
-    $niveles = Ensenan::find()
-        ->select('color')
-        ->distinct()
-        ->where(['maestra' => $maestraId])
-        ->column();
+        // Obtener todos los colores (niveles) en los que enseña la maestra actual
+        $niveles = Ensenan::find()
+            ->select('color')
+            ->distinct()
+            ->where(['maestra' => $maestraId])
+            ->column();
 
-    // Si no hay niveles asociados, no es necesario continuar
-    if (empty($niveles)) {
+        // Si no hay niveles asociados, no es necesario continuar
+        if (empty($niveles)) {
+            return $this->render('alumnas', [
+                'dataProvider' => null,
+            ]);
+        }
+
+        // Crear un ActiveDataProvider para manejar las alumnas
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => Usuarios::find()->where(['rol' => 'alumna', 'color' => $niveles]),
+            'pagination' => [
+                'pageSize' => 20, // Número de alumnas por página
+            ],
+        ]);
+
+        // Renderizar la vista y pasar el dataProvider
         return $this->render('alumnas', [
-            'alumnasPorNivel' => [],
+            'dataProvider' => $dataProvider,
         ]);
     }
 
-    // Obtener todas las alumnas que están en los niveles seleccionados
-    $alumnas = Usuarios::find()
-        ->where(['rol' => 'alumna', 'color' => $niveles])
-        ->all();
-
-    // Agrupar las alumnas por color (nivel)
-    $alumnasPorNivel = [];
-    foreach ($alumnas as $alumna) {
-        $alumnasPorNivel[$alumna->color][] = $alumna;
-    }
-
-    // Renderizar la vista y pasar el array $alumnasPorNivel
-    return $this->render('alumnas', [
-        'alumnasPorNivel' => $alumnasPorNivel,
-    ]);
-}
 
     
     public function actionUpload()
