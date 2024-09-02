@@ -133,4 +133,19 @@ class TelefonosController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    
+    public function actionAdd($userId)
+    {
+        $model = new Telefonos();
+        $model->usuario = $userId;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            // Redirigir a la página 'misdatos' después de guardar el teléfono
+            return $this->redirect(['usuarios/misdatos']);
+        }
+
+        return $this->render('add', [
+            'model' => $model,
+        ]);
+    }
 }

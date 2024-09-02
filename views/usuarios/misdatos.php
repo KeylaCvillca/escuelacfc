@@ -5,6 +5,10 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use app\models\Niveles;
+use yii\grid\GridView;
+use yii\grid\ActionColumn;
+use yii\helpers\Url;
+use app\models\Telefonos;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\AddUserForm */
@@ -88,10 +92,27 @@ $prefijos = [
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    <h2>Mis teléfonos</h2>
+    <?= GridView::widget([
+        'dataProvider' => $telefonos,
+        'columns' => [
+            'telefono',
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Telefonos $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
+            ],
+        ],
+        'summary' => ''
+    ])?>
+    
+    <?= Html::a('Añadir Teléfono', ['telefonos/add', 'userId' => $user->id], ['class' => 'btn btn-success']) ?>
 
     <?php
     $this->registerJs("

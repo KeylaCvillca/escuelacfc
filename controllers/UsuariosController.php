@@ -120,7 +120,12 @@ class UsuariosController extends Controller
         $model = new AddUserForm();
         $model->setScenario(AddUserForm::SCENARIO_UPDATE);
         $model->attributes = $user->attributes;
-        Yii::debug( $model->attributes);
+
+        $telefonos = new ActiveDataProvider([
+            'query' => Telefonos::find()->select("*")->where(["usuario" => $user->id])
+        ]);
+
+
         if (Yii::$app->request->isPost) {
             if ($model->load(Yii::$app->request->post())) {
 
@@ -151,6 +156,7 @@ class UsuariosController extends Controller
                     return $this->render('misdatos', [
                         'model' => $model,
                         'user' => $user,
+                        'telefonos' => $telefonos
                     ]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Error al actualizar los datos.');
@@ -161,6 +167,7 @@ class UsuariosController extends Controller
         return $this->render('misdatos', [
             'model' => $model,
             'user' => $user,
+            'telefonos' => $telefonos
         ]);
     }
 
