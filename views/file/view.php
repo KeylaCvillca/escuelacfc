@@ -4,6 +4,7 @@
 /** @var string $extension */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'Visualizar archivo';
 $this->params['breadcrumbs'][] = ['label' => 'Archivos', 'url' => ['index']];
@@ -24,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php elseif (in_array($extension, ['pdf'])): ?>
             <embed src="<?= Yii::getAlias('@web') . '/' . $filePath ?>" type="<?= $mimeType ?>" width="100%" height="600px">
         <?php elseif (in_array($extension, ['xls', 'xlsx'])): ?>
-            <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=<?= Yii::$app->request->hostInfo . Yii::getAlias('@web') . '/' . $filePath ?>" width="100%" height="600px"></iframe>
+            <p>Los archivos xls y xlsx no se pueden visualizar.</p>
+
         <?php else: ?>
             <p>Vista previa no disponible para este tipo de archivo.</p>
             <a href="<?= Yii::getAlias('@web') . '/' . $filePath ?>" class="btn btn-primary" download>Descargar Archivo</a>
