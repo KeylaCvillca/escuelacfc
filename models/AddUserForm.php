@@ -41,7 +41,7 @@ class AddUserForm extends Model
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'created_at', 'updated_at','color'], 'required'],
+            [['username', 'email', 'created_at', 'updated_at','color'], 'required'],
             [['fecha_nacimiento', 'fecha_ingreso', 'fecha_graduacion'], 'safe'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['nombre_apellidos'], 'string', 'max' => 50],
@@ -55,8 +55,21 @@ class AddUserForm extends Model
             [['telefonos'], 'each', 'rule' => ['string', 'max' => 15]],
             [['fotoFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'skipOnEmpty' => true],
             [['change_password'], 'boolean'],
-            [['password', 'confirm_password'], 'string', 'min' => 6],
-            [['confirm_password'], 'compare', 'compareAttribute' => 'password'],
+            ['password', 'required', 'when' => function ($model) {
+                return $model->change_password;
+            }],
+            ['password', 'string', 'min' => 8, 'when' => function ($model) {
+                return $model->change_password;
+            }],
+            ['password', 'match', 'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.,;_])[A-Za-z\d.,;_]{8,}$/', 'when' => function ($model) {
+                return $model->change_password;
+            }],
+            ['confirm_password', 'required', 'when' => function ($model) {
+                return $model->change_password;
+            }],
+            ['confirm_password', 'compare', 'compareAttribute' => 'password', 'when' => function ($model) {
+                return $model->change_password;
+            }],
         ];
     }
 

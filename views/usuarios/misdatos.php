@@ -69,9 +69,7 @@ $prefijos = [
         
     </div>
     
-    <!-- DetailView para mostrar datos no modificables -->
-    
-
+    <!-- Formulario para editar datos -->
     <?php $form = ActiveForm::begin([
         'options' => ['enctype' => 'multipart/form-data']
     ]); ?>
@@ -79,14 +77,14 @@ $prefijos = [
     <?= $form->field($model, 'nombre_apellidos')->textInput() ?>
     <?= $form->field($model, 'username')->textInput() ?>
 
-    <?= $form->field($model, 'change_password')->checkbox()?>
-    
-    <div id="password-fields">
-        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'id' => 'password']) ?>
-        <?= $form->field($model, 'confirm_password')->passwordInput(['maxlength' => true, 'id' => 'confirm_password']) ?>
+    <?= $form->field($model, 'change_password')->checkbox() ?>
 
-        <div id="password-message"></div>
-        <div id="confirm-password-message"></div>
+    <div id="password-fields" style="display: none;">
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'id' => 'password', 'value' => 'Asdf.1234']) ?>
+        <?= $form->field($model, 'confirm_password')->passwordInput(['maxlength' => true, 'id' => 'confirm_password', 'value' => 'Asdf.1234']) ?>
+
+        <div id="password-message" style="color: red;"></div>
+        <div id="confirm-password-message" style="color: red;"></div>
     </div>
 
     <div class="form-group">
@@ -94,5 +92,53 @@ $prefijos = [
     </div>
 
     <?php ActiveForm::end(); ?>
-</div>
 
+    <?php
+    $this->registerJs("
+        $('#adduserform-change_password').on('change', function() {
+            if ($(this).is(':checked')) {
+            $('#password').val('');
+                $('#confirm_password').val('');
+                $('#password-fields').show();
+            } else {
+                $('#password-fields').hide();
+                $('#password').val('Asdf.1234');
+                $('#confirm_password').val('Asdf.1234');
+                $('#password-message').text('');
+                $('#confirm-password-message').text('');
+            }
+        });
+
+        $('#password, #confirm_password').on('input', function() {
+            if ($('#adduserform-change_password').is(':checked')) {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirm_password').val();
+                var passwordMessage = '';
+                var confirmPasswordMessage = '';
+
+                // Nueva expresión regular con símbolos especiales
+                var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.,;_])[A-Za-z\d.,;_]{8,}$/;
+
+                if (password.length > 0 && !passwordRegex.test(password)) {
+                    passwordMessage = 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un dígito y un símbolo especial (.,;_).';
+                    $('#password-message').css('color', 'red');
+                } else if (password.length > 0) {
+                    $('#password-message').css('color', 'green');
+                    passwordMessage = 'Contraseña válida.';
+                }
+
+                if (password !== confirmPassword) {
+                    confirmPasswordMessage = 'Las contraseñas no coinciden.';
+                    $('#confirm-password-message').css('color', 'red');
+                } else if (password.length > 0) {
+                    $('#confirm-password-message').css('color', 'green');
+                    confirmPasswordMessage = 'Las contraseñas coinciden.';
+                }
+
+                $('#password-message').text(passwordMessage);
+                $('#confirm-password-message').text(confirmPasswordMessage);
+            }
+        });
+    ");
+    ?>
+</div>

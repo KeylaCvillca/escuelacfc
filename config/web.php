@@ -16,6 +16,13 @@ $config = [
     'modules' => [
         'rbac' => [
             'class' => 'yii2mod\rbac\Module',
+            // 'as access' => [
+            //     'class' => yii2mod\rbac\filters\AccessControl::class,
+            //     'allowActions' => [
+            //         'site/index',
+            //         'site/login',
+            //     ]
+            // ],
         ],
     ],
     'components' => [
@@ -77,6 +84,12 @@ $config = [
             ]
         ]
  
+    ],
+    'as access' => [
+        'class' => yii2mod\rbac\filters\AccessControl::class,
+        'allowActions' => [
+            '*'
+        ]
     ],
     'params' => $params,
 ];

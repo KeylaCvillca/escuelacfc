@@ -161,7 +161,7 @@ $this->title = 'My Yii Application';
             <div class="col-lg-6 col-md-6">
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
-                    <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+                    <?= $form->field($model, 'name')->textInput() ?>
 
                     <?= $form->field($model, 'email') ?>
 

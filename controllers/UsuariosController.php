@@ -90,6 +90,7 @@ class UsuariosController extends Controller
     public function actionCreate()
     {
          $model = new AddUserForm();
+         $model->change_password = true;
 
         if ($model->load(Yii::$app->request->post())) {
             $model->created_at = time();
@@ -122,12 +123,12 @@ class UsuariosController extends Controller
         Yii::debug( $model->attributes);
         if (Yii::$app->request->isPost) {
             if ($model->load(Yii::$app->request->post())) {
-                Yii::debug($model->change_password); // Debug output to check the value
-                Yii::debug($model->attributes);
+
                 if ($model->change_password) {
-                    Yii::debug('1' . $user->password_hash);
-                    $user->password_hash = Yii::$app->security->generatePasswordHash($model->password);
-                    Yii::debug('2' . $user->password_hash);
+                $model->password_hash = Yii::$app->security->generatePasswordHash($model->password);
+                } else {
+                    // Si no se cambia la contraseña, mantenemos el hash anterior
+                    $model->password_hash = $user->password_hash;
                 }
                 $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
 
@@ -146,11 +147,9 @@ class UsuariosController extends Controller
                 }
                 $user->attributes =$model->attributes;
                 if ($user->save(false)) {
-                    Yii::debug("a");
                     Yii::$app->session->setFlash('success', 'Los datos han sido actualizados.');
                     return $this->redirect(['index']);
                 } else {
-                    Yii::debug("b");
                     Yii::$app->session->setFlash('error', 'Error al actualizar los datos.');
                 }
             }
