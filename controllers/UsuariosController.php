@@ -291,10 +291,7 @@ class UsuariosController extends Controller
     {
         $model = new UploadExcelForm();
         if (Yii::$app->request->isPost) {
-            if (empty($model->color)) {
-                // Si el color está vacío, no lo actualices
-                unset($model->color);
-            }
+
             $model->file = UploadedFile::getInstance($model, 'file');
             $uploaded = $model->upload();
             if ($uploaded) {
