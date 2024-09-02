@@ -131,7 +131,7 @@ class UsuariosController extends Controller
                     $model->password_hash = $user->password_hash;
                 }
                 $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
-
+                $user->attributes =$model->attributes;
                 if ($model->fotoFile) {
                     // Definir la ruta completa para guardar la imagen
                     $fileName = 'imagenes/usuarios/' . $model->fotoFile->baseName . '.' . $model->fotoFile->extension;
@@ -145,10 +145,13 @@ class UsuariosController extends Controller
                         Yii::$app->session->setFlash('error', 'Error al subir la foto.');
                     }
                 }
-                $user->attributes =$model->attributes;
+                
                 if ($user->save(false)) {
                     Yii::$app->session->setFlash('success', 'Los datos han sido actualizados.');
-                    return $this->redirect(['index']);
+                    return $this->render('misdatos', [
+                        'model' => $model,
+                        'user' => $user,
+                    ]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Error al actualizar los datos.');
                 }

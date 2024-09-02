@@ -88,7 +88,10 @@ $config = [
     'as access' => [
         'class' => yii2mod\rbac\filters\AccessControl::class,
         'allowActions' => [
-            '*'
+            'site/index',
+            'site/login',
+            'site/captcha',
+            'site/logout',
         ]
     ],
     'params' => $params,
