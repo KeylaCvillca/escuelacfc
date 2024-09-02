@@ -112,7 +112,7 @@ $prefijos = [
         'summary' => ''
     ])?>
     
-    <?= Html::a('Añadir Teléfono', ['telefonos/add', 'userId' => $user->id], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Añadir Teléfono', ['telefonos/add', 'userid' => $user->id], ['class' => 'btn btn-success']) ?>
 
     <?php
     $this->registerJs("

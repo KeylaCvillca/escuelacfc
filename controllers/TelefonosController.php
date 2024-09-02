@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\TelefonosSearch;
+use app\models\Usuarios;
 use Yii;
 
 /**
@@ -134,18 +135,40 @@ class TelefonosController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
     
-    public function actionAdd($userId)
+    public function actionAdd($userid)
     {
-        $model = new Telefonos();
-        $model->usuario = $userId;
+        $paises = [
+            'US' => '+1',
+            'CA' => '+1',
+            'MX' => '+52',
+            'ES' => '+34',
+            // Añade más prefijos según sea necesario
+        ];
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // Redirigir a la página 'misdatos' después de guardar el teléfono
-            return $this->redirect(['usuarios/misdatos']);
+        if (Yii::$app->request->isPost) {
+            $telefonos = Yii::$app->request->post('telefonos');
+            $paisesSeleccionados = Yii::$app->request->post('paises');
+
+            foreach ($telefonos as $index => $telefono) {
+                $pais = $paisesSeleccionados[$index] ?? 'US'; // Default to 'US' if no country selected
+                $prefijo = $paises[$pais] ?? '';
+
+                $model = new Telefonos();
+                $model->usuario = $userid;
+                $model->telefono = $prefijo . $telefono;
+
+                if (!$model->save()) {
+                    Yii::$app->session->setFlash('error', 'Error al añadir algunos teléfonos.');
+                    return $this->redirect(['usuarios/misdatos']);
+                }
+            }
+
+            Yii::$app->session->setFlash('success', 'Teléfonos añadidos correctamente.');
+            return $this->redirect(['misdatos']); // Redirigir a la vista de misdatos
         }
 
         return $this->render('add', [
-            'model' => $model,
+            'paises' => $paises, // Pasar los países y prefijos a la vista si es necesario
         ]);
     }
 }
